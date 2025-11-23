@@ -76,10 +76,36 @@ const updateNodeRecursively = (nodes: FormNode[], id: string, updates: any): For
 
 // Helper to check if a type is a container
 const isContainerType = (type: ComponentType) => {
-  return type === ComponentType.CONTAINER || 
-         type === ComponentType.FORM || 
-         type === ComponentType.TABS || 
+  return type === ComponentType.CONTAINER ||
+         type === ComponentType.FORM ||
+         type === ComponentType.TABS ||
          type === ComponentType.TAB_ITEM;
+};
+
+// Helper to find parent node of a given node
+const findParentNode = (nodes: FormNode[], childId: string, parentId: string | null = null): string | null => {
+  for (const node of nodes) {
+    if (node.children.some(child => child.id === childId)) {
+      return node.id;
+    }
+    if (node.children.length > 0) {
+      const found = findParentNode(node.children, childId, node.id);
+      if (found) return found;
+    }
+  }
+  return null;
+};
+
+// Helper to get node by id
+const getNodeById = (nodes: FormNode[], id: string): FormNode | null => {
+  for (const node of nodes) {
+    if (node.id === id) return node;
+    if (node.children.length > 0) {
+      const found = getNodeById(node.children, id);
+      if (found) return found;
+    }
+  }
+  return null;
 };
 
 export const useDesignerStore = create<DesignerState>((set) => ({
@@ -102,10 +128,19 @@ export const useDesignerStore = create<DesignerState>((set) => ({
             { id: generateId(), type: ComponentType.TAB_ITEM, props: { label: 'Tab 3', style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style }, children: [] },
         ];
     }
-    
-    return { 
+
+    // Auto-set label for TAB_ITEM based on sibling count
+    if (type === ComponentType.TAB_ITEM && parentId) {
+      const parent = getNodeById(state.nodes, parentId);
+      if (parent?.type === ComponentType.TABS) {
+        const tabNumber = parent.children.length + 1;
+        newNode.props.label = `Tab ${tabNumber}`;
+      }
+    }
+
+    return {
       nodes: addNodeRecursively(state.nodes, parentId, newNode, index),
-      selectedNodeId: newNode.id 
+      selectedNodeId: newNode.id
     };
   }),
 
@@ -118,7 +153,18 @@ export const useDesignerStore = create<DesignerState>((set) => ({
     nodes: updateNodeRecursively(state.nodes, id, updates)
   })),
 
-  selectNode: (id) => set({ selectedNodeId: id }),
+  selectNode: (id) => set((state) => {
+    if (!id) return { selectedNodeId: null };
+
+    // If selecting a TAB_ITEM, select its parent TABS instead
+    const node = getNodeById(state.nodes, id);
+    if (node?.type === ComponentType.TAB_ITEM) {
+      const parentId = findParentNode(state.nodes, id);
+      return { selectedNodeId: parentId };
+    }
+
+    return { selectedNodeId: id };
+  }),
 
   moveNode: (activeId, overId, isInteriorDrop, activeNodeType) => set((state) => {
     const cloneNodes = JSON.parse(JSON.stringify(state.nodes));

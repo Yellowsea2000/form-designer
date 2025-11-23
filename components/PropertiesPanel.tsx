@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDesignerStore } from '../store';
 import { ComponentType, FormNode } from '../types';
-import { Settings2, Type, AlignLeft, Palette, Layout, X, Image as ImageIcon, Grid } from 'lucide-react';
+import { Settings2, Type, AlignLeft, Palette, Layout, X, Image as ImageIcon, Grid, Layers, Plus, Trash2 } from 'lucide-react';
 
 const SectionHeader: React.FC<{ title: string; icon: React.ReactNode }> = ({ title, icon }) => (
     <div className="flex items-center gap-2 text-slate-800 font-medium text-sm mb-3 mt-6 border-b border-slate-100 pb-2">
@@ -30,7 +30,7 @@ const findNodeById = (nodes: FormNode[], id: string): FormNode | undefined => {
 };
 
 export const PropertiesPanel: React.FC = () => {
-  const { nodes, selectedNodeId, updateNode, selectNode } = useDesignerStore();
+  const { nodes, selectedNodeId, updateNode, selectNode, addNode, removeNode } = useDesignerStore();
   
   // Use recursive search to find the selected node in the tree
   const selectedNode = selectedNodeId ? findNodeById(nodes, selectedNodeId) : undefined;
@@ -59,7 +59,10 @@ export const PropertiesPanel: React.FC = () => {
     });
   };
 
-  const isContainer = [ComponentType.CONTAINER, ComponentType.FORM, ComponentType.TAB_ITEM].includes(selectedNode.type);
+  const isContainer = [ComponentType.CONTAINER, ComponentType.FORM, ComponentType.TAB_ITEM, ComponentType.TABS].includes(selectedNode.type);
+
+  // Hide most properties for TAB_ITEM - they should be managed through parent TABS
+  const isTabItem = selectedNode.type === ComponentType.TAB_ITEM;
 
   return (
     <div className="w-80 bg-white border-l border-slate-200 flex flex-col h-full shadow-xl z-30">
@@ -76,9 +79,21 @@ export const PropertiesPanel: React.FC = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto p-6">
-        
-        {/* Layout Settings for Containers */}
-        {isContainer && (
+
+        {/* Show message for TAB_ITEM - configure through parent */}
+        {isTabItem && (
+          <div className="text-center py-8 text-slate-500">
+            <Layers className="w-12 h-12 mx-auto mb-3 opacity-20" />
+            <p className="text-sm mb-2">This is a Tab Item</p>
+            <p className="text-xs text-slate-400">Select the parent Tabs component to manage tab properties</p>
+          </div>
+        )}
+
+        {/* Only show properties if not a TAB_ITEM */}
+        {!isTabItem && (
+          <>
+            {/* Layout Settings for Containers */}
+            {isContainer && (
             <>
                 <SectionHeader title="Layout Settings" icon={<Grid className="w-4 h-4"/>} />
                 
@@ -110,6 +125,42 @@ export const PropertiesPanel: React.FC = () => {
                         onChange={(e) => handlePropChange('gap', parseInt(e.target.value))}
                     />
                 </InputGroup>
+            </>
+        )}
+
+        {/* Tabs Management */}
+        {selectedNode.type === ComponentType.TABS && (
+            <>
+                <SectionHeader title="Tab Items" icon={<Layers className="w-4 h-4"/>} />
+                <div className="space-y-2">
+                    {selectedNode.children?.map((child, idx) => (
+                        <div key={child.id} className="flex gap-2 items-center p-2 bg-slate-50 rounded-md border border-slate-200">
+                            <input
+                                type="text"
+                                className="flex-1 px-2 py-1 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                value={child.props.label || `Tab ${idx + 1}`}
+                                onChange={(e) => updateNode(child.id, { label: e.target.value })}
+                                placeholder={`Tab ${idx + 1}`}
+                            />
+                            <button
+                                onClick={() => removeNode(child.id)}
+                                className="p-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+                                title="Delete tab"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </button>
+                        </div>
+                    ))}
+                    <button
+                        className="w-full px-3 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md border border-dashed border-blue-300 transition-colors flex items-center justify-center gap-2"
+                        onClick={() => {
+                            addNode(ComponentType.TAB_ITEM, selectedNode.id);
+                        }}
+                    >
+                        <Plus className="w-4 h-4" />
+                        Add Tab
+                    </button>
+                </div>
             </>
         )}
 
@@ -285,6 +336,9 @@ export const PropertiesPanel: React.FC = () => {
             />
             <div className="text-right text-xs text-slate-400 mt-1">{selectedNode.props.style?.paddingTop || '0px'}</div>
          </InputGroup>
+
+          </>
+        )}
 
       </div>
     </div>
