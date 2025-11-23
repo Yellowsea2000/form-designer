@@ -245,7 +245,7 @@ export const Canvas: React.FC = () => {
           )}
         >
           {nodes.length === 0 && !isOver && (
-            <div className="flex flex-col items-center justify-center h-64 text-slate-400 border-2 border-dashed border-slate-200 rounded-lg">
+            <div className="flex flex-col items-center justify-center h-64 text-slate-400 border-2 border-transparent border-slate-200 rounded-lg">
               <p className="text-lg font-medium">Canvas is empty</p>
               <p className="text-sm">Drag components from the left sidebar</p>
             </div>

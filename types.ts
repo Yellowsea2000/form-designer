@@ -56,7 +56,7 @@ export interface DragData {
 
 export const DEFAULT_PROPS: Record<ComponentType, ComponentProps> = {
   [ComponentType.CONTAINER]: {
-    style: { padding: '20px', border: '1px dashed #cbd5e1', borderRadius: '8px', backgroundColor: '#ffffff', minHeight: '100px' },
+    style: { padding: '20px', borderRadius: '8px', backgroundColor: '#ffffff', minHeight: '100px' },
     columns: 1,
     gap: 16
   },

@@ -215,7 +215,7 @@ export const FormElementRenderer: React.FC<ElementRendererProps> = ({
             <div style={style} className={cn("h-full", props.className)}>
                 {children}
                 {(!children || (Array.isArray(children) && children.length === 0)) && (
-                    <div className="text-slate-300 text-center py-12 text-sm italic border-2 border-dashed border-slate-100 rounded-lg">
+                    <div className="text-slate-300 text-center py-12 text-sm italic border-2 border-transparent border-slate-100 rounded-lg">
                         Drop content for {label} here
                     </div>
                 )}
