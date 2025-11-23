@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, createContext, useContext } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -23,6 +23,21 @@ import { PropertiesPanel } from './components/PropertiesPanel';
 import { useDesignerStore } from './store';
 import { ComponentType, DragData, FormNode } from './types';
 import { Eye, Save } from 'lucide-react';
+
+// Context for sharing drag state with Canvas
+interface DragContextType {
+  activeDragData: DragData | null;
+  overId: string | null;
+  overData: any;
+}
+
+export const DragContext = createContext<DragContextType>({
+  activeDragData: null,
+  overId: null,
+  overData: null,
+});
+
+export const useDragContext = () => useContext(DragContext);
 
 // Drop animation config for smoother UX
 // Disable duration to remove rebound effect
@@ -49,6 +64,8 @@ const cursorModifier: Modifier = ({ transform }) => {
 function App() {
   const { addNode, moveNode, nodes } = useDesignerStore();
   const [activeDragData, setActiveDragData] = useState<DragData | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+  const [overData, setOverData] = useState<any>(null);
   const [showPreview, setShowPreview] = useState(false);
 
   const sensors = useSensors(
@@ -71,7 +88,15 @@ function App() {
   };
 
   const handleDragOver = (event: DragOverEvent) => {
-      // Can be used for drag preview highlights
+      // Track current drop target for showing placeholder in canvas
+      const { over } = event;
+      if (over) {
+        setOverId(over.id as string);
+        setOverData(over.data.current);
+      } else {
+        setOverId(null);
+        setOverData(null);
+      }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -79,6 +104,8 @@ function App() {
 
     // Reset drag state
     setActiveDragData(null);
+    setOverId(null);
+    setOverData(null);
 
     if (!over) return;
 
@@ -201,76 +228,78 @@ function App() {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex flex-col h-screen overflow-hidden bg-slate-50">
-        {/* Header */}
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-20">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center text-white font-bold shadow-lg shadow-blue-200">
-                FC
-            </div>
-            <h1 className="text-lg font-bold text-slate-800">FormCraft <span className="text-slate-400 font-normal">Pro</span></h1>
-          </div>
-          <div className="flex items-center gap-3">
-              <button 
-                onClick={() => setShowPreview(!showPreview)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${showPreview ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-100'}`}
-              >
-                  <Eye className="w-4 h-4" />
-                  {showPreview ? 'Edit Mode' : 'Preview'}
-              </button>
-              <button 
-                onClick={saveForm}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 shadow-sm transition-colors"
-              >
-                  <Save className="w-4 h-4" />
-                  Save
-              </button>
-          </div>
-        </header>
-
-        {/* Main Content */}
-        <div className="flex flex-1 overflow-hidden relative">
-            {/* Sidebar */}
-            {!showPreview && (
-                <div className="h-full z-10 shadow-lg shadow-slate-200/50">
-                    <Sidebar />
-                </div>
-            )}
-
-            {/* Canvas */}
-            <main className="flex-1 h-full relative flex flex-col">
-                <Canvas />
-            </main>
-
-            {/* Properties Panel */}
-            {!showPreview && (
-                 <div className="h-full z-10">
-                    <PropertiesPanel />
-                </div>
-            )}
-        </div>
-
-        {/* Drag Overlay - Visual feedback during drag */}
-        <DragOverlay 
-          dropAnimation={dropAnimation} 
-          modifiers={[cursorModifier]}
-          style={{ cursor: 'grabbing' }}
-        >
-          {activeDragData?.type === 'sidebar-item' && activeDragData.componentType ? (
-             <div className="w-[180px] bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90">
-                 <div className="flex items-center gap-2">
-                    <span className="font-medium text-slate-700 text-sm">{activeDragData.componentType}</span>
-                 </div>
-             </div>
-          ) : null}
-          {activeDragData?.type === 'canvas-item' ? (
-              <div className="bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90 w-[200px]">
-                  <span className="text-sm text-slate-700">移动中...</span>
+      <DragContext.Provider value={{ activeDragData, overId, overData }}>
+        <div className="flex flex-col h-screen overflow-hidden bg-slate-50">
+          {/* Header */}
+          <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-20">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center text-white font-bold shadow-lg shadow-blue-200">
+                  FC
               </div>
-          ) : null}
-        </DragOverlay>
+              <h1 className="text-lg font-bold text-slate-800">FormCraft <span className="text-slate-400 font-normal">Pro</span></h1>
+            </div>
+            <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setShowPreview(!showPreview)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${showPreview ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-100'}`}
+                >
+                    <Eye className="w-4 h-4" />
+                    {showPreview ? 'Edit Mode' : 'Preview'}
+                </button>
+                <button
+                  onClick={saveForm}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 shadow-sm transition-colors"
+                >
+                    <Save className="w-4 h-4" />
+                    Save
+                </button>
+            </div>
+          </header>
 
-      </div>
+          {/* Main Content */}
+          <div className="flex flex-1 overflow-hidden relative">
+              {/* Sidebar */}
+              {!showPreview && (
+                  <div className="h-full z-10 shadow-lg shadow-slate-200/50">
+                      <Sidebar />
+                  </div>
+              )}
+
+              {/* Canvas */}
+              <main className="flex-1 h-full relative flex flex-col">
+                  <Canvas />
+              </main>
+
+              {/* Properties Panel */}
+              {!showPreview && (
+                   <div className="h-full z-10">
+                      <PropertiesPanel />
+                  </div>
+              )}
+          </div>
+
+          {/* Drag Overlay - Visual feedback during drag */}
+          <DragOverlay
+            dropAnimation={dropAnimation}
+            modifiers={[cursorModifier]}
+            style={{ cursor: 'grabbing' }}
+          >
+            {activeDragData?.type === 'sidebar-item' && activeDragData.componentType ? (
+               <div className="w-[180px] bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90">
+                   <div className="flex items-center gap-2">
+                      <span className="font-medium text-slate-700 text-sm">{activeDragData.componentType}</span>
+                   </div>
+               </div>
+            ) : null}
+            {activeDragData?.type === 'canvas-item' ? (
+                <div className="bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90 w-[200px]">
+                    <span className="text-sm text-slate-700">移动中...</span>
+                </div>
+            ) : null}
+          </DragOverlay>
+
+        </div>
+      </DragContext.Provider>
     </DndContext>
   );
 }
