@@ -1,20 +1,42 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# FormCraft Pro
 
-# Run and deploy your AI Studio app
+A drag-and-drop form/page builder powered by a typed DSL for components and form documents.
 
-This contains everything you need to run your app locally.
+## What this project does
+- Build nested form layouts with containers, grids, tabs, and form controls.
+- Edit component properties in a live properties panel.
+- Export the current canvas as a versioned DSL document for storage or server sync.
+- Validate trees against component constraints (e.g., only `tab_item` inside `tabs`).
 
-View your app in AI Studio: https://ai.studio/apps/drive/1HNiT-rJw79LOZlaEDHMGglMk5Wp9Fw1Y
+## DSL highlights
+- Component specs live in `dsl/components/*.ts`, aggregated in `dsl/components/index.ts`.
+- Form-level helpers and validators live in `dsl/form.ts`.
+- Types for DSL prop metadata are in `dsl/types.ts`.
+- `createFormDocument(nodes, metadata)` produces a serializable form DSL; `validateFormDocument(doc)` reports schema errors.
 
-## Run Locally
+## Tech stack
+- React + TypeScript
+- Vite build tooling
+- Zustand for editor state
+- dnd-kit for drag-and-drop
+- tailwind-merge/clsx for class merging
+- lucide-react icon set
 
-**Prerequisites:**  Node.js
+## Key source map
+- App shell and drag context: `App.tsx`
+- Canvas rendering and sortable logic: `components/Canvas.tsx`
+- Component renderers: `components/FormElements.tsx` and `components/elements/`
+- Sidebar catalog: `components/Sidebar.tsx`
+- Properties panel: `components/PropertiesPanel.tsx`
+- State/store: `store.ts`
+- DSL definitions: `dsl/`
 
+## Getting started
+```bash
+npm install
+npm run dev
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Exporting a DSL document
+- Use the Save button in the UI; it logs the DSL document via `createFormDocument`.
+- Extend with `validateFormDocument` before persisting if you need stricter guardrails.***
