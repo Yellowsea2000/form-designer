@@ -23,6 +23,7 @@ import { PropertiesPanel } from './components/PropertiesPanel';
 import { useDesignerStore } from './store';
 import { ComponentType, DragData, FormNode } from './types';
 import { Eye, Save } from 'lucide-react';
+import { createFormDocument } from './dsl/form';
 
 // Context for sharing drag state with Canvas
 interface DragContextType {
@@ -198,9 +199,9 @@ function App() {
   };
 
   const saveForm = () => {
-      const json = JSON.stringify(nodes, null, 2);
-      console.log('Saving form schema:', json);
-      alert('Form schema saved to console!');
+      const document = createFormDocument(nodes, { name: 'FormCraft Pro DSL' });
+      console.log('Form DSL document:', JSON.stringify(document, null, 2));
+      alert('Form DSL saved to console!');
   };
 
   // Custom collision detection - prioritize interior zones when pointer is well inside

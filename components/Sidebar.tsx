@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { ComponentType } from '../types';
+import { componentDSLs } from '../dsl/components';
 import { 
   Type, 
   LayoutTemplate, 
@@ -67,29 +68,29 @@ export const Sidebar: React.FC = () => {
         <div>
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Layout</h3>
           <div className="grid grid-cols-2 gap-3">
-             <SidebarItem type={ComponentType.CONTAINER} label="Container" icon={<LayoutTemplate className="w-6 h-6"/>} />
-             <SidebarItem type={ComponentType.FORM} label="Form" icon={<AppWindow className="w-6 h-6"/>} />
-             <SidebarItem type={ComponentType.TABS} label="Tabs" icon={<Folder className="w-6 h-6"/>} />
+             <SidebarItem type={ComponentType.CONTAINER} label={componentDSLs[ComponentType.CONTAINER].displayName} icon={<LayoutTemplate className="w-6 h-6"/>} />
+             <SidebarItem type={ComponentType.FORM} label={componentDSLs[ComponentType.FORM].displayName} icon={<AppWindow className="w-6 h-6"/>} />
+             <SidebarItem type={ComponentType.TABS} label={componentDSLs[ComponentType.TABS].displayName} icon={<Folder className="w-6 h-6"/>} />
           </div>
         </div>
 
         <div>
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Form Controls</h3>
           <div className="grid grid-cols-2 gap-3">
-            <SidebarItem type={ComponentType.INPUT} label="Input" icon={<Type className="w-6 h-6"/>} />
-            <SidebarItem type={ComponentType.TEXTAREA} label="Text Area" icon={<AlignLeft className="w-6 h-6"/>} />
-            <SidebarItem type={ComponentType.SELECT} label="Select" icon={<MousePointerClick className="w-6 h-6"/>} />
-            <SidebarItem type={ComponentType.CHECKBOX} label="Checkbox" icon={<CheckSquare className="w-6 h-6"/>} />
-            <SidebarItem type={ComponentType.BUTTON} label="Button" icon={<BoxSelect className="w-6 h-6"/>} />
+            <SidebarItem type={ComponentType.INPUT} label={componentDSLs[ComponentType.INPUT].displayName} icon={<Type className="w-6 h-6"/>} />
+            <SidebarItem type={ComponentType.TEXTAREA} label={componentDSLs[ComponentType.TEXTAREA].displayName} icon={<AlignLeft className="w-6 h-6"/>} />
+            <SidebarItem type={ComponentType.SELECT} label={componentDSLs[ComponentType.SELECT].displayName} icon={<MousePointerClick className="w-6 h-6"/>} />
+            <SidebarItem type={ComponentType.CHECKBOX} label={componentDSLs[ComponentType.CHECKBOX].displayName} icon={<CheckSquare className="w-6 h-6"/>} />
+            <SidebarItem type={ComponentType.BUTTON} label={componentDSLs[ComponentType.BUTTON].displayName} icon={<BoxSelect className="w-6 h-6"/>} />
           </div>
         </div>
 
         <div>
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Display</h3>
           <div className="grid grid-cols-2 gap-3">
-            <SidebarItem type={ComponentType.HEADER} label="Header" icon={<Heading className="w-6 h-6"/>} />
-            <SidebarItem type={ComponentType.TEXT} label="Text" icon={<TypeIcon className="w-6 h-6"/>} />
-            <SidebarItem type={ComponentType.IMAGE} label="Image" icon={<ImageIcon className="w-6 h-6"/>} />
+            <SidebarItem type={ComponentType.HEADER} label={componentDSLs[ComponentType.HEADER].displayName} icon={<Heading className="w-6 h-6"/>} />
+            <SidebarItem type={ComponentType.TEXT} label={componentDSLs[ComponentType.TEXT].displayName} icon={<TypeIcon className="w-6 h-6"/>} />
+            <SidebarItem type={ComponentType.IMAGE} label={componentDSLs[ComponentType.IMAGE].displayName} icon={<ImageIcon className="w-6 h-6"/>} />
           </div>
         </div>
 

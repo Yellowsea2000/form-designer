@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { FormNode, ComponentType, DEFAULT_PROPS, ComponentProps } from './types';
+import { FormNode, ComponentType, ComponentProps } from './types';
+import { DEFAULT_PROPS } from './dsl/components';
 
 interface DesignerState {
   nodes: FormNode[];
