@@ -28,12 +28,23 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
       data: { 
           type: 'canvas-item', 
           id: node.id,
+          nodeType: node.type,
           // Pass children info to help drag handling determine if this is a container
           isContainer: node.type === ComponentType.CONTAINER || 
                        node.type === ComponentType.FORM || 
                        node.type === ComponentType.TABS ||
                        node.type === ComponentType.TAB_ITEM
       } 
+  });
+
+  // Add a separate droppable for container interior
+  const { setNodeRef: setDroppableRef, isOver: isOverInterior } = useDroppable({
+    id: `${node.id}-interior`,
+    data: {
+      type: 'container-interior',
+      parentId: node.id,
+      nodeType: node.type,
+    }
   });
 
   const { removeNode, selectNode, selectedNodeId } = useDesignerStore();
@@ -109,7 +120,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
       className={clsx(
         "group relative my-3 rounded-lg border-2 transition-all bg-white hover:shadow-md cursor-grab active:cursor-grabbing",
         isSelected ? "border-blue-500 ring-1 ring-blue-500 z-10" : "border-transparent hover:border-blue-200",
-        isOver && (isContainer || isTabs) ? "ring-2 ring-blue-400 bg-blue-50/50" : ""
+        isOver && !isOverInterior ? "ring-2 ring-blue-400" : ""
       )}
       onClick={(e) => {
         e.stopPropagation();
@@ -142,9 +153,35 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
             {(isContainer || isTabs) && (
                 <SortableContext items={visibleChildren.map(c => c.id)} strategy={sortingStrategy}>
                     <div 
-                        className={clsx("w-full transition-colors rounded", !isTabs && "min-h-[50px]")}
+                        className={clsx(
+                          "w-full transition-colors rounded relative", 
+                          !isTabs && "min-h-[50px]"
+                        )}
                         style={containerStyle}
                     >
+                        {/* Interior droppable zone */}
+                        {visibleChildren.length === 0 ? (
+                          <div 
+                            ref={setDroppableRef}
+                            className={clsx(
+                              "absolute inset-2 rounded transition-colors",
+                              isOverInterior && "ring-2 ring-inset ring-green-400 bg-green-50/30"
+                            )}
+                          >
+                            <div className="text-center py-8 text-slate-400 text-sm pointer-events-none">
+                              拖放组件到这里
+                            </div>
+                          </div>
+                        ) : (
+                          /* When has children, droppable zone is much smaller - easier to drag out */
+                          <div 
+                            ref={setDroppableRef}
+                            className={clsx(
+                              "absolute inset-x-8 top-8 bottom-8 rounded transition-colors pointer-events-none",
+                              isOverInterior && "ring-2 ring-inset ring-green-400 bg-green-50/20"
+                            )}
+                          />
+                        )}
                         {visibleChildren.map((child) => (
                              <SortableNode
                                 key={child.id}

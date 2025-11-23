@@ -46,10 +46,12 @@ export interface FormNode {
 }
 
 export interface DragData {
-  type: 'sidebar-item' | 'canvas-item';
+  type: 'sidebar-item' | 'canvas-item' | 'container-interior';
   componentType?: ComponentType;
   id?: string;
   isContainer?: boolean;
+  nodeType?: ComponentType;
+  parentId?: string;
 }
 
 export const DEFAULT_PROPS: Record<ComponentType, ComponentProps> = {

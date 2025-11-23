@@ -11,7 +11,11 @@ import {
   defaultDropAnimationSideEffects,
   DropAnimation,
   DragOverEvent,
-  closestCorners,
+  pointerWithin,
+  rectIntersection,
+  getFirstCollision,
+  DragOverlayProps,
+  Modifier,
 } from '@dnd-kit/core';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
@@ -31,6 +35,15 @@ const dropAnimation: DropAnimation = {
     },
   }),
   duration: 0, 
+};
+
+// Modifier to position the drag overlay near the cursor
+const cursorModifier: Modifier = ({ transform }) => {
+  return {
+    ...transform,
+    x: transform.x - 10, // Small offset from cursor
+    y: transform.y + 10, // Slightly below cursor
+  };
 };
 
 function App() {
@@ -78,43 +91,36 @@ function App() {
         let parentId: string | null = null;
         let index: number | undefined = undefined;
 
-        // Check if the dragged item is a layout component
-        const isLayoutComponent = activeData.componentType === ComponentType.CONTAINER || 
-                                   activeData.componentType === ComponentType.FORM;
-
-        // If dropping over a container/form, decide based on what's being dragged
-        if (overData?.isContainer) {
-             // Layout components should be placed as siblings, not inside
-             if (isLayoutComponent) {
-                 // Find the parent and index of the over element
-                 const findParentAndIndex = (nodes: FormNode[], childId: string): { parentId: string | null, index: number } | null => {
-                      for(const node of nodes) {
-                         const idx = node.children.findIndex(c => c.id === childId);
-                         if(idx !== -1) return { parentId: node.id, index: idx };
-                         
-                         const res = findParentAndIndex(node.children, childId);
-                         if(res) return res;
-                      }
-                      return null;
-                 };
-
-                 // Check root level first
-                 const rootIdx = nodes.findIndex(n => n.id === over.id);
-                 if (rootIdx !== -1) {
-                     parentId = null;
-                     index = rootIdx + 1;
-                 } else {
-                     // Check nested
-                     const res = findParentAndIndex(nodes, over.id as string);
-                     if (res) {
-                         parentId = res.parentId;
-                         index = res.index + 1;
-                     }
+        // Check if dropping into container interior (explicit nesting)
+        if (overData?.type === 'container-interior') {
+            parentId = overData.parentId as string;
+            // Append to end of container
+        } else if (overData?.isContainer) {
+            // Dropping on container border/edge - place as sibling
+            const findParentAndIndex = (nodes: FormNode[], childId: string): { parentId: string | null, index: number } | null => {
+                 for(const node of nodes) {
+                    const idx = node.children.findIndex(c => c.id === childId);
+                    if(idx !== -1) return { parentId: node.id, index: idx };
+                    
+                    const res = findParentAndIndex(node.children, childId);
+                    if(res) return res;
                  }
-             } else {
-                 // Non-layout components go inside containers
-                 parentId = over.id as string;
-             }
+                 return null;
+            };
+
+            // Check root level first
+            const rootIdx = nodes.findIndex(n => n.id === over.id);
+            if (rootIdx !== -1) {
+                parentId = null;
+                index = rootIdx + 1;
+            } else {
+                // Check nested
+                const res = findParentAndIndex(nodes, over.id as string);
+                if (res) {
+                    parentId = res.parentId;
+                    index = res.index + 1;
+                }
+            }
         } else if (over.id === 'canvas-droppable') {
              parentId = null; // Root
              index = nodes.length;
@@ -152,11 +158,14 @@ function App() {
 
     // Scenario 2: Reordering / Moving Canvas Items
     if (activeData?.type === 'canvas-item') {
-        if (active.id !== over.id) {
-             // Store logic handles: 
-             // - If over is Container -> Insert Inside (unless active is also a layout)
-             // - If over is Leaf -> Insert Before
-             moveNode(active.id as string, over.id as string, overData?.isContainer);
+        if (active.id !== over.id && !over.id.toString().startsWith(active.id.toString())) {
+             const dragData = activeData as DragData;
+             moveNode(
+               active.id as string, 
+               over.id as string, 
+               overData?.type === 'container-interior',
+               dragData.nodeType
+             );
         }
     }
   };
@@ -167,10 +176,27 @@ function App() {
       alert('Form schema saved to console!');
   };
 
+  // Custom collision detection - prioritize interior zones when pointer is well inside
+  const customCollisionDetection = (args: any) => {
+    // First check pointer-based collision for interior zones
+    const pointerCollisions = pointerWithin(args);
+    const interiorCollision = pointerCollisions.find((collision: any) => 
+      collision.id.toString().endsWith('-interior')
+    );
+    
+    // If pointer is over an interior zone, use it
+    if (interiorCollision) {
+      return [interiorCollision];
+    }
+    
+    // Otherwise use rectangle intersection for better edge detection
+    return rectIntersection(args);
+  };
+
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCorners}
+      collisionDetection={customCollisionDetection}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
@@ -225,17 +251,21 @@ function App() {
         </div>
 
         {/* Drag Overlay - Visual feedback during drag */}
-        <DragOverlay dropAnimation={dropAnimation}>
+        <DragOverlay 
+          dropAnimation={dropAnimation} 
+          modifiers={[cursorModifier]}
+          style={{ cursor: 'grabbing' }}
+        >
           {activeDragData?.type === 'sidebar-item' && activeDragData.componentType ? (
-             <div className="w-[200px] bg-white p-4 rounded-lg shadow-xl border-2 border-blue-500 opacity-90 cursor-grabbing">
+             <div className="w-[180px] bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90">
                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-slate-800">Adding {activeDragData.componentType}</span>
+                    <span className="font-medium text-slate-700 text-sm">{activeDragData.componentType}</span>
                  </div>
              </div>
           ) : null}
           {activeDragData?.type === 'canvas-item' ? (
-              <div className="bg-white p-4 rounded-lg shadow-xl border-2 border-blue-500 opacity-90 cursor-grabbing w-[300px]">
-                  Moving component...
+              <div className="bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90 w-[200px]">
+                  <span className="text-sm text-slate-700">移动中...</span>
               </div>
           ) : null}
         </DragOverlay>

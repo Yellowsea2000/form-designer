@@ -10,7 +10,7 @@ interface DesignerState {
   removeNode: (id: string) => void;
   updateNode: (id: string, updates: Partial<FormNode> | Partial<ComponentProps>) => void;
   selectNode: (id: string | null) => void;
-  moveNode: (activeId: string, overId: string, overIsContainer?: boolean) => void;
+  moveNode: (activeId: string, overId: string, isInteriorDrop?: boolean, activeNodeType?: ComponentType) => void;
 }
 
 // Simple ID generator
@@ -120,7 +120,7 @@ export const useDesignerStore = create<DesignerState>((set) => ({
 
   selectNode: (id) => set({ selectedNodeId: id }),
 
-  moveNode: (activeId, overId, overIsContainer) => set((state) => {
+  moveNode: (activeId, overId, isInteriorDrop, activeNodeType) => set((state) => {
     const cloneNodes = JSON.parse(JSON.stringify(state.nodes));
     
     // 1. Find and Remove active node
@@ -144,16 +144,36 @@ export const useDesignerStore = create<DesignerState>((set) => ({
 
     if (!activeNode) return { nodes: state.nodes };
 
-    // Check if active node is a layout component
-    const activeIsLayout = activeNode.type === ComponentType.CONTAINER || 
-                           activeNode.type === ComponentType.FORM;
-
     // 2. Find overId and Insert
     if (overId === 'root' || overId === 'canvas-droppable') {
         cloneNodes.push(activeNode);
         return { nodes: cloneNodes };
     }
 
+    // Handle interior drop (explicit nesting)
+    if (isInteriorDrop) {
+        // Extract parent ID from interior droppable ID (format: "nodeId-interior")
+        const parentId = overId.replace('-interior', '');
+        
+        const insertIntoParent = (nodes: FormNode[]): boolean => {
+            for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].id === parentId) {
+                    nodes[i].children.push(activeNode!);
+                    return true;
+                }
+                if (nodes[i].children && insertIntoParent(nodes[i].children)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        if (insertIntoParent(cloneNodes)) {
+            return { nodes: cloneNodes };
+        }
+    }
+
+    // Handle regular drop (sibling placement)
     const insert = (nodes: FormNode[]): boolean => {
         for (let i = 0; i < nodes.length; i++) {
             if (nodes[i].id === overId) {
@@ -161,13 +181,8 @@ export const useDesignerStore = create<DesignerState>((set) => ({
                 
                 // Check if target is a container
                 if (isContainerType(targetNode.type)) {
-                    // If active is a layout component, place as sibling instead of inside
-                    if (activeIsLayout) {
-                        nodes.splice(i + 1, 0, activeNode!);
-                    } else {
-                        // Insert inside for non-layout components
-                        targetNode.children.push(activeNode!);
-                    }
+                    // Place as sibling (after the container)
+                    nodes.splice(i + 1, 0, activeNode!);
                 } else {
                     // Insert BEFORE sibling
                     nodes.splice(i, 0, activeNode!);
