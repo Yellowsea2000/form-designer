@@ -26,7 +26,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ type, label, icon }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `sidebar-${type}`,
     data: {
-      type: 'sidebar-item',
+      type: 'component',
       componentType: type,
     },
   });

@@ -1,10 +1,10 @@
 import React from 'react';
-import { ComponentProps, FormNode } from '../../types';
+import { ComponentNode, ComponentProps } from '../../types';
 
 export interface ElementRendererProps {
   props: ComponentProps;
   children?: React.ReactNode;
-  node?: FormNode;
+  node?: ComponentNode;
   activeTabId?: string | null;
   onTabChange?: (id: string) => void;
 }

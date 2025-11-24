@@ -16,9 +16,10 @@ This document summarizes the stack, layering, core data shapes, interaction flow
   - Header toggles Preview/Save; Preview hides sidebar and properties panel only.
   - `DragContext` shares active drag data and hover info with the Canvas.
 - **State layer** (`store.ts`)
-  - `nodes: FormNode[]` for the tree; `selectedNodeId` for current selection.
-  - `addNode/removeNode/updateNode/selectNode/moveNode` manage lifecycle and reordering; `DEFAULT_PROPS` comes from the DSL.
-  - Move logic supports root/container interior drops, sibling insertion, and Tabs/TabItem selection rules.
+  - `formSchema: FormSchema` contains the component tree plus layout metadata; `selectedComponentId` and `propertyPanelOpen` drive UI chrome.
+  - `dragState` stores `DragData`, drop targets, and preview nodes for overlays.
+  - `actions.addComponent/removeComponent/updateComponent/moveComponent` manage lifecycle and reordering; `DEFAULT_PROPS` comes from the DSL and Tabs auto-seed three TabItems.
+  - Move logic prevents cycles (no dropping into descendants) and supports root/container interior drops and sibling insertion.
 - **UI components**
   - **Sidebar** (`components/Sidebar.tsx`): reads `componentDSLs` to render draggable catalog items.
   - **Canvas** (`components/Canvas.tsx`): `SortableContext` + `useDroppable/useSortable` to render the tree, show placeholders, handle interior/sibling drops, grid layout (`columns/gap`), and Tabs rendering of only the active tab.
@@ -32,16 +33,18 @@ This document summarizes the stack, layering, core data shapes, interaction flow
   - `index.html` host, `index.css` for global/scrollbar styles, `tailwind.config.cjs` for scan paths and theme colors (including `canvas` background).
 
 ## 3. Core data shapes
-- `FormNode`: `{ id, type, props, children[] }`, aligned to DSL `ComponentType`.
+- `FormSchema`: `{ id, name, components: ComponentNode[], layout }`, the full designer document.
+- `ComponentNode`: `{ id, type, props, children[] }`, aligned to DSL `ComponentType`.
+- `DragState`: `{ isDragging, draggedItem, dropTarget, previewComponent }` for DnD overlays and placeholders.
 - `ComponentProps`: shared prop bag (label/content/options/style/...) with defaults per component DSL.
 - `ComponentDSLDefinition`: component metadata, defaults, editable fields, and child constraints—used by renderers, the properties panel, and validation.
 
 ## 4. Key flows
-1. **Add via drag**: Sidebar drag carries `DragData(type=sidebar-item, componentType)`; Canvas `onDragEnd` inspects drop target (root/interior/sibling) and calls `addNode` (hydrated with DSL defaults).
-2. **Reorder/nest**: Canvas nodes expose `useSortable` + interior `useDroppable`; `moveNode` decides insert location from drop target and prevents dropping into descendants (ID prefix guard).
+1. **Add via drag**: Sidebar drag carries `DragData(type=component, componentType)`; Canvas `onDragEnd` inspects drop target (root/interior/sibling) and calls `addComponent` (hydrated with DSL defaults).
+2. **Reorder/nest**: Canvas nodes expose `useSortable` + interior `useDroppable`; `moveComponent` decides insert location from drop target and prevents dropping into descendants (ID-based guard).
 3. **Select & edit**: Canvas click sets `selectNode`; Properties panel reads the selection and calls `updateNode` to merge props/style.
 4. **Tabs behavior**: Tabs track an active TabItem and render only that child in the SortableContext; new Tabs auto-create three TabItems, and new TabItems auto-number.
-5. **Export DSL**: Save triggers `createFormDocument(nodes, metadata)` (logged today); run `validateFormDocument` before persistence for stricter guardrails.
+5. **Export DSL**: Save triggers `createFormDocument(formSchema, metadata)` (logged today) and persists to localStorage; run `validateFormDocument` before persistence for stricter guardrails.
 6. **Preview mode**: Layout toggle that hides Sidebar/PropertiesPanel; Canvas renders the same tree.
 
 ## 5. Directory map

@@ -1,47 +1,82 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { createContext, useContext, useRef, useState, useMemo } from 'react';
 import {
   DndContext,
   DragEndEvent,
   DragOverlay,
+  DragOverEvent,
   DragStartEvent,
+  DropAnimation,
   MouseSensor,
   TouchSensor,
-  useSensor,
-  useSensors,
   defaultDropAnimationSideEffects,
-  DropAnimation,
-  DragOverEvent,
   pointerWithin,
   rectIntersection,
-  getFirstCollision,
-  DragOverlayProps,
+  useSensor,
+  useSensors,
   Modifier,
 } from '@dnd-kit/core';
+import { Eye, Save, Settings2 } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
 import { PropertiesPanel } from './components/PropertiesPanel';
 import { useDesignerStore } from './store';
-import { ComponentType, DragData, FormNode } from './types';
-import { Eye, Save } from 'lucide-react';
-import { createFormDocument } from './dsl/form';
+import { ComponentNode, ComponentType, DragData, DropTarget } from './types';
+import { createFormDocument, validateFormDocument } from './dsl/form';
+import { storageManager } from './persistence';
 
-// Context for sharing drag state with Canvas
 interface DragContextType {
   activeDragData: DragData | null;
-  overId: string | null;
-  overData: any;
+  dropTarget: DropTarget | null;
 }
 
 export const DragContext = createContext<DragContextType>({
   activeDragData: null,
-  overId: null,
-  overData: null,
+  dropTarget: null,
 });
 
 export const useDragContext = () => useContext(DragContext);
 
+// Helper to find parent and index of a node in the tree
+const findParentAndIndex = (
+  nodes: ComponentNode[],
+  childId: string,
+  parentId: string | null = null
+): { parentId: string | null; index: number } | null => {
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    if (node.id === childId) {
+      return { parentId, index: i };
+    }
+    if (node.children?.length) {
+      const result = findParentAndIndex(node.children, childId, node.id);
+      if (result) return result;
+    }
+  }
+  return null;
+};
+
+const resolveInsertLocation = (
+  nodes: ComponentNode[],
+  overId: string,
+  overData: any
+): { parentId: string | null; index?: number } => {
+  if (overData?.type === 'container-interior') {
+    return { parentId: overData.parentId ?? null, index: undefined };
+  }
+
+  if (overId === 'canvas-droppable' || overId === 'root') {
+    return { parentId: null, index: nodes.length };
+  }
+
+  const target = findParentAndIndex(nodes, overId);
+  if (target) {
+    return { parentId: target.parentId, index: target.index + 1 };
+  }
+
+  return { parentId: null, index: nodes.length };
+};
+
 // Drop animation config for smoother UX
-// Disable duration to remove rebound effect
 const dropAnimation: DropAnimation = {
   sideEffects: defaultDropAnimationSideEffects({
     styles: {
@@ -50,174 +85,131 @@ const dropAnimation: DropAnimation = {
       },
     },
   }),
-  duration: 0, 
+  duration: 0,
 };
 
 // Modifier to position the drag overlay near the cursor
-const cursorModifier: Modifier = ({ transform }) => {
-  return {
-    ...transform,
-    x: transform.x - 10, // Small offset from cursor
-    y: transform.y + 10, // Slightly below cursor
-  };
-};
+const cursorModifier: Modifier = ({ transform }) => ({
+  ...transform,
+  x: transform.x - 10,
+  y: transform.y + 10,
+});
 
 function App() {
-  const { addNode, moveNode, nodes } = useDesignerStore();
-  const [activeDragData, setActiveDragData] = useState<DragData | null>(null);
-  const [overId, setOverId] = useState<string | null>(null);
-  const [overData, setOverData] = useState<any>(null);
+  const formSchema = useDesignerStore((state) => state.formSchema);
+  const dragState = useDesignerStore((state) => state.dragState);
+  const propertyPanelOpen = useDesignerStore((state) => state.propertyPanelOpen);
+  const actions = useDesignerStore((state) => state.actions);
   const [showPreview, setShowPreview] = useState(false);
+
+  const toggleProperties = () => {
+    if (propertyPanelOpen) {
+      actions.closePropertyPanel();
+    } else {
+      actions.openPropertyPanel();
+    }
+  };
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
-      activationConstraint: {
-        distance: 10, // 10px movement before drag starts prevents accidental clicks
-      },
+      activationConstraint: { distance: 10 },
     }),
     useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 250,
-        tolerance: 5,
-      },
+      activationConstraint: { delay: 250, tolerance: 5 },
     })
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    const { active } = event;
-    setActiveDragData(active.data.current as DragData);
+    const dragData = event.active.data.current as DragData;
+    actions.startDrag(dragData);
   };
 
+  const lastDropTargetRef = useRef<DropTarget | null>(null);
+
   const handleDragOver = (event: DragOverEvent) => {
-      // Track current drop target for showing placeholder in canvas
-      const { over } = event;
-      if (over) {
-        setOverId(over.id as string);
-        setOverData(over.data.current);
-      } else {
-        setOverId(null);
-        setOverData(null);
+    const { over } = event;
+    if (over) {
+      const overData = over.data.current;
+      const nextDropTarget: DropTarget = {
+        id: over.id as string,
+        type: overData?.type === 'container-interior' ? 'container' : 'canvas',
+        acceptTypes: Object.values(ComponentType),
+        position: overData?.type === 'container-interior' ? 'inside' : 'after',
+        data: overData,
+      };
+
+      const currentTarget = lastDropTargetRef.current;
+      const isSameTarget =
+        currentTarget &&
+        currentTarget.id === nextDropTarget.id &&
+        currentTarget.position === nextDropTarget.position &&
+        currentTarget.type === nextDropTarget.type;
+
+      if (!isSameTarget) {
+        lastDropTargetRef.current = nextDropTarget;
+        actions.setDropTarget(nextDropTarget);
       }
+    } else if (lastDropTargetRef.current) {
+      lastDropTargetRef.current = null;
+      actions.setDropTarget(null);
+    }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
-    // Reset drag state
-    setActiveDragData(null);
-    setOverId(null);
-    setOverData(null);
-
+    actions.endDrag();
+    lastDropTargetRef.current = null;
     if (!over) return;
 
     const activeData = active.data.current as DragData;
     const overData = over.data.current;
+    const overId = over.id as string;
 
-    // Scenario 1: Dropping Sidebar Item
-    if (activeData?.type === 'sidebar-item' && activeData.componentType) {
-        
-        let parentId: string | null = null;
-        let index: number | undefined = undefined;
+    if (activeData.type === 'component' && activeData.componentType) {
+      const { parentId, index } = resolveInsertLocation(
+        formSchema.components,
+        overId,
+        overData
+      );
+      actions.addComponent(activeData.componentType, parentId, index);
+      return;
+    }
 
-        // Check if dropping into container interior (explicit nesting)
-        if (overData?.type === 'container-interior') {
-            parentId = overData.parentId as string;
-            // Append to end of container
-        } else if (overData?.isContainer) {
-            // Dropping on container border/edge - place as sibling
-            const findParentAndIndex = (nodes: FormNode[], childId: string): { parentId: string | null, index: number } | null => {
-                 for(const node of nodes) {
-                    const idx = node.children.findIndex(c => c.id === childId);
-                    if(idx !== -1) return { parentId: node.id, index: idx };
-                    
-                    const res = findParentAndIndex(node.children, childId);
-                    if(res) return res;
-                 }
-                 return null;
-            };
+    if (activeData.type === 'reorder') {
+      const dropMode = overData?.type === 'container-interior' ? 'inside' : 'after';
+      const targetId =
+        dropMode === 'inside' ? overData?.parentId || overId : (overId as string);
+      actions.moveComponent(active.id as string, targetId, dropMode);
+    }
+  };
 
-            // Check root level first
-            const rootIdx = nodes.findIndex(n => n.id === over.id);
-            if (rootIdx !== -1) {
-                parentId = null;
-                index = rootIdx + 1;
-            } else {
-                // Check nested
-                const res = findParentAndIndex(nodes, over.id as string);
-                if (res) {
-                    parentId = res.parentId;
-                    index = res.index + 1;
-                }
-            }
-        } else if (over.id === 'canvas-droppable') {
-             parentId = null; // Root
-             index = nodes.length;
-        } else {
-            // Dropping over a regular item - insert next to it
-            const findParentAndIndex = (nodes: FormNode[], childId: string): { parentId: string | null, index: number } | null => {
-                 for(const node of nodes) {
-                    const idx = node.children.findIndex(c => c.id === childId);
-                    if(idx !== -1) return { parentId: node.id, index: idx };
-                    
-                    const res = findParentAndIndex(node.children, childId);
-                    if(res) return res;
-                 }
-                 return null;
-            };
-
-            // Check root level first
-            const rootIdx = nodes.findIndex(n => n.id === over.id);
-            if (rootIdx !== -1) {
-                parentId = null;
-                index = rootIdx + 1;
-            } else {
-                // Check nested
-                const res = findParentAndIndex(nodes, over.id as string);
-                if (res) {
-                    parentId = res.parentId;
-                    index = res.index + 1;
-                }
-            }
-        }
-
-        addNode(activeData.componentType, parentId, index);
+  const saveForm = async () => {
+    try {
+      const document = createFormDocument(formSchema);
+      const errors = validateFormDocument(document);
+      if (errors.length) {
+        alert(`Validation failed:\n${errors.join('\n')}`);
         return;
-    }
-
-    // Scenario 2: Reordering / Moving Canvas Items
-    if (activeData?.type === 'canvas-item') {
-        if (active.id !== over.id && !over.id.toString().startsWith(active.id.toString())) {
-             const dragData = activeData as DragData;
-             moveNode(
-               active.id as string, 
-               over.id as string, 
-               overData?.type === 'container-interior',
-               dragData.nodeType
-             );
-        }
-    }
-  };
-
-  const saveForm = () => {
-      const document = createFormDocument(nodes, { name: 'FormCraft Pro DSL' });
+      }
+      await storageManager.save(formSchema.id, formSchema);
       console.log('Form DSL document:', JSON.stringify(document, null, 2));
-      alert('Form DSL saved to console!');
+      alert('Form saved locally (localStorage).');
+    } catch (error) {
+      console.error('Save failed', error);
+      alert('Failed to save form. Check console for details.');
+    }
   };
 
-  // Custom collision detection - prioritize interior zones when pointer is well inside
   const customCollisionDetection = (args: any) => {
-    // First check pointer-based collision for interior zones
     const pointerCollisions = pointerWithin(args);
-    const interiorCollision = pointerCollisions.find((collision: any) => 
+    const interiorCollision = pointerCollisions.find((collision: any) =>
       collision.id.toString().endsWith('-interior')
     );
-    
-    // If pointer is over an interior zone, use it
+
     if (interiorCollision) {
       return [interiorCollision];
     }
-    
-    // Otherwise use rectangle intersection for better edge detection
+
     return rectIntersection(args);
   };
 
@@ -229,76 +221,91 @@ function App() {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <DragContext.Provider value={{ activeDragData, overId, overData }}>
+      <DragContext.Provider
+        value={{
+          activeDragData: dragState.draggedItem,
+          dropTarget: dragState.dropTarget,
+        }}
+      >
         <div className="flex flex-col h-screen overflow-hidden bg-slate-50">
           {/* Header */}
           <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-20">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center text-white font-bold shadow-lg shadow-blue-200">
-                  FC
+                FC
               </div>
-              <h1 className="text-lg font-bold text-slate-800">FormCraft <span className="text-slate-400 font-normal">Pro</span></h1>
+              <h1 className="text-lg font-bold text-slate-800">
+                FormCraft <span className="text-slate-400 font-normal">Pro</span>
+              </h1>
             </div>
             <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setShowPreview(!showPreview)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${showPreview ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-100'}`}
-                >
-                    <Eye className="w-4 h-4" />
-                    {showPreview ? 'Edit Mode' : 'Preview'}
-                </button>
-                <button
-                  onClick={saveForm}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 shadow-sm transition-colors"
-                >
-                    <Save className="w-4 h-4" />
-                    Save
-                </button>
+              <button
+                onClick={toggleProperties}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  propertyPanelOpen ? 'text-slate-600 hover:bg-slate-100' : 'bg-blue-50 text-blue-600'
+                }`}
+              >
+                <Settings2 className="w-4 h-4" />
+                {propertyPanelOpen ? 'Hide Properties' : 'Show Properties'}
+              </button>
+              <button
+                onClick={() => setShowPreview(!showPreview)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  showPreview ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                <Eye className="w-4 h-4" />
+                {showPreview ? 'Edit Mode' : 'Preview'}
+              </button>
+              <button
+                onClick={saveForm}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 shadow-sm transition-colors"
+              >
+                <Save className="w-4 h-4" />
+                Save
+              </button>
             </div>
           </header>
 
           {/* Main Content */}
           <div className="flex flex-1 overflow-hidden relative">
-              {/* Sidebar */}
-              {!showPreview && (
-                  <div className="h-full z-10 shadow-lg shadow-slate-200/50">
-                      <Sidebar />
-                  </div>
-              )}
+            {/* Sidebar */}
+            {!showPreview && (
+              <div className="h-full z-10 shadow-lg shadow-slate-200/50">
+                <Sidebar />
+              </div>
+            )}
 
-              {/* Canvas */}
-              <main className="flex-1 h-full relative flex flex-col">
-                  <Canvas />
-              </main>
+            {/* Canvas */}
+            <main className="flex-1 h-full relative flex flex-col">
+              <Canvas />
+            </main>
 
-              {/* Properties Panel */}
-              {!showPreview && (
-                   <div className="h-full z-10">
-                      <PropertiesPanel />
-                  </div>
-              )}
+            {/* Properties Panel */}
+            {!showPreview && propertyPanelOpen && (
+              <div className="h-full z-10">
+                <PropertiesPanel />
+              </div>
+            )}
           </div>
 
           {/* Drag Overlay - Visual feedback during drag */}
-          <DragOverlay
-            dropAnimation={dropAnimation}
-            modifiers={[cursorModifier]}
-            style={{ cursor: 'grabbing' }}
-          >
-            {activeDragData?.type === 'sidebar-item' && activeDragData.componentType ? (
-               <div className="w-[180px] bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90">
-                   <div className="flex items-center gap-2">
-                      <span className="font-medium text-slate-700 text-sm">{activeDragData.componentType}</span>
-                   </div>
-               </div>
-            ) : null}
-            {activeDragData?.type === 'canvas-item' ? (
-                <div className="bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90 w-[200px]">
-                    <span className="text-sm text-slate-700">移动中...</span>
+          <DragOverlay dropAnimation={dropAnimation} modifiers={[cursorModifier]} style={{ cursor: 'grabbing' }}>
+            {dragState.draggedItem?.type === 'component' && dragState.draggedItem.componentType ? (
+              <div className="w-[180px] bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-slate-700 text-sm">
+                    {dragState.draggedItem.componentType}
+                  </span>
                 </div>
+              </div>
+            ) : null}
+            {dragState.draggedItem?.type === 'reorder' ? (
+              <div className="bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90 w-[200px]">
+                <span className="text-sm text-slate-700">Moving...</span>
+              </div>
             ) : null}
           </DragOverlay>
-
         </div>
       </DragContext.Provider>
     </DndContext>

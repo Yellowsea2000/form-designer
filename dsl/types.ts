@@ -1,4 +1,4 @@
-import { ComponentProps, ComponentType, FormNode } from '../types';
+import { ComponentProps, ComponentType, FormNode, LayoutConfig } from '../types';
 
 export type DSLPrimitiveType = 'string' | 'boolean' | 'number' | 'enum' | 'options' | 'style';
 
@@ -34,6 +34,8 @@ export interface FormDSLDocument {
   metadata?: {
     name?: string;
     description?: string;
+    schemaId?: string;
+    layout?: LayoutConfig;
   };
   nodes: FormNode[];
 }

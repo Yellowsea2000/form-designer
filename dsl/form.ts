@@ -1,4 +1,4 @@
-import { FormNode, ComponentType } from '../types';
+import { ComponentNode, ComponentType, FormSchema } from '../types';
 import { componentDSLs } from './components';
 import { FormDSLDocument, FormDSLSpec } from './types';
 
@@ -9,19 +9,21 @@ export const formDSLSpec: FormDSLSpec = {
   components: componentDSLs,
 };
 
-export const createFormDocument = (
-  nodes: FormNode[],
-  metadata?: FormDSLDocument['metadata']
-): FormDSLDocument => ({
+export const createFormDocument = (schema: FormSchema, metadata?: FormDSLDocument['metadata']): FormDSLDocument => ({
   version: FORM_DSL_VERSION,
-  metadata,
-  nodes,
+  metadata: {
+    schemaId: schema.id,
+    name: schema.name,
+    layout: schema.layout,
+    ...metadata,
+  },
+  nodes: schema.components,
 });
 
 export const validateFormDocument = (doc: FormDSLDocument): string[] => {
   const errors: string[] = [];
 
-  const walk = (node: FormNode, parentType?: ComponentType) => {
+  const walk = (node: ComponentNode, parentType?: ComponentType) => {
     const dsl = componentDSLs[node.type];
 
     if (!dsl) {
