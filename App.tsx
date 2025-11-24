@@ -15,10 +15,11 @@ import {
   useSensors,
   Modifier,
 } from '@dnd-kit/core';
-import { Eye, Save, Settings2 } from 'lucide-react';
+import { Code, Eye, Save, Settings2 } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
 import { PropertiesPanel } from './components/PropertiesPanel';
+import { JsonModal } from './components/JsonModal';
 import { useDesignerStore } from './store';
 import { ComponentNode, ComponentType, DragData, DropTarget } from './types';
 import { createFormDocument, validateFormDocument } from './dsl/form';
@@ -101,6 +102,12 @@ function App() {
   const propertyPanelOpen = useDesignerStore((state) => state.propertyPanelOpen);
   const actions = useDesignerStore((state) => state.actions);
   const [showPreview, setShowPreview] = useState(false);
+  const [showJson, setShowJson] = useState(false);
+
+  const formJson = useMemo(
+    () => JSON.stringify(createFormDocument(formSchema), null, 2),
+    [formSchema]
+  );
 
   const toggleProperties = () => {
     if (propertyPanelOpen) {
@@ -258,6 +265,13 @@ function App() {
                 {showPreview ? 'Edit Mode' : 'Preview'}
               </button>
               <button
+                onClick={() => setShowJson(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors"
+              >
+                <Code className="w-4 h-4" />
+                JSON
+              </button>
+              <button
                 onClick={saveForm}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 shadow-sm transition-colors"
               >
@@ -281,13 +295,15 @@ function App() {
               <Canvas />
             </main>
 
-            {/* Properties Panel */}
-            {!showPreview && propertyPanelOpen && (
-              <div className="h-full z-10">
-                <PropertiesPanel />
-              </div>
-            )}
-          </div>
+          {/* Properties Panel */}
+          {!showPreview && propertyPanelOpen && (
+            <div className="h-full z-10">
+              <PropertiesPanel />
+            </div>
+          )}
+        </div>
+
+          <JsonModal open={showJson} json={formJson} onClose={() => setShowJson(false)} />
 
           {/* Drag Overlay - Visual feedback during drag */}
           <DragOverlay dropAnimation={dropAnimation} modifiers={[cursorModifier]} style={{ cursor: 'grabbing' }}>
