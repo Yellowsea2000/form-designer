@@ -1,6 +1,6 @@
 import { FormDataSerializer, FormSchema, StorageManager } from './types';
 
-const STORAGE_PREFIX = 'formcraft:';
+const STORAGE_PREFIX = 'formdesigner:';
 
 export const formDataSerializer: FormDataSerializer = {
   serialize: (formSchema: FormSchema) => JSON.stringify(formSchema),

@@ -239,10 +239,10 @@ function App() {
           <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-20">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center text-white font-bold shadow-lg shadow-blue-200">
-                FC
+                FD
               </div>
               <h1 className="text-lg font-bold text-slate-800">
-                FormCraft <span className="text-slate-400 font-normal">Pro</span>
+                formDesigner <span className="text-slate-400 font-normal">Pro</span>
               </h1>
             </div>
             <div className="flex items-center gap-3">

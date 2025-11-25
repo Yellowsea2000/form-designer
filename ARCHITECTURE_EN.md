@@ -1,4 +1,4 @@
-# FormCraft Pro Architecture
+# formDesigner  Architecture
 
 This document summarizes the stack, layering, core data shapes, interaction flows, and extension hooks for the drag-and-drop form/page builder.
 

@@ -1,4 +1,4 @@
-# FormCraft Pro
+# formDesigner
 
 A drag-and-drop form/page builder powered by a typed DSL for components and form documents.
 

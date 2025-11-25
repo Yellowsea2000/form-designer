@@ -1,4 +1,4 @@
-# FormCraft DSL
+# formDesigner DSL
 
 This folder contains the Domain Specific Language (DSL) used by the form builder.
 
