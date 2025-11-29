@@ -73,20 +73,20 @@ export const PropertiesPanel: React.FC = () => {
 
   return (
     <div className="w-80 bg-white border-l border-slate-200 flex flex-col h-full shadow-xl z-30">
-      <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+      <div className="p-4 border-b border-slate-100 flex items-center gap-3 bg-slate-50/50">
+        <button
+          onClick={() => {
+            closePropertyPanel();
+          }}
+          className="text-slate-500 hover:text-slate-700 w-9 h-9 rounded-md border border-slate-200 flex items-center justify-center bg-white shadow-sm"
+          aria-label="Close properties"
+        >
+          <X className="w-5 h-5" />
+        </button>
         <div>
           <h2 className="font-semibold text-slate-800 flex items-center gap-2">Properties</h2>
           <span className="text-xs text-slate-500 bg-slate-200 px-1.5 py-0.5 rounded uppercase">{selectedNode.type}</span>
         </div>
-        <button
-          onClick={() => {
-            closePropertyPanel();
-            selectComponent(null);
-          }}
-          className="text-slate-400 hover:text-slate-600"
-        >
-          <X className="w-5 h-5" />
-        </button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-6">

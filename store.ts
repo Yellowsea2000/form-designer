@@ -210,7 +210,7 @@ const detachNode = (
 export const useDesignerStore = create<FormDesignerStore>((set, _get) => ({
   formSchema: createEmptySchema(),
   selectedComponentId: null,
-  propertyPanelOpen: true,
+  propertyPanelOpen: false,
   dragState: {
     isDragging: false,
     draggedItem: null,
@@ -229,7 +229,6 @@ export const useDesignerStore = create<FormDesignerStore>((set, _get) => ({
         return {
           formSchema: { ...state.formSchema, components: nextComponents },
           selectedComponentId: newNode.id,
-          propertyPanelOpen: true,
         };
       }),
 
@@ -331,7 +330,7 @@ export const useDesignerStore = create<FormDesignerStore>((set, _get) => ({
       set({
         formSchema: createEmptySchema(),
         selectedComponentId: null,
-        propertyPanelOpen: true,
+        propertyPanelOpen: false,
         dragState: {
           isDragging: false,
           draggedItem: null,

@@ -255,8 +255,8 @@ export const Canvas: React.FC = () => {
   const showCanvasPlaceholder = activeDragData?.type === 'component' && dropTarget?.id === 'canvas-droppable';
 
   return (
-    <div className="flex-1 h-full bg-canvas overflow-y-auto p-8" onClick={() => actions.selectComponent(null)}>
-      <div className="max-w-[800px] mx-auto">
+    <div className="flex-1 h-full bg-canvas overflow-y-auto p-4" onClick={() => actions.selectComponent(null)}>
+      <div className="w-full max-w-[1200px] mx-auto px-2">
         <div
           ref={setNodeRef}
           className={clsx(

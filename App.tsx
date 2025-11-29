@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef, useState, useMemo } from 'react';
+import React, { createContext, useContext, useMemo, useRef, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -15,7 +15,7 @@ import {
   useSensors,
   Modifier,
 } from '@dnd-kit/core';
-import { Code, Eye, Save, Settings2 } from 'lucide-react';
+import { BoxSelect, Code, Eye, Save, Settings2, X } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
 import { PropertiesPanel } from './components/PropertiesPanel';
@@ -103,6 +103,7 @@ function App() {
   const actions = useDesignerStore((state) => state.actions);
   const [showPreview, setShowPreview] = useState(false);
   const [showJson, setShowJson] = useState(false);
+  const [componentsOpen, setComponentsOpen] = useState(false);
 
   const formJson = useMemo(
     () => JSON.stringify(createFormDocument(formSchema), null, 2),
@@ -283,25 +284,66 @@ function App() {
 
           {/* Main Content */}
           <div className="flex flex-1 overflow-hidden relative">
-            {/* Sidebar */}
-            {!showPreview && (
-              <div className="h-full z-10 shadow-lg shadow-slate-200/50">
-                <Sidebar />
-              </div>
-            )}
-
             {/* Canvas */}
             <main className="flex-1 h-full relative flex flex-col">
+              {!showPreview && !componentsOpen && !propertyPanelOpen && (
+                <button
+                  type="button"
+                  onClick={() => setComponentsOpen(true)}
+                  className="absolute top-4 right-4 z-20 flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-full shadow-lg hover:shadow-xl text-sm text-slate-700"
+                >
+                  <BoxSelect className="w-4 h-4" />
+                  <span className="hidden sm:inline">Components</span>
+                </button>
+              )}
+
+              {!showPreview && (
+                <div
+                  className={`absolute top-4 bottom-4 right-4 z-30 transition-all duration-300 ${
+                    componentsOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'
+                  }`}
+                >
+                  <div className="relative h-full">
+                    <div className="h-full w-72 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden relative">
+                      <button
+                        type="button"
+                        onClick={() => setComponentsOpen(false)}
+                        className="absolute top-3 left-3 flex items-center justify-center w-9 h-9 rounded-md bg-white border border-slate-200 shadow-sm hover:shadow-md text-slate-600"
+                        aria-label="Close components panel"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      <Sidebar />
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!showPreview && (
+                <div
+                  className={`absolute top-4 bottom-4 right-4 z-40 transition-all duration-300 ${
+                    propertyPanelOpen
+                      ? 'translate-x-0 opacity-100'
+                      : 'translate-x-full opacity-0 pointer-events-none'
+                  }`}
+                >
+                  <div className="relative h-full">
+                    <div className="h-full w-80 bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden relative">
+                      <button
+                        type="button"
+                        onClick={actions.closePropertyPanel}
+                        className="absolute top-3 left-3 flex items-center justify-center w-9 h-9 rounded-md bg-white border border-slate-200 shadow-sm hover:shadow-md text-slate-600"
+                        aria-label="Close properties panel"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      <PropertiesPanel />
+                    </div>
+                  </div>
+                </div>
+              )}
               <Canvas />
             </main>
-
-          {/* Properties Panel */}
-          {!showPreview && propertyPanelOpen && (
-            <div className="h-full z-10">
-              <PropertiesPanel />
-            </div>
-          )}
-        </div>
+          </div>
 
           <JsonModal open={showJson} json={formJson} onClose={() => setShowJson(false)} />
 
