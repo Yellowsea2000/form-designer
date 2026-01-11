@@ -193,15 +193,27 @@ function App() {
 
   const saveForm = async () => {
     try {
-      const document = createFormDocument(formSchema);
-      const errors = validateFormDocument(document);
+      const formDocument = createFormDocument(formSchema);
+      const errors = validateFormDocument(formDocument);
       if (errors.length) {
         alert(`Validation failed:\n${errors.join('\n')}`);
         return;
       }
       await storageManager.save(formSchema.id, formSchema);
-      console.log('Form DSL document:', JSON.stringify(document, null, 2));
-      alert('Form saved locally (localStorage).');
+      console.log('Form DSL document:', JSON.stringify(formDocument, null, 2));
+      
+      // 自动下载JSON文件
+      const jsonString = JSON.stringify(formDocument, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `form-${formSchema.id || 'export'}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
     } catch (error) {
       console.error('Save failed', error);
       alert('Failed to save form. Check console for details.');
@@ -239,15 +251,10 @@ function App() {
           {/* Header */}
           <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-20">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center text-white font-bold shadow-lg shadow-blue-200">
-                FD
-              </div>
-              <h1 className="text-lg font-bold text-slate-800">
-                formDesigner <span className="text-slate-400 font-normal">Pro</span>
-              </h1>
+             
             </div>
             <div className="flex items-center gap-3">
-              <button
+              {/* <button
                 onClick={toggleProperties}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   propertyPanelOpen ? 'text-slate-600 hover:bg-slate-100' : 'bg-blue-50 text-blue-600'
@@ -255,8 +262,8 @@ function App() {
               >
                 <Settings2 className="w-4 h-4" />
                 {propertyPanelOpen ? 'Hide Properties' : 'Show Properties'}
-              </button>
-              <button
+              </button> */}
+              {/* <button
                 onClick={() => setShowPreview(!showPreview)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   showPreview ? 'bg-blue-50 text-blue-600' : 'text-slate-600 hover:bg-slate-100'
@@ -264,7 +271,7 @@ function App() {
               >
                 <Eye className="w-4 h-4" />
                 {showPreview ? 'Edit Mode' : 'Preview'}
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowJson(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors"
