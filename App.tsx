@@ -15,7 +15,8 @@ import {
   useSensors,
   Modifier,
 } from '@dnd-kit/core';
-import { BoxSelect, Code, Eye, Save, Settings2, X } from 'lucide-react';
+import { Code, Eye, Save, Settings2, X } from 'lucide-react';
+import componentsIcon from './img/icon/components.png';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
 import { PropertiesPanel } from './components/PropertiesPanel';
@@ -297,10 +298,9 @@ function App() {
                 <button
                   type="button"
                   onClick={() => setComponentsOpen(true)}
-                  className="absolute top-4 right-4 z-20 flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-full shadow-lg hover:shadow-xl text-sm text-slate-700"
+                  className="w-[48px] h-[48px] absolute top-8 right-8 z-20 flex items-center justify-center px-3 py-2 bg-white border shadow-lg hover:shadow-xl text-sm text-slate-700"
                 >
-                  <BoxSelect className="w-4 h-4" />
-                  <span className="hidden sm:inline">Components</span>
+                  <img src={componentsIcon} alt="Components" className="w-4 h-4 object-contain" />
                 </button>
               )}
 
