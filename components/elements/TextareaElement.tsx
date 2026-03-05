@@ -1,24 +1,19 @@
 import React from 'react';
+import { Input } from 'antd';
 import { ElementRendererProps } from './types';
-import { baseInputClass, baseLabelClass } from './common';
+import { baseLabelClass, cn } from './common';
 
 export const TextareaElement: React.FC<ElementRendererProps> = ({ props }) => {
-  const { label, required, placeholder, style } = props;
+  const { label, required, placeholder, style, className } = props;
 
   return (
-    <div style={style}>
+    <div style={style} className={cn('pointer-events-none', className)}>
       {label && (
         <label className={baseLabelClass}>
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
-      <textarea
-        className={baseInputClass}
-        placeholder={placeholder}
-        rows={3}
-        disabled
-        readOnly
-      />
+      <Input.TextArea placeholder={placeholder} rows={3} disabled />
     </div>
   );
 };

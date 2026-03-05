@@ -1,25 +1,23 @@
 import React from 'react';
+import { Select } from 'antd';
 import { ElementRendererProps } from './types';
-import { baseInputClass, baseLabelClass } from './common';
+import { baseLabelClass, cn } from './common';
 
 export const SelectElement: React.FC<ElementRendererProps> = ({ props }) => {
-  const { label, required, options, style } = props;
+  const { label, required, options, style, className } = props;
 
   return (
-    <div style={style}>
+    <div style={style} className={cn('pointer-events-none', className)}>
       {label && (
         <label className={baseLabelClass}>
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
-      <select className={baseInputClass} disabled>
-        <option value="">Select an option</option>
-        {options?.map((opt, idx) => (
-          <option key={idx} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+      <Select
+        disabled
+        placeholder="Select an option"
+        options={options?.map((opt) => ({ label: opt.label, value: opt.value }))}
+      />
     </div>
   );
 };

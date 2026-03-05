@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useMemo, useState, createContext, useContext } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -17,12 +17,13 @@ import {
   DragOverlayProps,
   Modifier,
 } from '@dnd-kit/core';
+import { Button, Input, Modal, Space, message } from 'antd';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
 import { PropertiesPanel } from './components/PropertiesPanel';
 import { useDesignerStore } from './store';
 import { ComponentType, DragData, FormNode } from './types';
-import { Eye, Save } from 'lucide-react';
+import { Code2, Copy, Eye, Save } from 'lucide-react';
 import { createFormDocument } from './dsl/form';
 
 // Context for sharing drag state with Canvas
@@ -68,6 +69,7 @@ function App() {
   const [overId, setOverId] = useState<string | null>(null);
   const [overData, setOverData] = useState<any>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [showJsonModal, setShowJsonModal] = useState(false);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -204,6 +206,20 @@ function App() {
       alert('Form DSL saved to console!');
   };
 
+  const pageJson = useMemo(() => {
+    const payload = createFormDocument(nodes, { name: 'FormCraft Pro DSL' });
+    return JSON.stringify(payload, null, 2);
+  }, [nodes]);
+
+  const copyJsonToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(pageJson);
+      message.success('JSON copied');
+    } catch {
+      message.error('Copy failed');
+    }
+  };
+
   // Custom collision detection - prioritize interior zones when pointer is well inside
   const customCollisionDetection = (args: any) => {
     // First check pointer-based collision for interior zones
@@ -246,6 +262,13 @@ function App() {
                 >
                     <Eye className="w-4 h-4" />
                     {showPreview ? 'Edit Mode' : 'Preview'}
+                </button>
+                <button
+                  onClick={() => setShowJsonModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors"
+                >
+                    <Code2 className="w-4 h-4" />
+                    JSON
                 </button>
                 <button
                   onClick={saveForm}
@@ -298,6 +321,36 @@ function App() {
                 </div>
             ) : null}
           </DragOverlay>
+
+          <Modal
+            open={showJsonModal}
+            title="Page JSON Structure"
+            width={760}
+            onCancel={() => setShowJsonModal(false)}
+            footer={[
+              <Button key="copy" icon={<Copy className="w-4 h-4" />} onClick={copyJsonToClipboard}>
+                Copy JSON
+              </Button>,
+              <Button key="close" type="primary" onClick={() => setShowJsonModal(false)}>
+                Close
+              </Button>,
+            ]}
+          >
+            <Space direction="vertical" size={10} style={{ width: '100%' }}>
+              <Input.TextArea
+                readOnly
+                value={pageJson}
+                autoSize={{ minRows: 14, maxRows: 20 }}
+                styles={{
+                  textarea: {
+                    fontFamily:
+                      'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                    fontSize: 12,
+                  },
+                }}
+              />
+            </Space>
+          </Modal>
 
         </div>
       </DragContext.Provider>
