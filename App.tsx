@@ -18,6 +18,7 @@ import {
   Modifier,
 } from '@dnd-kit/core';
 import { Button, Input, Modal, Space, message } from 'antd';
+import { observer } from 'mobx-react-lite';
 import { Sidebar } from './components/Sidebar';
 import { Canvas } from './components/Canvas';
 import { PropertiesPanel } from './components/PropertiesPanel';
@@ -63,7 +64,7 @@ const cursorModifier: Modifier = ({ transform }) => {
   };
 };
 
-function App() {
+const App: React.FC = observer(() => {
   const { addNode, moveNode, nodes } = useDesignerStore();
   const [activeDragData, setActiveDragData] = useState<DragData | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
@@ -356,6 +357,6 @@ function App() {
       </DragContext.Provider>
     </DndContext>
   );
-}
+});
 
 export default App;

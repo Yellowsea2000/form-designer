@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Flex, Space, Tag, Typography } from 'antd';
 import { X } from 'lucide-react';
+import { observer } from 'mobx-react-lite';
 import { useDesignerStore } from '../store';
 import { ComponentType } from '../types';
 import { AppearanceSection } from './properties/AppearanceSection';
@@ -15,7 +16,7 @@ import { StyleChangeFn, PropChangeFn } from './properties/types';
 import { ValidationSection } from './properties/ValidationSection';
 import { findNodeById } from './properties/utils';
 
-export const PropertiesPanel: React.FC = () => {
+export const PropertiesPanel: React.FC = observer(() => {
   const { nodes, selectedNodeId, updateNode, selectNode, addNode, removeNode } = useDesignerStore();
   const selectedNode = selectedNodeId ? findNodeById(nodes, selectedNodeId) : undefined;
 
@@ -132,5 +133,5 @@ export const PropertiesPanel: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 

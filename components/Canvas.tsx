@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { observer } from 'mobx-react-lite';
 import { useDesignerStore } from '../store';
 import { FormNode, ComponentType } from '../types';
 import { FormElementRenderer } from './FormElements';
@@ -250,7 +251,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
   );
 };
 
-export const Canvas: React.FC = () => {
+export const Canvas: React.FC = observer(() => {
   const { nodes, selectedNodeId, selectNode } = useDesignerStore();
   const { activeDragData, overId } = useDragContext();
   const { setNodeRef, isOver } = useDroppable({
@@ -311,4 +312,4 @@ export const Canvas: React.FC = () => {
       </div>
     </div>
   );
-};
+});
