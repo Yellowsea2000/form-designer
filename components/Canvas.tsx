@@ -30,10 +30,16 @@ const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({ isInterior }) => 
 interface SortableNodeProps {
   node: FormNode;
   isSelected: boolean;
+  isPreview: boolean;
   onClick: (e: React.MouseEvent) => void;
 }
 
-const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }) => {
+const SortableNode: React.FC<SortableNodeProps> = ({
+  node,
+  isSelected,
+  isPreview,
+  onClick,
+}) => {
   const { activeDragData, overId, overData } = useDragContext();
   const {
     attributes,
@@ -53,7 +59,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
           isContainer: node.type === ComponentType.CONTAINER || 
                        node.type === ComponentType.TABS ||
                        node.type === ComponentType.TAB_ITEM
-      } 
+      },
+      disabled: isPreview,
   });
 
   // Add a separate droppable for container interior
@@ -63,7 +70,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
       type: 'container-interior',
       parentId: node.id,
       nodeType: node.type,
-    }
+    },
+    disabled: isPreview,
   });
 
   const { removeNode, selectNode, selectedNodeId } = useDesignerStore();
@@ -136,31 +144,41 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
       ref={setNodeRef}
       style={style}
       className={clsx(
-        "group relative my-3 rounded-lg border-2 transition-all bg-white hover:shadow-md cursor-grab active:cursor-grabbing",
-        isSelected ? "border-blue-500 ring-1 ring-blue-500 z-10" : "border-transparent hover:border-blue-200",
-        isOver && !isOverInterior ? "ring-2 ring-blue-400" : ""
+        'group relative my-3 rounded-lg transition-all bg-white',
+        isPreview
+          ? 'border-0 shadow-none cursor-default'
+          : 'border-2 hover:shadow-md cursor-grab active:cursor-grabbing',
+        !isPreview && isSelected ? 'border-blue-500 ring-1 ring-blue-500 z-10' : '',
+        !isPreview && !isSelected ? 'border-transparent hover:border-blue-200' : '',
+        !isPreview && isOver && !isOverInterior ? 'ring-2 ring-blue-400' : ''
       )}
       onClick={(e) => {
+        if (isPreview) {
+          return;
+        }
         e.stopPropagation();
         onClick(e);
       }}
-      {...attributes}
-      {...listeners}
+      {...(!isPreview ? attributes : {})}
+      {...(!isPreview ? listeners : {})}
       // Critical: Stop propagation to prevent dragging parent when interacting with child
       onMouseDown={(e) => {
+          if (isPreview) {
+            return;
+          }
           e.stopPropagation();
           listeners?.onMouseDown?.(e);
       }}
       onTouchStart={(e) => {
+          if (isPreview) {
+            return;
+          }
           e.stopPropagation();
           listeners?.onTouchStart?.(e);
       }}
     >
       {/* Content */}
       <div className="p-4 relative">
-        {/* For non-containers, overlay prevents interaction. For containers, we need to interact with children */}
-        {!isContainer && !isTabs && <div className="absolute inset-0 z-[5]" />} 
-        
         <FormElementRenderer 
             type={node.type} 
             props={node.props} 
@@ -178,33 +196,35 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
                         style={containerStyle}
                     >
                         {/* Interior droppable zone - show placeholder when dragging */}
-                        {visibleChildren.length === 0 ? (
-                          <div
-                            ref={setDroppableRef}
-                            className={clsx(
-                              "absolute inset-2 rounded-lg transition-all min-h-[80px]",
-                              isOverInterior
-                                ? "ring-2 ring-inset ring-green-400 bg-green-50/50 border-2 border-dashed border-green-400"
-                                : activeDragData
-                                  ? "border-2 border-dashed border-green-300 bg-green-50/20"
-                                  : ""
-                            )}
-                          />
-                        ) : (
-                          /* When has children, show a full-area drop zone for easier dropping */
-                          <div
-                            ref={setDroppableRef}
-                            className={clsx(
-                              "absolute inset-0 rounded-lg transition-all pointer-events-auto z-0",
-                              isOverInterior && "ring-2 ring-inset ring-green-400 bg-green-50/30"
-                            )}
-                          />
-                        )}
+                        {!isPreview &&
+                          (visibleChildren.length === 0 ? (
+                            <div
+                              ref={setDroppableRef}
+                              className={clsx(
+                                "absolute inset-2 rounded-lg transition-all min-h-[80px]",
+                                isOverInterior
+                                  ? "ring-2 ring-inset ring-green-400 bg-green-50/50 border-2 border-dashed border-green-400"
+                                  : activeDragData
+                                    ? "border-2 border-dashed border-green-300 bg-green-50/20"
+                                    : ""
+                              )}
+                            />
+                          ) : (
+                            /* When has children, show a full-area drop zone for easier dropping */
+                            <div
+                              ref={setDroppableRef}
+                              className={clsx(
+                                "absolute inset-0 rounded-lg transition-all pointer-events-auto z-0",
+                                isOverInterior && "ring-2 ring-inset ring-green-400 bg-green-50/30"
+                              )}
+                            />
+                          ))}
                         {visibleChildren.map((child) => (
                              <SortableNode
                                 key={child.id}
                                 node={child}
                                 isSelected={selectedNodeId === child.id}
+                                isPreview={isPreview}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     selectNode(child.id);
@@ -212,7 +232,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
                              />
                         ))}
                         {/* Show placeholder at the end when hovering interior - AFTER all children */}
-                        {visibleChildren.length > 0 && activeDragData?.type === 'sidebar-item' && isOverInterior && (
+                        {!isPreview && visibleChildren.length > 0 && activeDragData?.type === 'sidebar-item' && isOverInterior && (
                           <div className="col-span-full">
                             <DragPlaceholder isInterior />
                           </div>
@@ -224,7 +244,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
       </div>
 
       {/* Actions */}
-      {isSelected && (
+      {!isPreview && isSelected && (
         <div
             className="absolute -right-3 -top-3 bg-white rounded-full shadow border border-slate-200 z-20 cursor-pointer"
             onMouseDown={(e) => e.stopPropagation()} // Prevent drag when clicking delete
@@ -244,30 +264,40 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
       )}
 
       {/* Show drag placeholder after this node when dragging from sidebar */}
-      {activeDragData?.type === 'sidebar-item' && overId === node.id && !overData?.type?.includes('interior') && (
+      {!isPreview && activeDragData?.type === 'sidebar-item' && overId === node.id && !overData?.type?.includes('interior') && (
         <DragPlaceholder />
       )}
     </div>
   );
 };
 
-export const Canvas: React.FC = observer(() => {
+interface CanvasProps {
+  isPreview?: boolean;
+}
+
+export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) => {
   const { nodes, selectedNodeId, selectNode } = useDesignerStore();
   const { activeDragData, overId } = useDragContext();
   const { setNodeRef, isOver } = useDroppable({
     id: 'canvas-droppable',
     data: {
         type: 'canvas'
-    }
+    },
+    disabled: isPreview,
   });
 
   // Show placeholder when dragging to empty canvas or at the end
-  const showCanvasPlaceholder = activeDragData?.type === 'sidebar-item' && overId === 'canvas-droppable';
+  const showCanvasPlaceholder =
+    !isPreview && activeDragData?.type === 'sidebar-item' && overId === 'canvas-droppable';
 
   return (
     <div
       className="flex-1 h-full bg-canvas overflow-y-auto p-8"
-      onClick={() => selectNode(null)}
+      onClick={() => {
+        if (!isPreview) {
+          selectNode(null);
+        }
+      }}
     >
       <div className="max-w-[800px] mx-auto">
         <div
@@ -296,6 +326,7 @@ export const Canvas: React.FC = observer(() => {
                 key={node.id}
                 node={node}
                 isSelected={selectedNodeId === node.id}
+                isPreview={isPreview}
                 onClick={(e) => {
                     e.stopPropagation();
                     selectNode(node.id);

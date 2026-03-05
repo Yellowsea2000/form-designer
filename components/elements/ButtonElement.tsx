@@ -10,9 +10,8 @@ export const ButtonElement: React.FC<ElementRendererProps> = ({ props }) => {
     <Button
       htmlType={buttonType}
       type="primary"
-      className={cn('pointer-events-none', className)}
+      className={cn(className)}
       style={style}
-      disabled
     >
       {content}
     </Button>

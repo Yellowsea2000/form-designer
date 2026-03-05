@@ -292,7 +292,7 @@ const App: React.FC = observer(() => {
 
               {/* Canvas */}
               <main className="flex-1 h-full relative flex flex-col">
-                  <Canvas />
+                  <Canvas isPreview={showPreview} />
               </main>
 
               {/* Properties Panel */}
