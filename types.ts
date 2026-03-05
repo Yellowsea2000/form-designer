@@ -3,7 +3,6 @@ import { CSSProperties } from 'react';
 export enum ComponentType {
   // Layout
   CONTAINER = 'container',
-  FORM = 'form',
   TABS = 'tabs',
   TAB_ITEM = 'tab_item',
   

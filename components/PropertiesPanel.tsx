@@ -49,7 +49,6 @@ export const PropertiesPanel: React.FC = () => {
 
   const isContainer = [
     ComponentType.CONTAINER,
-    ComponentType.FORM,
     ComponentType.TAB_ITEM,
     ComponentType.TABS,
   ].includes(selectedNode.type);

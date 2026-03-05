@@ -3,7 +3,6 @@ import { ComponentDSLDefinition } from '../types';
 import { buttonDSL } from './button';
 import { checkboxDSL } from './checkbox';
 import { containerDSL } from './container';
-import { formDSL } from './form';
 import { headerDSL } from './header';
 import { imageDSL } from './image';
 import { inputDSL } from './input';
@@ -15,7 +14,6 @@ import { textareaDSL } from './textarea';
 
 export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
   [ComponentType.CONTAINER]: containerDSL,
-  [ComponentType.FORM]: formDSL,
   [ComponentType.TABS]: tabsDSL,
   [ComponentType.TAB_ITEM]: tabItemDSL,
   [ComponentType.INPUT]: inputDSL,

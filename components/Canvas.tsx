@@ -50,7 +50,6 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
           nodeType: node.type,
           // Pass children info to help drag handling determine if this is a container
           isContainer: node.type === ComponentType.CONTAINER || 
-                       node.type === ComponentType.FORM || 
                        node.type === ComponentType.TABS ||
                        node.type === ComponentType.TAB_ITEM
       } 
@@ -88,7 +87,6 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
   };
   
   const isContainer = node.type === ComponentType.CONTAINER || 
-                      node.type === ComponentType.FORM || 
                       node.type === ComponentType.TAB_ITEM;
   
   const isTabs = node.type === ComponentType.TABS;
@@ -105,7 +103,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, onClick }
   const columns = node.props.columns || 1;
   const gap = node.props.gap || 16;
   
-  // Only apply grid to containers (Container, Form, TabItem). Tabs component wrapper doesn't need grid usually.
+  // Only apply grid to containers (Container, TabItem). Tabs component wrapper doesn't need grid usually.
   const showGrid = isContainer && columns > 1;
   
   const containerStyle = useMemo(() => {

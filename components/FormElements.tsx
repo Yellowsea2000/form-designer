@@ -3,7 +3,6 @@ import { ComponentType } from '../types';
 import { ButtonElement } from './elements/ButtonElement';
 import { CheckboxElement } from './elements/CheckboxElement';
 import { ContainerElement } from './elements/ContainerElement';
-import { FormElement } from './elements/FormElement';
 import { HeaderElement } from './elements/HeaderElement';
 import { ImageElement } from './elements/ImageElement';
 import { InputElement } from './elements/InputElement';
@@ -27,7 +26,6 @@ const renderers: Record<ComponentType, React.FC<ElementRendererProps>> = {
   [ComponentType.CHECKBOX]: CheckboxElement,
   [ComponentType.BUTTON]: ButtonElement,
   [ComponentType.IMAGE]: ImageElement,
-  [ComponentType.FORM]: FormElement,
   [ComponentType.CONTAINER]: ContainerElement,
   [ComponentType.TABS]: TabsElement,
   [ComponentType.TAB_ITEM]: TabItemElement,

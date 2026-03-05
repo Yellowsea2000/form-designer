@@ -78,7 +78,6 @@ const updateNodeRecursively = (nodes: FormNode[], id: string, updates: any): For
 // Helper to check if a type is a container
 const isContainerType = (type: ComponentType) => {
   return type === ComponentType.CONTAINER ||
-         type === ComponentType.FORM ||
          type === ComponentType.TABS ||
          type === ComponentType.TAB_ITEM;
 };
