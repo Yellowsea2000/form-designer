@@ -1,9 +1,9 @@
-import React from 'react';
-import { Button, Flex, Input, Space } from 'antd';
-import { Layers, Plus, Trash2 } from 'lucide-react';
-import { ComponentType, FormNode } from '../../types';
-import { AddNodeFn, RemoveNodeFn, UpdateNodeFn } from './types';
-import { SectionCard } from './SectionCard';
+import React from "react";
+import { Button, Flex, Input, Space } from "antd";
+import { Layers, Plus, Trash2 } from "lucide-react";
+import { ComponentType, FormNode } from "../../types";
+import { AddNodeFn, RemoveNodeFn, UpdateNodeFn } from "./types";
+import { SectionCard } from "./SectionCard";
 
 interface TabsManagementSectionProps {
   selectedNode: FormNode;
@@ -20,7 +20,7 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
 }) => {
   return (
     <SectionCard title="Tab Items" icon={<Layers className="w-4 h-4" />}>
-      <Space direction="vertical" style={{ width: '100%' }} size={8}>
+      <Space direction="vertical" style={{ width: "100%" }} size={8}>
         {selectedNode.children.map((child, idx) => (
           <Flex key={child.id} gap={8}>
             <Input
@@ -48,4 +48,3 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
     </SectionCard>
   );
 };
-

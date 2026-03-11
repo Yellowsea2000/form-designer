@@ -1,6 +1,6 @@
-import React from 'react';
-import { Alert, Typography } from 'antd';
-import { Layers } from 'lucide-react';
+import React from "react";
+import { Alert, Typography } from "antd";
+import { Layers } from "lucide-react";
 
 export const TabItemHint: React.FC = () => {
   return (
@@ -17,4 +17,3 @@ export const TabItemHint: React.FC = () => {
     />
   );
 };
-

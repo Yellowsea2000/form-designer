@@ -1,6 +1,6 @@
-import React from 'react';
-import { Empty } from 'antd';
-import { Settings2 } from 'lucide-react';
+import React from "react";
+import { Empty } from "antd";
+import { Settings2 } from "lucide-react";
 
 export const EmptyProperties: React.FC = () => {
   return (
@@ -12,4 +12,3 @@ export const EmptyProperties: React.FC = () => {
     </div>
   );
 };
-

@@ -1,8 +1,8 @@
-import { FormNode, ComponentType } from '../types';
-import { componentDSLs } from './components';
-import { FormDSLDocument, FormDSLSpec } from './types';
+import { FormNode, ComponentType } from "../types";
+import { componentDSLs } from "./components";
+import { FormDSLDocument, FormDSLSpec } from "./types";
 
-export const FORM_DSL_VERSION = '1.0.0';
+export const FORM_DSL_VERSION = "1.0.0";
 
 export const formDSLSpec: FormDSLSpec = {
   version: FORM_DSL_VERSION,
@@ -11,7 +11,7 @@ export const formDSLSpec: FormDSLSpec = {
 
 export const createFormDocument = (
   nodes: FormNode[],
-  metadata?: FormDSLDocument['metadata']
+  metadata?: FormDSLDocument["metadata"],
 ): FormDSLDocument => ({
   version: FORM_DSL_VERSION,
   metadata,
@@ -37,7 +37,7 @@ export const validateFormDocument = (doc: FormDSLDocument): string[] => {
       node.children.forEach((child) => {
         if (!dsl.children?.allow.includes(child.type)) {
           errors.push(
-            `Child type ${child.type} is not allowed inside ${node.type} (parent node ${node.id})`
+            `Child type ${child.type} is not allowed inside ${node.type} (parent node ${node.id})`,
           );
         }
       });

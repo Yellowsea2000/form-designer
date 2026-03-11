@@ -1,4 +1,4 @@
-import { ComponentType } from '../../types';
+import { ComponentType } from "../../types";
 
 export const ALL_COMPONENT_TYPES: ComponentType[] = [
   ComponentType.CONTAINER,

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Input } from 'antd';
-import { ElementRendererProps } from './types';
-import { baseLabelClass, cn } from './common';
+import React from "react";
+import { Input } from "antd";
+import { ElementRendererProps } from "./types";
+import { baseLabelClass, cn } from "./common";
 
 export const TextareaElement: React.FC<ElementRendererProps> = ({ props }) => {
   const { label, required, placeholder, style, className } = props;

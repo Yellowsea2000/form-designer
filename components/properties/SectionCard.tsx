@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, Flex, Typography } from 'antd';
+import React from "react";
+import { Card, Flex, Typography } from "antd";
 
 interface SectionCardProps {
   title: string;
@@ -23,4 +23,3 @@ export const SectionCard: React.FC<SectionCardProps> = ({ title, icon, children 
     </Card>
   );
 };
-

@@ -1,14 +1,19 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useDroppable } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { observer } from 'mobx-react-lite';
-import { useDesignerStore } from '../store';
-import { FormNode, ComponentType } from '../types';
-import { FormElementRenderer } from './FormElements';
-import { Trash2, Plus } from 'lucide-react';
-import { clsx } from 'clsx';
-import { useDragContext } from '../App';
+import React, { useEffect, useState, useMemo } from "react";
+import { useDroppable } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  rectSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { observer } from "mobx-react-lite";
+import { useDesignerStore } from "../store";
+import { FormNode, ComponentType } from "../types";
+import { FormElementRenderer } from "./FormElements";
+import { Trash2, Plus } from "lucide-react";
+import { clsx } from "clsx";
+import { useDragContext } from "../index";
 
 // Drag Placeholder Component - shows where the component will be placed
 const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({ isInterior }) => (
@@ -17,7 +22,7 @@ const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({ isInterior }) => 
       "my-3 rounded-lg border-2 border-dashed transition-all animate-pulse",
       isInterior
         ? "border-green-400 bg-green-50/50 min-h-[60px]"
-        : "border-blue-400 bg-blue-50/50 min-h-[80px]"
+        : "border-blue-400 bg-blue-50/50 min-h-[80px]",
     )}
   >
     <div className="flex items-center justify-center h-full min-h-[60px] text-slate-400">
@@ -34,40 +39,29 @@ interface SortableNodeProps {
   onClick: (e: React.MouseEvent) => void;
 }
 
-const SortableNode: React.FC<SortableNodeProps> = ({
-  node,
-  isSelected,
-  isPreview,
-  onClick,
-}) => {
+const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview, onClick }) => {
   const { activeDragData, overId, overData } = useDragContext();
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-    isOver,
-  } = useSortable({ 
-      id: node.id, 
-      data: { 
-          type: 'canvas-item', 
-          id: node.id,
-          nodeType: node.type,
-          // Pass children info to help drag handling determine if this is a container
-          isContainer: node.type === ComponentType.CONTAINER || 
-                       node.type === ComponentType.TABS ||
-                       node.type === ComponentType.TAB_ITEM
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging, isOver } =
+    useSortable({
+      id: node.id,
+      data: {
+        type: "canvas-item",
+        id: node.id,
+        nodeType: node.type,
+        // Pass children info to help drag handling determine if this is a container
+        isContainer:
+          node.type === ComponentType.CONTAINER ||
+          node.type === ComponentType.TABS ||
+          node.type === ComponentType.TAB_ITEM,
       },
       disabled: isPreview,
-  });
+    });
 
   // Add a separate droppable for container interior
   const { setNodeRef: setDroppableRef, isOver: isOverInterior } = useDroppable({
     id: `${node.id}-interior`,
     data: {
-      type: 'container-interior',
+      type: "container-interior",
       parentId: node.id,
       nodeType: node.type,
     },
@@ -82,11 +76,11 @@ const SortableNode: React.FC<SortableNodeProps> = ({
   // Initialize active tab if needed
   useEffect(() => {
     if (node.type === ComponentType.TABS && node.children.length > 0) {
-        // If no active tab or active tab is not in children anymore, set to first
-        const childIds = node.children.map(c => c.id);
-        if (!activeTabId || !childIds.includes(activeTabId)) {
-            setActiveTabId(node.children[0].id);
-        }
+      // If no active tab or active tab is not in children anymore, set to first
+      const childIds = node.children.map((c) => c.id);
+      if (!activeTabId || !childIds.includes(activeTabId)) {
+        setActiveTabId(node.children[0].id);
+      }
     }
   }, [node.type, node.children, activeTabId]);
 
@@ -94,36 +88,35 @@ const SortableNode: React.FC<SortableNodeProps> = ({
     transform: CSS.Translate.toString(transform),
     transition,
   };
-  
-  const isContainer = node.type === ComponentType.CONTAINER || 
-                      node.type === ComponentType.TAB_ITEM;
-  
+
+  const isContainer = node.type === ComponentType.CONTAINER || node.type === ComponentType.TAB_ITEM;
+
   const isTabs = node.type === ComponentType.TABS;
 
   // For Tabs, we only want to render the ACTIVE child in the SortableContext
   const visibleChildren = useMemo(() => {
-      if (isTabs) {
-          return node.children.filter(c => c.id === activeTabId);
-      }
-      return node.children;
+    if (isTabs) {
+      return node.children.filter((c) => c.id === activeTabId);
+    }
+    return node.children;
   }, [isTabs, node.children, activeTabId]);
 
   // Calculate Grid Style
   const columns = node.props.columns || 1;
   const gap = node.props.gap || 16;
-  
+
   // Only apply grid to containers (Container, TabItem). Tabs component wrapper doesn't need grid usually.
   const showGrid = isContainer && columns > 1;
-  
+
   const containerStyle = useMemo(() => {
-      if (showGrid) {
-          return {
-              display: 'grid',
-              gridTemplateColumns: `repeat(${columns}, 1fr)`,
-              gap: `${gap}px`,
-          } as React.CSSProperties;
-      }
-      return undefined;
+    if (showGrid) {
+      return {
+        display: "grid",
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gap: `${gap}px`,
+      } as React.CSSProperties;
+    }
+    return undefined;
   }, [showGrid, columns, gap]);
 
   // Switch strategy based on layout
@@ -144,13 +137,13 @@ const SortableNode: React.FC<SortableNodeProps> = ({
       ref={setNodeRef}
       style={style}
       className={clsx(
-        'group relative my-3 rounded-lg transition-all bg-white',
+        "group relative my-3 rounded-lg transition-all bg-white",
         isPreview
-          ? 'border-0 shadow-none cursor-default'
-          : 'border-2 hover:shadow-md cursor-grab active:cursor-grabbing',
-        !isPreview && isSelected ? 'border-blue-500 ring-1 ring-blue-500 z-10' : '',
-        !isPreview && !isSelected ? 'border-transparent hover:border-blue-200' : '',
-        !isPreview && isOver && !isOverInterior ? 'ring-2 ring-blue-400' : ''
+          ? "border-0 shadow-none cursor-default"
+          : "border-2 hover:shadow-md cursor-grab active:cursor-grabbing",
+        !isPreview && isSelected ? "border-blue-500 ring-1 ring-blue-500 z-10" : "",
+        !isPreview && !isSelected ? "border-transparent hover:border-blue-200" : "",
+        !isPreview && isOver && !isOverInterior ? "ring-2 ring-blue-400" : "",
       )}
       onClick={(e) => {
         if (isPreview) {
@@ -163,92 +156,95 @@ const SortableNode: React.FC<SortableNodeProps> = ({
       {...(!isPreview ? listeners : {})}
       // Critical: Stop propagation to prevent dragging parent when interacting with child
       onMouseDown={(e) => {
-          if (isPreview) {
-            return;
-          }
-          e.stopPropagation();
-          listeners?.onMouseDown?.(e);
+        if (isPreview) {
+          return;
+        }
+        e.stopPropagation();
+        listeners?.onMouseDown?.(e);
       }}
       onTouchStart={(e) => {
-          if (isPreview) {
-            return;
-          }
-          e.stopPropagation();
-          listeners?.onTouchStart?.(e);
+        if (isPreview) {
+          return;
+        }
+        e.stopPropagation();
+        listeners?.onTouchStart?.(e);
       }}
     >
       {/* Content */}
       <div className="p-4 relative">
-        <FormElementRenderer 
-            type={node.type} 
-            props={node.props} 
-            node={node}
-            activeTabId={activeTabId}
-            onTabChange={setActiveTabId}
+        <FormElementRenderer
+          type={node.type}
+          props={node.props}
+          node={node}
+          activeTabId={activeTabId}
+          onTabChange={setActiveTabId}
         >
-            {(isContainer || isTabs) && (
-                <SortableContext items={visibleChildren.map(c => c.id)} strategy={sortingStrategy}>
+          {(isContainer || isTabs) && (
+            <SortableContext items={visibleChildren.map((c) => c.id)} strategy={sortingStrategy}>
+              <div
+                className={clsx(
+                  "w-full transition-colors rounded relative",
+                  !isTabs && "min-h-[50px]",
+                )}
+                style={containerStyle}
+              >
+                {/* Interior droppable zone - show placeholder when dragging */}
+                {!isPreview &&
+                  (visibleChildren.length === 0 ? (
                     <div
-                        className={clsx(
-                          "w-full transition-colors rounded relative",
-                          !isTabs && "min-h-[50px]"
-                        )}
-                        style={containerStyle}
-                    >
-                        {/* Interior droppable zone - show placeholder when dragging */}
-                        {!isPreview &&
-                          (visibleChildren.length === 0 ? (
-                            <div
-                              ref={setDroppableRef}
-                              className={clsx(
-                                "absolute inset-2 rounded-lg transition-all min-h-[80px]",
-                                isOverInterior
-                                  ? "ring-2 ring-inset ring-green-400 bg-green-50/50 border-2 border-dashed border-green-400"
-                                  : activeDragData
-                                    ? "border-2 border-dashed border-green-300 bg-green-50/20"
-                                    : ""
-                              )}
-                            />
-                          ) : (
-                            /* When has children, show a full-area drop zone for easier dropping */
-                            <div
-                              ref={setDroppableRef}
-                              className={clsx(
-                                "absolute inset-0 rounded-lg transition-all pointer-events-auto z-0",
-                                isOverInterior && "ring-2 ring-inset ring-green-400 bg-green-50/30"
-                              )}
-                            />
-                          ))}
-                        {visibleChildren.map((child) => (
-                             <SortableNode
-                                key={child.id}
-                                node={child}
-                                isSelected={selectedNodeId === child.id}
-                                isPreview={isPreview}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    selectNode(child.id);
-                                }}
-                             />
-                        ))}
-                        {/* Show placeholder at the end when hovering interior - AFTER all children */}
-                        {!isPreview && visibleChildren.length > 0 && activeDragData?.type === 'sidebar-item' && isOverInterior && (
-                          <div className="col-span-full">
-                            <DragPlaceholder isInterior />
-                          </div>
-                        )}
+                      ref={setDroppableRef}
+                      className={clsx(
+                        "absolute inset-2 rounded-lg transition-all min-h-[80px]",
+                        isOverInterior
+                          ? "ring-2 ring-inset ring-green-400 bg-green-50/50 border-2 border-dashed border-green-400"
+                          : activeDragData
+                            ? "border-2 border-dashed border-green-300 bg-green-50/20"
+                            : "",
+                      )}
+                    />
+                  ) : (
+                    /* When has children, show a full-area drop zone for easier dropping */
+                    <div
+                      ref={setDroppableRef}
+                      className={clsx(
+                        "absolute inset-0 rounded-lg transition-all pointer-events-auto z-0",
+                        isOverInterior && "ring-2 ring-inset ring-green-400 bg-green-50/30",
+                      )}
+                    />
+                  ))}
+                {visibleChildren.map((child) => (
+                  <SortableNode
+                    key={child.id}
+                    node={child}
+                    isSelected={selectedNodeId === child.id}
+                    isPreview={isPreview}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      selectNode(child.id);
+                    }}
+                  />
+                ))}
+                {/* Show placeholder at the end when hovering interior - AFTER all children */}
+                {!isPreview &&
+                  visibleChildren.length > 0 &&
+                  activeDragData?.type === "sidebar-item" &&
+                  isOverInterior && (
+                    <div className="col-span-full">
+                      <DragPlaceholder isInterior />
                     </div>
-                </SortableContext>
-            )}
+                  )}
+              </div>
+            </SortableContext>
+          )}
         </FormElementRenderer>
       </div>
 
       {/* Actions */}
       {!isPreview && isSelected && (
         <div
-            className="absolute -right-3 -top-3 bg-white rounded-full shadow border border-slate-200 z-20 cursor-pointer"
-            onMouseDown={(e) => e.stopPropagation()} // Prevent drag when clicking delete
-            onTouchStart={(e) => e.stopPropagation()}
+          className="absolute -right-3 -top-3 bg-white rounded-full shadow border border-slate-200 z-20 cursor-pointer"
+          onMouseDown={(e) => e.stopPropagation()} // Prevent drag when clicking delete
+          onTouchStart={(e) => e.stopPropagation()}
         >
           <button
             onClick={(e) => {
@@ -264,9 +260,10 @@ const SortableNode: React.FC<SortableNodeProps> = ({
       )}
 
       {/* Show drag placeholder after this node when dragging from sidebar */}
-      {!isPreview && activeDragData?.type === 'sidebar-item' && overId === node.id && !overData?.type?.includes('interior') && (
-        <DragPlaceholder />
-      )}
+      {!isPreview &&
+        activeDragData?.type === "sidebar-item" &&
+        overId === node.id &&
+        !overData?.type?.includes("interior") && <DragPlaceholder />}
     </div>
   );
 };
@@ -279,16 +276,16 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
   const { nodes, selectedNodeId, selectNode } = useDesignerStore();
   const { activeDragData, overId } = useDragContext();
   const { setNodeRef, isOver } = useDroppable({
-    id: 'canvas-droppable',
+    id: "canvas-droppable",
     data: {
-        type: 'canvas'
+      type: "canvas",
     },
     disabled: isPreview,
   });
 
   // Show placeholder when dragging to empty canvas or at the end
   const showCanvasPlaceholder =
-    !isPreview && activeDragData?.type === 'sidebar-item' && overId === 'canvas-droppable';
+    !isPreview && activeDragData?.type === "sidebar-item" && overId === "canvas-droppable";
 
   return (
     <div
@@ -304,7 +301,7 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
           ref={setNodeRef}
           className={clsx(
             "min-h-[calc(100vh-100px)] bg-white rounded-xl shadow-sm border transition-colors p-8 pb-32",
-            isOver ? "border-blue-400 bg-blue-50/30" : "border-slate-200"
+            isOver ? "border-blue-400 bg-blue-50/30" : "border-slate-200",
           )}
         >
           {nodes.length === 0 && !isOver && !showCanvasPlaceholder && (
@@ -316,11 +313,9 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
           )}
 
           {/* Show placeholder at the start of canvas when empty and dragging */}
-          {nodes.length === 0 && showCanvasPlaceholder && (
-            <DragPlaceholder />
-          )}
+          {nodes.length === 0 && showCanvasPlaceholder && <DragPlaceholder />}
 
-          <SortableContext items={nodes.map(n => n.id)} strategy={verticalListSortingStrategy}>
+          <SortableContext items={nodes.map((n) => n.id)} strategy={verticalListSortingStrategy}>
             {nodes.map((node) => (
               <SortableNode
                 key={node.id}
@@ -328,17 +323,15 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
                 isSelected={selectedNodeId === node.id}
                 isPreview={isPreview}
                 onClick={(e) => {
-                    e.stopPropagation();
-                    selectNode(node.id);
+                  e.stopPropagation();
+                  selectNode(node.id);
                 }}
               />
             ))}
           </SortableContext>
 
           {/* Show placeholder at the end of canvas when has nodes and dragging */}
-          {nodes.length > 0 && showCanvasPlaceholder && (
-            <DragPlaceholder />
-          )}
+          {nodes.length > 0 && showCanvasPlaceholder && <DragPlaceholder />}
         </div>
       </div>
     </div>

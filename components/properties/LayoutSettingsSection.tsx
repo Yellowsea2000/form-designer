@@ -1,13 +1,10 @@
-import React from 'react';
-import { Form, InputNumber, Slider } from 'antd';
-import { Grid } from 'lucide-react';
-import { SectionProps } from './types';
-import { SectionCard } from './SectionCard';
+import React from "react";
+import { Form, InputNumber, Slider } from "antd";
+import { Grid } from "lucide-react";
+import { SectionProps } from "./types";
+import { SectionCard } from "./SectionCard";
 
-export const LayoutSettingsSection: React.FC<SectionProps> = ({
-  selectedNode,
-  onPropChange,
-}) => {
+export const LayoutSettingsSection: React.FC<SectionProps> = ({ selectedNode, onPropChange }) => {
   const columns = selectedNode.props.columns ?? 1;
   const gap = selectedNode.props.gap ?? 16;
 
@@ -19,11 +16,9 @@ export const LayoutSettingsSection: React.FC<SectionProps> = ({
             min={1}
             max={4}
             step={1}
-            marks={{ 1: '1', 2: '2', 3: '3', 4: '4' }}
+            marks={{ 1: "1", 2: "2", 3: "3", 4: "4" }}
             value={columns}
-            onChange={(value) =>
-              onPropChange('columns', Array.isArray(value) ? value[0] : value)
-            }
+            onChange={(value) => onPropChange("columns", Array.isArray(value) ? value[0] : value)}
           />
         </Form.Item>
         <Form.Item label="Grid Gap (px)" style={{ marginBottom: 0 }}>
@@ -31,8 +26,8 @@ export const LayoutSettingsSection: React.FC<SectionProps> = ({
             min={0}
             max={64}
             value={gap}
-            onChange={(value) => onPropChange('gap', Number(value ?? 0))}
-            style={{ width: '100%' }}
+            onChange={(value) => onPropChange("gap", Number(value ?? 0))}
+            style={{ width: "100%" }}
           />
         </Form.Item>
       </Form>

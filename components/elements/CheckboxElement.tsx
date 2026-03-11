@@ -1,7 +1,7 @@
-import React from 'react';
-import { Checkbox } from 'antd';
-import { ElementRendererProps } from './types';
-import { cn } from './common';
+import React from "react";
+import { Checkbox } from "antd";
+import { ElementRendererProps } from "./types";
+import { cn } from "./common";
 
 export const CheckboxElement: React.FC<ElementRendererProps> = ({ props }) => {
   const { label, content, style, className } = props;

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Button, Flex, Input, Space } from 'antd';
-import { AlignLeft, Plus } from 'lucide-react';
-import { ComponentType } from '../../types';
-import { SectionProps } from './types';
-import { SectionCard } from './SectionCard';
+import React from "react";
+import { Button, Flex, Input, Space } from "antd";
+import { AlignLeft, Plus } from "lucide-react";
+import { ComponentType } from "../../types";
+import { SectionProps } from "./types";
+import { SectionCard } from "./SectionCard";
 
 export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onPropChange }) => {
   if (selectedNode.type !== ComponentType.SELECT) {
@@ -15,18 +15,18 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onP
   const handleLabelChange = (index: number, label: string) => {
     const nextOptions = [...options];
     nextOptions[index] = { ...nextOptions[index], label };
-    onPropChange('options', nextOptions);
+    onPropChange("options", nextOptions);
   };
 
   const handleValueChange = (index: number, value: string) => {
     const nextOptions = [...options];
     nextOptions[index] = { ...nextOptions[index], value };
-    onPropChange('options', nextOptions);
+    onPropChange("options", nextOptions);
   };
 
   return (
     <SectionCard title="Options" icon={<AlignLeft className="w-4 h-4" />}>
-      <Space direction="vertical" size={8} style={{ width: '100%' }}>
+      <Space direction="vertical" size={8} style={{ width: "100%" }}>
         {options.map((option, index) => (
           <Flex key={`${option.value}-${index}`} gap={8}>
             <Input
@@ -47,7 +47,7 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onP
           block
           icon={<Plus className="w-4 h-4" />}
           onClick={() =>
-            onPropChange('options', [
+            onPropChange("options", [
               ...options,
               {
                 label: `Option ${options.length + 1}`,
@@ -62,4 +62,3 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onP
     </SectionCard>
   );
 };
-

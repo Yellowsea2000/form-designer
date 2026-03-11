@@ -10,14 +10,15 @@ This folder contains the Domain Specific Language (DSL) used by the form builder
 
 ```ts
 interface ComponentDSLDefinition {
-  type: ComponentType;               // unique key
-  displayName: string;               // human readable label
-  version: string;                   // semantic component DSL version
-  category: 'layout' | 'form-control' | 'display';
-  description: string;               // docs for designers
-  defaultProps: ComponentProps;      // used when instantiating nodes
-  props: ComponentPropDSL[];         // DSL description of supported props
-  children?: {                       // optional child constraints
+  type: ComponentType; // unique key
+  displayName: string; // human readable label
+  version: string; // semantic component DSL version
+  category: "layout" | "form-control" | "display";
+  description: string; // docs for designers
+  defaultProps: ComponentProps; // used when instantiating nodes
+  props: ComponentPropDSL[]; // DSL description of supported props
+  children?: {
+    // optional child constraints
     allow: ComponentType[];
     description?: string;
     min?: number;
@@ -32,7 +33,7 @@ Each component file exports a `*DSL` object with its defaults and prop schema.
 
 ```ts
 interface FormDSLDocument {
-  version: '1.0.0';
+  version: "1.0.0";
   metadata?: { name?: string; description?: string };
   nodes: FormNode[]; // tree of components
 }

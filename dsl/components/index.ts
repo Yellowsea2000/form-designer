@@ -1,16 +1,16 @@
-import { ComponentProps, ComponentType } from '../../types';
-import { ComponentDSLDefinition } from '../types';
-import { buttonDSL } from './button';
-import { checkboxDSL } from './checkbox';
-import { containerDSL } from './container';
-import { headerDSL } from './header';
-import { imageDSL } from './image';
-import { inputDSL } from './input';
-import { selectDSL } from './select';
-import { tabItemDSL } from './tabItem';
-import { tabsDSL } from './tabs';
-import { textDSL } from './text';
-import { textareaDSL } from './textarea';
+import { ComponentProps, ComponentType } from "../../types";
+import { ComponentDSLDefinition } from "../types";
+import { buttonDSL } from "./button";
+import { checkboxDSL } from "./checkbox";
+import { containerDSL } from "./container";
+import { headerDSL } from "./header";
+import { imageDSL } from "./image";
+import { inputDSL } from "./input";
+import { selectDSL } from "./select";
+import { tabItemDSL } from "./tabItem";
+import { tabsDSL } from "./tabs";
+import { textDSL } from "./text";
+import { textareaDSL } from "./textarea";
 
 export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
   [ComponentType.CONTAINER]: containerDSL,
@@ -26,10 +26,12 @@ export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
   [ComponentType.HEADER]: headerDSL,
 };
 
-export const DEFAULT_PROPS: Record<ComponentType, ComponentProps> = Object.values(componentDSLs).reduce(
+export const DEFAULT_PROPS: Record<ComponentType, ComponentProps> = Object.values(
+  componentDSLs,
+).reduce(
   (acc, dsl) => {
     acc[dsl.type] = dsl.defaultProps;
     return acc;
   },
-  {} as Record<ComponentType, ComponentProps>
+  {} as Record<ComponentType, ComponentProps>,
 );

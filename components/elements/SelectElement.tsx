@@ -1,7 +1,7 @@
-import React from 'react';
-import { Select } from 'antd';
-import { ElementRendererProps } from './types';
-import { baseLabelClass, cn } from './common';
+import React from "react";
+import { Select } from "antd";
+import { ElementRendererProps } from "./types";
+import { baseLabelClass, cn } from "./common";
 
 export const SelectElement: React.FC<ElementRendererProps> = ({ props }) => {
   const { label, required, options, style, className } = props;

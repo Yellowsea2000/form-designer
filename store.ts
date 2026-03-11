@@ -1,6 +1,6 @@
-import { makeAutoObservable, observable } from 'mobx';
-import { FormNode, ComponentType, ComponentProps } from './types';
-import { DEFAULT_PROPS } from './dsl/components';
+import { makeAutoObservable, observable } from "mobx";
+import { FormNode, ComponentType, ComponentProps } from "./types";
+import { DEFAULT_PROPS } from "./dsl/components";
 
 // Simple ID generator
 const generateId = () => `node_${Math.random().toString(36).substr(2, 9)}`;
@@ -10,7 +10,7 @@ const addNodeRecursively = (
   nodes: FormNode[],
   parentId: string | null,
   newNode: FormNode,
-  index?: number
+  index?: number,
 ): FormNode[] => {
   if (parentId === null) {
     const newNodes = [...nodes];
@@ -56,14 +56,14 @@ const removeNodeRecursively = (nodes: FormNode[], id: string): FormNode[] => {
 const updateNodeRecursively = (
   nodes: FormNode[],
   id: string,
-  updates: Partial<FormNode> | Partial<ComponentProps>
+  updates: Partial<FormNode> | Partial<ComponentProps>,
 ): FormNode[] => {
   return nodes.map((node) => {
     if (node.id === id) {
-      if ('props' in updates) {
+      if ("props" in updates) {
         return { ...node, ...updates };
       }
-      if ('type' in updates || 'id' in updates) {
+      if ("type" in updates || "id" in updates) {
         return { ...node, ...updates };
       }
       return { ...node, props: { ...node.props, ...updates } };
@@ -127,7 +127,7 @@ export class DesignerStore {
         // Keep form tree as plain JS objects to avoid React style freeze conflict.
         nodes: observable.ref,
       },
-      { autoBind: true }
+      { autoBind: true },
     );
   }
 
@@ -145,19 +145,19 @@ export class DesignerStore {
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
-          props: { label: 'Tab 1', style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
+          props: { label: "Tab 1", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
           children: [],
         },
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
-          props: { label: 'Tab 2', style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
+          props: { label: "Tab 2", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
           children: [],
         },
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
-          props: { label: 'Tab 3', style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
+          props: { label: "Tab 3", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
           children: [],
         },
       ];
@@ -207,7 +207,7 @@ export class DesignerStore {
     activeId: string,
     overId: string,
     isInteriorDrop?: boolean,
-    _activeNodeType?: ComponentType
+    _activeNodeType?: ComponentType,
   ) {
     const cloneNodes: FormNode[] = JSON.parse(JSON.stringify(this.nodes));
 
@@ -235,7 +235,7 @@ export class DesignerStore {
     }
 
     // 2. Find overId and insert
-    if (overId === 'root' || overId === 'canvas-droppable') {
+    if (overId === "root" || overId === "canvas-droppable") {
       cloneNodes.push(activeNode);
       this.nodes = cloneNodes;
       return;
@@ -244,7 +244,7 @@ export class DesignerStore {
     // Handle interior drop (explicit nesting)
     if (isInteriorDrop) {
       // Extract parent ID from interior droppable ID (format: "nodeId-interior")
-      const parentId = overId.replace('-interior', '');
+      const parentId = overId.replace("-interior", "");
 
       const insertIntoParent = (nodes: FormNode[]): boolean => {
         for (let i = 0; i < nodes.length; i++) {

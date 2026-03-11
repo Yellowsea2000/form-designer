@@ -1,20 +1,20 @@
-import React from 'react';
-import { Button, Flex, Space, Tag, Typography } from 'antd';
-import { X } from 'lucide-react';
-import { observer } from 'mobx-react-lite';
-import { useDesignerStore } from '../store';
-import { ComponentType } from '../types';
-import { AppearanceSection } from './properties/AppearanceSection';
-import { ContentSection } from './properties/ContentSection';
-import { EmptyProperties } from './properties/EmptyProperties';
-import { ImageSettingsSection } from './properties/ImageSettingsSection';
-import { LayoutSettingsSection } from './properties/LayoutSettingsSection';
-import { SelectOptionsSection } from './properties/SelectOptionsSection';
-import { TabItemHint } from './properties/TabItemHint';
-import { TabsManagementSection } from './properties/TabsManagementSection';
-import { StyleChangeFn, PropChangeFn } from './properties/types';
-import { ValidationSection } from './properties/ValidationSection';
-import { findNodeById } from './properties/utils';
+import React from "react";
+import { Button, Flex, Space, Tag, Typography } from "antd";
+import { X } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { useDesignerStore } from "../store";
+import { ComponentType } from "../types";
+import { AppearanceSection } from "./properties/AppearanceSection";
+import { ContentSection } from "./properties/ContentSection";
+import { EmptyProperties } from "./properties/EmptyProperties";
+import { ImageSettingsSection } from "./properties/ImageSettingsSection";
+import { LayoutSettingsSection } from "./properties/LayoutSettingsSection";
+import { SelectOptionsSection } from "./properties/SelectOptionsSection";
+import { TabItemHint } from "./properties/TabItemHint";
+import { TabsManagementSection } from "./properties/TabsManagementSection";
+import { StyleChangeFn, PropChangeFn } from "./properties/types";
+import { ValidationSection } from "./properties/ValidationSection";
+import { findNodeById } from "./properties/utils";
 
 export const PropertiesPanel: React.FC = observer(() => {
   const { nodes, selectedNodeId, updateNode, selectNode, addNode, removeNode } = useDesignerStore();
@@ -64,18 +64,14 @@ export const PropertiesPanel: React.FC = observer(() => {
             <Typography.Title level={5} style={{ margin: 0 }}>
               Properties
             </Typography.Title>
-            <Tag style={{ marginTop: 4, textTransform: 'uppercase' }}>{selectedNode.type}</Tag>
+            <Tag style={{ marginTop: 4, textTransform: "uppercase" }}>{selectedNode.type}</Tag>
           </div>
-          <Button
-            type="text"
-            icon={<X className="w-5 h-5" />}
-            onClick={() => selectNode(null)}
-          />
+          <Button type="text" icon={<X className="w-5 h-5" />} onClick={() => selectNode(null)} />
         </Flex>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4">
-        <Space direction="vertical" size={12} style={{ width: '100%' }}>
+        <Space direction="vertical" size={12} style={{ width: "100%" }}>
           {isTabItem ? (
             <TabItemHint />
           ) : (
@@ -134,4 +130,3 @@ export const PropertiesPanel: React.FC = observer(() => {
     </div>
   );
 });
-

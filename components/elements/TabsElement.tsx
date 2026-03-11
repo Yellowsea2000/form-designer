@@ -1,6 +1,6 @@
-import React from 'react';
-import { ElementRendererProps } from './types';
-import { cn } from './common';
+import React from "react";
+import { ElementRendererProps } from "./types";
+import { cn } from "./common";
 
 export const TabsElement: React.FC<ElementRendererProps> = ({
   props,
@@ -12,7 +12,7 @@ export const TabsElement: React.FC<ElementRendererProps> = ({
   const { style, className } = props;
 
   return (
-    <div style={style} className={cn('flex flex-col', className)}>
+    <div style={style} className={cn("flex flex-col", className)}>
       <div className="flex border-b border-slate-200 bg-slate-50/50 rounded-t-lg overflow-x-auto">
         {node?.children.map((child) => (
           <button
@@ -22,13 +22,13 @@ export const TabsElement: React.FC<ElementRendererProps> = ({
               onTabChange?.(child.id);
             }}
             className={cn(
-              'px-4 py-3 text-sm font-medium transition-colors focus:outline-none border-b-2 whitespace-nowrap',
+              "px-4 py-3 text-sm font-medium transition-colors focus:outline-none border-b-2 whitespace-nowrap",
               activeTabId === child.id
-                ? 'border-blue-500 text-blue-600 bg-white'
-                : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50'
+                ? "border-blue-500 text-blue-600 bg-white"
+                : "border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50",
             )}
           >
-            {child.props.label || 'Tab'}
+            {child.props.label || "Tab"}
           </button>
         ))}
       </div>

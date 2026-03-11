@@ -1,22 +1,22 @@
-import { CSSProperties } from 'react';
+import { CSSProperties } from "react";
 
 export enum ComponentType {
   // Layout
-  CONTAINER = 'container',
-  TABS = 'tabs',
-  TAB_ITEM = 'tab_item',
-  
+  CONTAINER = "container",
+  TABS = "tabs",
+  TAB_ITEM = "tab_item",
+
   // Form Controls
-  INPUT = 'input',
-  TEXTAREA = 'textarea',
-  SELECT = 'select',
-  CHECKBOX = 'checkbox',
-  BUTTON = 'button',
-  
+  INPUT = "input",
+  TEXTAREA = "textarea",
+  SELECT = "select",
+  CHECKBOX = "checkbox",
+  BUTTON = "button",
+
   // Display
-  TEXT = 'text',
-  IMAGE = 'image',
-  HEADER = 'header'
+  TEXT = "text",
+  IMAGE = "image",
+  HEADER = "header",
 }
 
 export interface ComponentProps {
@@ -30,8 +30,8 @@ export interface ComponentProps {
   content?: string; // For text/header
   className?: string;
   style?: CSSProperties;
-  buttonType?: 'submit' | 'button' | 'reset';
-  
+  buttonType?: "submit" | "button" | "reset";
+
   // Layout props
   columns?: number;
   gap?: number;
@@ -45,7 +45,7 @@ export interface FormNode {
 }
 
 export interface DragData {
-  type: 'sidebar-item' | 'canvas-item' | 'container-interior';
+  type: "sidebar-item" | "canvas-item" | "container-interior";
   componentType?: ComponentType;
   id?: string;
   isContainer?: boolean;

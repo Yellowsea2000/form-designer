@@ -1,8 +1,8 @@
-import React from 'react';
-import { Flex, Switch, Typography } from 'antd';
-import { Layout } from 'lucide-react';
-import { SectionProps } from './types';
-import { SectionCard } from './SectionCard';
+import React from "react";
+import { Flex, Switch, Typography } from "antd";
+import { Layout } from "lucide-react";
+import { SectionProps } from "./types";
+import { SectionCard } from "./SectionCard";
 
 export const ValidationSection: React.FC<SectionProps> = ({ selectedNode, onPropChange }) => {
   if (selectedNode.props.required === undefined) {
@@ -15,10 +15,9 @@ export const ValidationSection: React.FC<SectionProps> = ({ selectedNode, onProp
         <Typography.Text>Required Field</Typography.Text>
         <Switch
           checked={Boolean(selectedNode.props.required)}
-          onChange={(checked) => onPropChange('required', checked)}
+          onChange={(checked) => onPropChange("required", checked)}
         />
       </Flex>
     </SectionCard>
   );
 };
-

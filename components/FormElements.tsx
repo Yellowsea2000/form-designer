@@ -1,17 +1,17 @@
-import React from 'react';
-import { ComponentType } from '../types';
-import { ButtonElement } from './elements/ButtonElement';
-import { CheckboxElement } from './elements/CheckboxElement';
-import { ContainerElement } from './elements/ContainerElement';
-import { HeaderElement } from './elements/HeaderElement';
-import { ImageElement } from './elements/ImageElement';
-import { InputElement } from './elements/InputElement';
-import { SelectElement } from './elements/SelectElement';
-import { TabItemElement } from './elements/TabItemElement';
-import { TabsElement } from './elements/TabsElement';
-import { TextElement } from './elements/TextElement';
-import { TextareaElement } from './elements/TextareaElement';
-import { ElementRendererProps } from './elements/types';
+import React from "react";
+import { ComponentType } from "../types";
+import { ButtonElement } from "./elements/ButtonElement";
+import { CheckboxElement } from "./elements/CheckboxElement";
+import { ContainerElement } from "./elements/ContainerElement";
+import { HeaderElement } from "./elements/HeaderElement";
+import { ImageElement } from "./elements/ImageElement";
+import { InputElement } from "./elements/InputElement";
+import { SelectElement } from "./elements/SelectElement";
+import { TabItemElement } from "./elements/TabItemElement";
+import { TabsElement } from "./elements/TabsElement";
+import { TextElement } from "./elements/TextElement";
+import { TextareaElement } from "./elements/TextareaElement";
+import { ElementRendererProps } from "./elements/types";
 
 interface ElementRendererInput extends ElementRendererProps {
   type: ComponentType;

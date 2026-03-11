@@ -1,6 +1,6 @@
-import { ComponentProps, ComponentType, FormNode } from '../types';
+import { ComponentProps, ComponentType, FormNode } from "../types";
 
-export type DSLPrimitiveType = 'string' | 'boolean' | 'number' | 'enum' | 'options' | 'style';
+export type DSLPrimitiveType = "string" | "boolean" | "number" | "enum" | "options" | "style";
 
 export interface ComponentPropDSL {
   name: keyof ComponentProps | string;
@@ -22,7 +22,7 @@ export interface ComponentDSLDefinition {
   type: ComponentType;
   displayName: string;
   version: string;
-  category: 'layout' | 'form-control' | 'display';
+  category: "layout" | "form-control" | "display";
   description: string;
   defaultProps: ComponentProps;
   props: ComponentPropDSL[];

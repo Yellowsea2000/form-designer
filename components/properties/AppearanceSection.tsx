@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button, Flex, Form, Select, Slider, Space, Typography } from 'antd';
-import { Palette } from 'lucide-react';
-import { ComponentType } from '../../types';
-import { SectionProps } from './types';
-import { SectionCard } from './SectionCard';
-import { COLOR_OPTIONS, FONT_SIZE_OPTIONS, getPxNumber } from './utils';
+import React from "react";
+import { Button, Flex, Form, Select, Slider, Space, Typography } from "antd";
+import { Palette } from "lucide-react";
+import { ComponentType } from "../../types";
+import { SectionProps } from "./types";
+import { SectionCard } from "./SectionCard";
+import { COLOR_OPTIONS, FONT_SIZE_OPTIONS, getPxNumber } from "./utils";
 
 interface AppearanceSectionProps extends SectionProps {
   onPaddingChange: (padding: number) => void;
@@ -21,7 +21,7 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
     selectedNode.type === ComponentType.BUTTON ||
     selectedNode.type === ComponentType.HEADER ||
     selectedNode.type === ComponentType.TEXT;
-  const colorKey = selectedNode.type === ComponentType.BUTTON ? 'backgroundColor' : 'color';
+  const colorKey = selectedNode.type === ComponentType.BUTTON ? "backgroundColor" : "color";
   const colorValue = selectedNode.props.style?.[colorKey] as string | undefined;
   const padding = getPxNumber(selectedNode.props.style?.paddingTop, 0);
 
@@ -32,14 +32,14 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
           <Form.Item label="Font Size" style={{ marginBottom: 12 }}>
             <Select
               options={FONT_SIZE_OPTIONS}
-              value={(selectedNode.props.style?.fontSize as string) || '14px'}
-              onChange={(value) => onStyleChange('fontSize', value)}
+              value={(selectedNode.props.style?.fontSize as string) || "14px"}
+              onChange={(value) => onStyleChange("fontSize", value)}
             />
           </Form.Item>
         )}
         {supportsColor && (
           <Form.Item
-            label={selectedNode.type === ComponentType.BUTTON ? 'Background Color' : 'Text Color'}
+            label={selectedNode.type === ComponentType.BUTTON ? "Background Color" : "Text Color"}
             style={{ marginBottom: 12 }}
           >
             <Space wrap size={8}>
@@ -55,10 +55,10 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
                       minWidth: 24,
                       height: 24,
                       padding: 0,
-                      borderRadius: '9999px',
+                      borderRadius: "9999px",
                       backgroundColor: color,
-                      border: isSelected ? '2px solid #1677ff' : '1px solid #d9d9d9',
-                      boxShadow: isSelected ? '0 0 0 2px rgba(22, 119, 255, 0.2)' : undefined,
+                      border: isSelected ? "2px solid #1677ff" : "1px solid #d9d9d9",
+                      boxShadow: isSelected ? "0 0 0 2px rgba(22, 119, 255, 0.2)" : undefined,
                     }}
                   />
                 );
