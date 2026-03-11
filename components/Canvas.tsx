@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useDroppable } from "@dnd-kit/core";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -14,6 +14,7 @@ import { FormNode, ComponentType } from "../types";
 import { FormElementRenderer } from "./FormElements";
 import { clsx } from "clsx";
 import { useDragContext } from "../index";
+import emptyCanvasImage from "../images/emptyCanvas.png";
 
 // Drag Placeholder Component - shows where the component will be placed
 const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({ isInterior }) => (
@@ -30,7 +31,7 @@ const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({ isInterior }) => 
         className={clsx("mr-2", isInterior ? "text-green-400" : "text-blue-400")}
         style={{ fontSize: 20 }}
       />
-      <span className="text-sm font-medium">放置到这里</span>
+      <span className="text-sm font-medium">Drop here</span>
     </div>
   </div>
 );
@@ -71,7 +72,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
     disabled: isPreview,
   });
 
-  const { removeNode, selectNode, selectedNodeId } = useDesignerStore();
+  const { duplicateNode, removeNode, selectNode, selectedNodeId } = useDesignerStore();
 
   // Tabs specific state
   const [activeTabId, setActiveTabId] = useState<string | null>(null);
@@ -245,19 +246,31 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
       {/* Actions */}
       {!isPreview && isSelected && (
         <div
-          className="absolute -right-3 -top-3 bg-white rounded-full shadow border border-slate-200 z-20 cursor-pointer"
-          onMouseDown={(e) => e.stopPropagation()} // Prevent drag when clicking delete
+          className="absolute -bottom-3 left-2 z-20 flex overflow-hidden rounded-md border border-blue-500 shadow-lg"
+          onMouseDown={(e) => e.stopPropagation()} // Prevent drag when clicking action buttons
           onTouchStart={(e) => e.stopPropagation()}
         >
           <button
             onClick={(e) => {
               e.stopPropagation();
+              duplicateNode(node.id);
+            }}
+            className="flex items-center gap-1 border-r border-blue-500 bg-blue-600 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-blue-700"
+            title="Duplicate component"
+          >
+            <CopyOutlined style={{ fontSize: 12 }} />
+            <span>Duplicate</span>
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
               removeNode(node.id);
             }}
-            className="p-2 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+            className="flex items-center gap-1 bg-blue-600 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-blue-700"
             title="Delete component"
           >
-            <DeleteOutlined style={{ fontSize: 16 }} />
+            <DeleteOutlined style={{ fontSize: 12 }} />
+            <span>Delete</span>
           </button>
         </div>
       )}
@@ -292,14 +305,14 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
 
   return (
     <div
-      className="flex-1 h-full bg-canvas overflow-y-auto p-8"
+      className="flex-1 h-full bg-canvas overflow-y-auto p-[36px]"
       onClick={() => {
         if (!isPreview) {
           selectNode(null);
         }
       }}
     >
-      <div className="max-w-[800px] mx-auto">
+      <div className="w-full">
         <div
           ref={setNodeRef}
           className={clsx(
@@ -308,10 +321,23 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
           )}
         >
           {nodes.length === 0 && !isOver && !showCanvasPlaceholder && (
-            <div className="flex flex-col items-center justify-center h-64 text-slate-400 border-2 border-dashed border-slate-200 rounded-lg">
-              <PlusOutlined className="mb-2" style={{ fontSize: 32 }} />
-              <p className="text-lg font-medium">Canvas is empty</p>
-              <p className="text-sm">Drag components from the left sidebar</p>
+            <div className="flex min-h-[calc(100vh-220px)] items-center justify-center">
+              <div className="w-full max-w-[760px] rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/40 px-8 py-12">
+                <div className="mx-auto flex max-w-[620px] flex-col items-center text-center">
+                  <img
+                    src={emptyCanvasImage}
+                    alt="Empty canvas illustration"
+                    className="mb-5 w-[260px] max-w-full select-none"
+                    draggable={false}
+                  />
+                  <p className="text-[31px] font-semibold leading-tight text-[#2f3338]">
+                    This space is your blank canvas
+                  </p>
+                  <p className="mt-3 text-[18px] font-normal leading-[1.35] text-[#5f6368]">
+                    Please drag and drop elements from the left panel here.
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 

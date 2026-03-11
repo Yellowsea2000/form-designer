@@ -67,7 +67,7 @@ const cursorModifier: Modifier = ({ transform }) => {
 };
 
 export const FormCraftPage: React.FC = observer(() => {
-  const { addNode, moveNode, nodes } = useDesignerStore();
+  const { addNode, moveNode, nodes, selectedNodeId } = useDesignerStore();
   const [activeDragData, setActiveDragData] = useState<DragData | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
   const [overData, setOverData] = useState<any>(null);
@@ -190,7 +190,7 @@ export const FormCraftPage: React.FC = observer(() => {
         }
       }
 
-      addNode(activeData.componentType, parentId, index);
+      addNode(activeData.componentType, parentId, index, false);
       return;
     }
 
@@ -298,8 +298,8 @@ export const FormCraftPage: React.FC = observer(() => {
             </main>
 
             {/* Properties Panel */}
-            {!showPreview && (
-              <div className="h-full z-10">
+            {!showPreview && selectedNodeId && (
+              <div className="fixed top-16 right-0 bottom-0 z-40">
                 <PropertiesPanel />
               </div>
             )}

@@ -116,6 +116,50 @@ const getNodeById = (nodes: FormNode[], id: string): FormNode | null => {
   return null;
 };
 
+interface NodeLocation {
+  node: FormNode;
+  parentId: string | null;
+  index: number;
+}
+
+// Helper to find node location so duplicate can insert right after the source node.
+const findNodeLocation = (
+  nodes: FormNode[],
+  id: string,
+  parentId: string | null = null,
+): NodeLocation | null => {
+  for (let index = 0; index < nodes.length; index++) {
+    const node = nodes[index];
+
+    if (node.id === id) {
+      return { node, parentId, index };
+    }
+
+    if (node.children.length > 0) {
+      const found = findNodeLocation(node.children, id, node.id);
+      if (found) {
+        return found;
+      }
+    }
+  }
+
+  return null;
+};
+
+// Helper to deep-clone a node tree and assign fresh IDs for all descendants.
+const cloneNodeWithNewIds = (node: FormNode): FormNode => {
+  return {
+    id: generateId(),
+    type: node.type,
+    props: {
+      ...node.props,
+      style: node.props.style ? { ...node.props.style } : undefined,
+      options: node.props.options?.map((option) => ({ ...option })),
+    },
+    children: node.children.map((child) => cloneNodeWithNewIds(child)),
+  };
+};
+
 export class DesignerStore {
   nodes: FormNode[] = [];
   selectedNodeId: string | null = null;
@@ -131,7 +175,7 @@ export class DesignerStore {
     );
   }
 
-  addNode(type: ComponentType, parentId: string | null, index?: number) {
+  addNode(type: ComponentType, parentId: string | null, index?: number, autoSelect = true) {
     const newNode: FormNode = {
       id: generateId(),
       type,
@@ -173,7 +217,9 @@ export class DesignerStore {
     }
 
     this.nodes = addNodeRecursively(this.nodes, parentId, newNode, index);
-    this.selectedNodeId = newNode.id;
+    if (autoSelect) {
+      this.selectedNodeId = newNode.id;
+    }
   }
 
   removeNode(id: string) {
@@ -181,6 +227,22 @@ export class DesignerStore {
     if (this.selectedNodeId === id) {
       this.selectedNodeId = null;
     }
+  }
+
+  duplicateNode(id: string) {
+    const location = findNodeLocation(this.nodes, id);
+    if (!location) {
+      return;
+    }
+
+    const duplicatedNode = cloneNodeWithNewIds(location.node);
+    this.nodes = addNodeRecursively(
+      this.nodes,
+      location.parentId,
+      duplicatedNode,
+      location.index + 1,
+    );
+    this.selectNode(duplicatedNode.id);
   }
 
   updateNode(id: string, updates: Partial<FormNode> | Partial<ComponentProps>) {
