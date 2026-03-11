@@ -1,6 +1,6 @@
 import React from "react";
+import { AlignLeftOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Flex, Input, Space } from "antd";
-import { AlignLeft, Plus } from "lucide-react";
 import { ComponentType } from "../../types";
 import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
@@ -25,7 +25,7 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onP
   };
 
   return (
-    <SectionCard title="Options" icon={<AlignLeft className="w-4 h-4" />}>
+    <SectionCard title="Options" icon={<AlignLeftOutlined style={{ fontSize: 16 }} />}>
       <Space direction="vertical" size={8} style={{ width: "100%" }}>
         {options.map((option, index) => (
           <Flex key={`${option.value}-${index}`} gap={8}>
@@ -45,7 +45,7 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onP
         <Button
           type="dashed"
           block
-          icon={<Plus className="w-4 h-4" />}
+          icon={<PlusOutlined style={{ fontSize: 16 }} />}
           onClick={() =>
             onPropChange("options", [
               ...options,

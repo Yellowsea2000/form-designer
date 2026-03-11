@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useDroppable } from "@dnd-kit/core";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -11,7 +12,6 @@ import { observer } from "mobx-react-lite";
 import { useDesignerStore } from "../store";
 import { FormNode, ComponentType } from "../types";
 import { FormElementRenderer } from "./FormElements";
-import { Trash2, Plus } from "lucide-react";
 import { clsx } from "clsx";
 import { useDragContext } from "../index";
 
@@ -26,7 +26,10 @@ const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({ isInterior }) => 
     )}
   >
     <div className="flex items-center justify-center h-full min-h-[60px] text-slate-400">
-      <Plus className={clsx("w-5 h-5 mr-2", isInterior ? "text-green-400" : "text-blue-400")} />
+      <PlusOutlined
+        className={clsx("mr-2", isInterior ? "text-green-400" : "text-blue-400")}
+        style={{ fontSize: 20 }}
+      />
       <span className="text-sm font-medium">放置到这里</span>
     </div>
   </div>
@@ -254,7 +257,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
             className="p-2 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
             title="Delete component"
           >
-            <Trash2 className="w-4 h-4" />
+            <DeleteOutlined style={{ fontSize: 16 }} />
           </button>
         </div>
       )}
@@ -306,7 +309,7 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
         >
           {nodes.length === 0 && !isOver && !showCanvasPlaceholder && (
             <div className="flex flex-col items-center justify-center h-64 text-slate-400 border-2 border-dashed border-slate-200 rounded-lg">
-              <Plus className="w-8 h-8 mb-2" />
+              <PlusOutlined className="mb-2" style={{ fontSize: 32 }} />
               <p className="text-lg font-medium">Canvas is empty</p>
               <p className="text-sm">Drag components from the left sidebar</p>
             </div>

@@ -1,6 +1,6 @@
 import React from "react";
+import { FontSizeOutlined } from "@ant-design/icons";
 import { Form, Input } from "antd";
-import { Type } from "lucide-react";
 import { ComponentType } from "../../types";
 import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
@@ -16,7 +16,7 @@ export const ContentSection: React.FC<SectionProps> = ({ selectedNode, onPropCha
   }
 
   return (
-    <SectionCard title="Content" icon={<Type className="w-4 h-4" />}>
+    <SectionCard title="Content" icon={<FontSizeOutlined style={{ fontSize: 16 }} />}>
       <Form layout="vertical" size="small">
         {selectedNode.props.label !== undefined && (
           <Form.Item label="Label" style={{ marginBottom: 12 }}>

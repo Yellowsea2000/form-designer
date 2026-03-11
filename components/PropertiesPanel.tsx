@@ -1,6 +1,6 @@
 import React from "react";
+import { CloseOutlined } from "@ant-design/icons";
 import { Button, Flex, Space, Tag, Typography } from "antd";
-import { X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useDesignerStore } from "../store";
 import { ComponentType } from "../types";
@@ -66,7 +66,11 @@ export const PropertiesPanel: React.FC = observer(() => {
             </Typography.Title>
             <Tag style={{ marginTop: 4, textTransform: "uppercase" }}>{selectedNode.type}</Tag>
           </div>
-          <Button type="text" icon={<X className="w-5 h-5" />} onClick={() => selectNode(null)} />
+          <Button
+            type="text"
+            icon={<CloseOutlined style={{ fontSize: 20 }} />}
+            onClick={() => selectNode(null)}
+          />
         </Flex>
       </div>
 

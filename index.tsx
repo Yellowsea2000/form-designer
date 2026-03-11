@@ -17,6 +17,7 @@ import {
   DragOverlayProps,
   Modifier,
 } from "@dnd-kit/core";
+import { CodeOutlined, CopyOutlined, EyeOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button, Input, Modal, Space, message } from "antd";
 import { observer } from "mobx-react-lite";
 import { Sidebar } from "./components/Sidebar";
@@ -24,7 +25,6 @@ import { Canvas } from "./components/Canvas";
 import { PropertiesPanel } from "./components/PropertiesPanel";
 import { useDesignerStore } from "./store";
 import { ComponentType, DragData, FormNode } from "./types";
-import { Code2, Copy, Eye, Save } from "lucide-react";
 import { createFormDocument } from "./dsl/form";
 import "antd/dist/reset.css";
 import "./index.css";
@@ -263,21 +263,21 @@ export const FormCraftPage: React.FC = observer(() => {
                 onClick={() => setShowPreview(!showPreview)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${showPreview ? "bg-blue-50 text-blue-600" : "text-slate-600 hover:bg-slate-100"}`}
               >
-                <Eye className="w-4 h-4" />
+                <EyeOutlined style={{ fontSize: 16 }} />
                 {showPreview ? "Edit Mode" : "Preview"}
               </button>
               <button
                 onClick={() => setShowJsonModal(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors"
               >
-                <Code2 className="w-4 h-4" />
+                <CodeOutlined style={{ fontSize: 16 }} />
                 JSON
               </button>
               <button
                 onClick={saveForm}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 shadow-sm transition-colors"
               >
-                <Save className="w-4 h-4" />
+                <SaveOutlined style={{ fontSize: 16 }} />
                 Save
               </button>
             </div>
@@ -333,7 +333,11 @@ export const FormCraftPage: React.FC = observer(() => {
             width={760}
             onCancel={() => setShowJsonModal(false)}
             footer={[
-              <Button key="copy" icon={<Copy className="w-4 h-4" />} onClick={copyJsonToClipboard}>
+              <Button
+                key="copy"
+                icon={<CopyOutlined style={{ fontSize: 16 }} />}
+                onClick={copyJsonToClipboard}
+              >
                 Copy JSON
               </Button>,
               <Button key="close" type="primary" onClick={() => setShowJsonModal(false)}>

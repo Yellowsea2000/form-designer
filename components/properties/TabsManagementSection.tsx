@@ -1,6 +1,6 @@
 import React from "react";
+import { ClusterOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Flex, Input, Space } from "antd";
-import { Layers, Plus, Trash2 } from "lucide-react";
 import { ComponentType, FormNode } from "../../types";
 import { AddNodeFn, RemoveNodeFn, UpdateNodeFn } from "./types";
 import { SectionCard } from "./SectionCard";
@@ -19,7 +19,7 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
   removeNode,
 }) => {
   return (
-    <SectionCard title="Tab Items" icon={<Layers className="w-4 h-4" />}>
+    <SectionCard title="Tab Items" icon={<ClusterOutlined style={{ fontSize: 16 }} />}>
       <Space direction="vertical" style={{ width: "100%" }} size={8}>
         {selectedNode.children.map((child, idx) => (
           <Flex key={child.id} gap={8}>
@@ -31,7 +31,7 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
             <Button
               danger
               type="text"
-              icon={<Trash2 className="w-4 h-4" />}
+              icon={<DeleteOutlined style={{ fontSize: 16 }} />}
               onClick={() => removeNode(child.id)}
             />
           </Flex>
@@ -39,7 +39,7 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
         <Button
           block
           type="dashed"
-          icon={<Plus className="w-4 h-4" />}
+          icon={<PlusOutlined style={{ fontSize: 16 }} />}
           onClick={() => addNode(ComponentType.TAB_ITEM, selectedNode.id)}
         >
           Add Tab

@@ -1,13 +1,13 @@
 import React from "react";
+import { ClusterOutlined } from "@ant-design/icons";
 import { Alert, Typography } from "antd";
-import { Layers } from "lucide-react";
 
 export const TabItemHint: React.FC = () => {
   return (
     <Alert
       type="info"
       showIcon
-      icon={<Layers className="w-4 h-4" />}
+      icon={<ClusterOutlined style={{ fontSize: 16 }} />}
       message="This is a Tab Item"
       description={
         <Typography.Text type="secondary" style={{ fontSize: 12 }}>

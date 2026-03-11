@@ -1,6 +1,6 @@
 import React from "react";
+import { BgColorsOutlined } from "@ant-design/icons";
 import { Button, Flex, Form, Select, Slider, Space, Typography } from "antd";
-import { Palette } from "lucide-react";
 import { ComponentType } from "../../types";
 import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
@@ -26,7 +26,7 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
   const padding = getPxNumber(selectedNode.props.style?.paddingTop, 0);
 
   return (
-    <SectionCard title="Appearance" icon={<Palette className="w-4 h-4" />}>
+    <SectionCard title="Appearance" icon={<BgColorsOutlined style={{ fontSize: 16 }} />}>
       <Form layout="vertical" size="small">
         {supportsFontSize && (
           <Form.Item label="Font Size" style={{ marginBottom: 12 }}>

@@ -1,6 +1,6 @@
 import React from "react";
+import { AuditOutlined } from "@ant-design/icons";
 import { Flex, Switch, Typography } from "antd";
-import { Layout } from "lucide-react";
 import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
 
@@ -10,7 +10,7 @@ export const ValidationSection: React.FC<SectionProps> = ({ selectedNode, onProp
   }
 
   return (
-    <SectionCard title="Validation" icon={<Layout className="w-4 h-4" />}>
+    <SectionCard title="Validation" icon={<AuditOutlined style={{ fontSize: 16 }} />}>
       <Flex justify="space-between" align="center">
         <Typography.Text>Required Field</Typography.Text>
         <Switch

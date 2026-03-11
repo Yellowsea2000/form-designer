@@ -1,6 +1,6 @@
 import React from "react";
+import { PictureOutlined } from "@ant-design/icons";
 import { Form, Input } from "antd";
-import { Image as ImageIcon } from "lucide-react";
 import { ComponentType } from "../../types";
 import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
@@ -11,7 +11,7 @@ export const ImageSettingsSection: React.FC<SectionProps> = ({ selectedNode, onP
   }
 
   return (
-    <SectionCard title="Image Source" icon={<ImageIcon className="w-4 h-4" />}>
+    <SectionCard title="Image Source" icon={<PictureOutlined style={{ fontSize: 16 }} />}>
       <Form layout="vertical" size="small">
         <Form.Item label="Image URL" style={{ marginBottom: 12 }}>
           <Input

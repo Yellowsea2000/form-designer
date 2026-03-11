@@ -1,6 +1,6 @@
 import React from "react";
+import { AppstoreOutlined } from "@ant-design/icons";
 import { Form, InputNumber, Slider } from "antd";
-import { Grid } from "lucide-react";
 import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
 
@@ -9,7 +9,7 @@ export const LayoutSettingsSection: React.FC<SectionProps> = ({ selectedNode, on
   const gap = selectedNode.props.gap ?? 16;
 
   return (
-    <SectionCard title="Layout Settings" icon={<Grid className="w-4 h-4" />}>
+    <SectionCard title="Layout Settings" icon={<AppstoreOutlined style={{ fontSize: 16 }} />}>
       <Form layout="vertical" size="small">
         <Form.Item label={`Grid Columns: ${columns}`} style={{ marginBottom: 12 }}>
           <Slider

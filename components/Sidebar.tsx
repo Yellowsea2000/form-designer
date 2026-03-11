@@ -1,19 +1,18 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
+import {
+  AlignLeftOutlined,
+  AppstoreOutlined,
+  BorderOutlined,
+  CheckSquareOutlined,
+  FontSizeOutlined,
+  FolderOutlined,
+  LayoutOutlined,
+  PictureOutlined,
+  SelectOutlined,
+} from "@ant-design/icons";
 import { ComponentType } from "../types";
 import { componentDSLs } from "../dsl/components";
-import {
-  Type,
-  LayoutTemplate,
-  CheckSquare,
-  Type as TypeIcon,
-  Image as ImageIcon,
-  MousePointerClick,
-  AlignLeft,
-  Heading,
-  BoxSelect,
-  Folder,
-} from "lucide-react";
 
 interface SidebarItemProps {
   type: ComponentType;
@@ -56,7 +55,7 @@ export const Sidebar: React.FC = () => {
     <div className="w-72 bg-white border-r border-slate-200 flex flex-col h-full overflow-y-auto">
       <div className="p-4 border-b border-slate-100">
         <h2 className="font-semibold text-slate-800 flex items-center gap-2">
-          <BoxSelect className="w-5 h-5 text-blue-600" />
+          <AppstoreOutlined className="text-blue-600" style={{ fontSize: 20 }} />
           Components
         </h2>
         <p className="text-xs text-slate-500 mt-1">Drag items to the canvas</p>
@@ -69,12 +68,12 @@ export const Sidebar: React.FC = () => {
             <SidebarItem
               type={ComponentType.CONTAINER}
               label={componentDSLs[ComponentType.CONTAINER].displayName}
-              icon={<LayoutTemplate className="w-6 h-6" />}
+              icon={<LayoutOutlined style={{ fontSize: 24 }} />}
             />
             <SidebarItem
               type={ComponentType.TABS}
               label={componentDSLs[ComponentType.TABS].displayName}
-              icon={<Folder className="w-6 h-6" />}
+              icon={<FolderOutlined style={{ fontSize: 24 }} />}
             />
           </div>
         </div>
@@ -87,27 +86,27 @@ export const Sidebar: React.FC = () => {
             <SidebarItem
               type={ComponentType.INPUT}
               label={componentDSLs[ComponentType.INPUT].displayName}
-              icon={<Type className="w-6 h-6" />}
+              icon={<FontSizeOutlined style={{ fontSize: 24 }} />}
             />
             <SidebarItem
               type={ComponentType.TEXTAREA}
               label={componentDSLs[ComponentType.TEXTAREA].displayName}
-              icon={<AlignLeft className="w-6 h-6" />}
+              icon={<AlignLeftOutlined style={{ fontSize: 24 }} />}
             />
             <SidebarItem
               type={ComponentType.SELECT}
               label={componentDSLs[ComponentType.SELECT].displayName}
-              icon={<MousePointerClick className="w-6 h-6" />}
+              icon={<SelectOutlined style={{ fontSize: 24 }} />}
             />
             <SidebarItem
               type={ComponentType.CHECKBOX}
               label={componentDSLs[ComponentType.CHECKBOX].displayName}
-              icon={<CheckSquare className="w-6 h-6" />}
+              icon={<CheckSquareOutlined style={{ fontSize: 24 }} />}
             />
             <SidebarItem
               type={ComponentType.BUTTON}
               label={componentDSLs[ComponentType.BUTTON].displayName}
-              icon={<BoxSelect className="w-6 h-6" />}
+              icon={<BorderOutlined style={{ fontSize: 24 }} />}
             />
           </div>
         </div>
@@ -120,17 +119,17 @@ export const Sidebar: React.FC = () => {
             <SidebarItem
               type={ComponentType.HEADER}
               label={componentDSLs[ComponentType.HEADER].displayName}
-              icon={<Heading className="w-6 h-6" />}
+              icon={<FontSizeOutlined style={{ fontSize: 24 }} />}
             />
             <SidebarItem
               type={ComponentType.TEXT}
               label={componentDSLs[ComponentType.TEXT].displayName}
-              icon={<TypeIcon className="w-6 h-6" />}
+              icon={<FontSizeOutlined style={{ fontSize: 24 }} />}
             />
             <SidebarItem
               type={ComponentType.IMAGE}
               label={componentDSLs[ComponentType.IMAGE].displayName}
-              icon={<ImageIcon className="w-6 h-6" />}
+              icon={<PictureOutlined style={{ fontSize: 24 }} />}
             />
           </div>
         </div>
