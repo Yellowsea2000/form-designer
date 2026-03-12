@@ -13,7 +13,7 @@ import { useDesignerStore } from "../store";
 import { FormNode, ComponentType } from "../types";
 import { FormElementRenderer } from "./FormElements";
 import { clsx } from "clsx";
-import { useDragContext } from "../index";
+import { useDragContext } from "../dragContext";
 import emptyCanvasImage from "../images/emptyCanvas.png";
 
 // Drag Placeholder Component - shows where the component will be placed

@@ -28,21 +28,9 @@ import { ComponentType, DragData, FormNode } from "./types";
 import { createFormDocument } from "./dsl/form";
 import "antd/dist/reset.css";
 import "./index.css";
+import { DragContext } from "./dragContext";
 
 // Context for sharing drag state with Canvas
-interface DragContextType {
-  activeDragData: DragData | null;
-  overId: string | null;
-  overData: any;
-}
-
-export const DragContext = createContext<DragContextType>({
-  activeDragData: null,
-  overId: null,
-  overData: null,
-});
-
-export const useDragContext = () => useContext(DragContext);
 
 // Drop animation config for smoother UX
 // Disable duration to remove rebound effect
