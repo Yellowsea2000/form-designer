@@ -30,3 +30,6 @@ tailwind.config.js
 postcss.config.js
 webpack.config.js
 eslint.config.js
+
+package-lock.json
+package.json
