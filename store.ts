@@ -175,34 +175,11 @@ export class DesignerStore {
     );
   }
 
-  addNode(
-    type: ComponentType,
-    parentId: string | null,
-    index?: number,
-    autoSelect = true,
-    propsOverrides?: Partial<ComponentProps>,
-  ) {
-    const baseDefaultProps = DEFAULT_PROPS[type] || {};
-    const mergedStyle = {
-      ...(baseDefaultProps.style || {}),
-      ...(propsOverrides?.style || {}),
-    };
-
-    const nextOptions =
-      propsOverrides?.options ??
-      baseDefaultProps.options?.map((option) => ({
-        ...option,
-      }));
-
+  addNode(type: ComponentType, parentId: string | null, index?: number, autoSelect = true) {
     const newNode: FormNode = {
       id: generateId(),
       type,
-      props: {
-        ...baseDefaultProps,
-        ...propsOverrides,
-        style: Object.keys(mergedStyle).length ? mergedStyle : undefined,
-        options: nextOptions,
-      },
+      props: { ...DEFAULT_PROPS[type] },
       children: [],
     };
 

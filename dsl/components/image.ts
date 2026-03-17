@@ -8,7 +8,7 @@ const defaultProps: ComponentProps = {
 };
 
 export const imageDSL: ComponentDSLDefinition = {
-  type: ComponentType.IMAGE,
+  type: ComponentType.ICON,
   displayName: "Icon",
   version: "1.0.0",
   category: "display",

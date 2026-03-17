@@ -2,12 +2,12 @@ import { ComponentProps, ComponentType } from "../../types";
 import { ComponentDSLDefinition } from "../types";
 
 const defaultProps: ComponentProps = {
-  content: "Form Header",
+  content: "Form Title",
   style: { fontSize: "24px", fontWeight: "bold", color: "#1e293b" },
 };
 
 export const headerDSL: ComponentDSLDefinition = {
-  type: ComponentType.HEADER,
+  type: ComponentType.TITLE,
   displayName: "Title",
   version: "1.0.0",
   category: "display",
@@ -16,16 +16,16 @@ export const headerDSL: ComponentDSLDefinition = {
   props: [
     {
       name: "content",
-      label: "Heading Text",
+      label: "Title Text",
       type: "string",
-      description: "Displayed heading string.",
+      description: "Displayed title string.",
       defaultValue: defaultProps.content,
     },
     {
       name: "style",
       label: "Style",
       type: "style",
-      description: "Inline style overrides for the heading.",
+      description: "Inline style overrides for the title.",
       defaultValue: defaultProps.style,
     },
   ],

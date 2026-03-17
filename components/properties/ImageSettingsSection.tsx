@@ -6,7 +6,7 @@ import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
 
 export const ImageSettingsSection: React.FC<SectionProps> = ({ selectedNode, onPropChange }) => {
-  if (selectedNode.type !== ComponentType.IMAGE) {
+  if (selectedNode.type !== ComponentType.ICON) {
     return null;
   }
 

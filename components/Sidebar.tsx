@@ -1,7 +1,7 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { AppstoreOutlined } from "@ant-design/icons";
-import { ComponentProps, ComponentType } from "../types";
+import { ComponentType } from "../types";
 import { componentDSLs } from "../dsl/components";
 import checkboxIcon from "../images/FormComponent/Checkbox.png";
 import containerIcon from "../images/FormComponent/Container.png";
@@ -21,7 +21,6 @@ import titleIcon from "../images/FormComponent/Title.png";
 interface SidebarItemProps {
   dragId: string;
   type: ComponentType;
-  propsOverrides?: Partial<ComponentProps>;
   label: string;
   icon: React.ReactNode;
 }
@@ -33,20 +32,21 @@ const itemIconBoxClassName = "flex items-center justify-center text-slate-600";
 type SidebarPaletteType =
   | ComponentType.CONTAINER
   | ComponentType.TEXT
-  | ComponentType.HEADER
-  | ComponentType.IMAGE
+  | ComponentType.TITLE
+  | ComponentType.ICON
   | ComponentType.TABS
   | ComponentType.INPUT
   | ComponentType.DATE_PICKER
   | ComponentType.TIME_PICKER
   | ComponentType.TEXTAREA
   | ComponentType.SELECT
-  | ComponentType.CHECKBOX;
+  | ComponentType.CHECKBOX
+  | ComponentType.RADIO
+  | ComponentType.SWITCH;
 
 interface SidebarPaletteItem {
   id: string;
   type: SidebarPaletteType;
-  propsOverrides?: Partial<ComponentProps>;
   label: string;
   icon: React.ReactNode;
 }
@@ -67,15 +67,15 @@ const layoutItems: SidebarPaletteItem[] = [
     icon: <img src={textIcon} alt="Text" className={itemImageClassName} draggable={false} />,
   },
   {
-    id: "layout-header",
-    type: ComponentType.HEADER,
-    label: componentDSLs[ComponentType.HEADER].displayName,
+    id: "layout-title",
+    type: ComponentType.TITLE,
+    label: componentDSLs[ComponentType.TITLE].displayName,
     icon: <img src={titleIcon} alt="Title" className={itemImageClassName} draggable={false} />,
   },
   {
-    id: "layout-image",
-    type: ComponentType.IMAGE,
-    label: componentDSLs[ComponentType.IMAGE].displayName,
+    id: "layout-icon",
+    type: ComponentType.ICON,
+    label: componentDSLs[ComponentType.ICON].displayName,
     icon: (
       <img src={iconComponentIcon} alt="Icon" className={itemImageClassName} draggable={false} />
     ),
@@ -120,41 +120,20 @@ const formControlItems: SidebarPaletteItem[] = [
   },
   {
     id: "control-switch",
-    type: ComponentType.CHECKBOX,
+    type: ComponentType.SWITCH,
     label: "Switch",
-    propsOverrides: {
-      controlVariant: "switch",
-      label: "Switch",
-      content: "Enable notifications",
-    },
     icon: <img src={switchIcon} alt="Switch" className={itemImageClassName} draggable={false} />,
   },
   {
     id: "control-radio",
-    type: ComponentType.CHECKBOX,
+    type: ComponentType.RADIO,
     label: "Radio",
-    propsOverrides: {
-      controlVariant: "radio",
-      label: "Radio",
-      options: [
-        { label: "Option 1", value: "1" },
-        { label: "Option 2", value: "2" },
-      ],
-    },
     icon: <img src={radioIcon} alt="Radio" className={itemImageClassName} draggable={false} />,
   },
   {
     id: "control-checkbox",
     type: ComponentType.CHECKBOX,
     label: "Checkbox",
-    propsOverrides: {
-      controlVariant: "checkbox",
-      label: "Checkbox",
-      options: [
-        { label: "Option 1", value: "1" },
-        { label: "Option 2", value: "2" },
-      ],
-    },
     icon: (
       <img src={checkboxIcon} alt="Checkbox" className={itemImageClassName} draggable={false} />
     ),
@@ -212,13 +191,12 @@ const sidebarSections: Array<{
   },
 ];
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, propsOverrides, label, icon }) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: dragId,
     data: {
       type: "sidebar-item",
       componentType: type,
-      componentPropsOverrides: propsOverrides,
     },
   });
 
@@ -268,7 +246,6 @@ export const Sidebar: React.FC = () => {
                   key={item.id}
                   dragId={`sidebar-${item.id}`}
                   type={item.type}
-                  propsOverrides={item.propsOverrides}
                   label={item.label}
                   icon={item.icon}
                 />

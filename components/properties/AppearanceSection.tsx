@@ -16,10 +16,10 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
   onPaddingChange,
 }) => {
   const supportsFontSize =
-    selectedNode.type === ComponentType.HEADER || selectedNode.type === ComponentType.TEXT;
+    selectedNode.type === ComponentType.TITLE || selectedNode.type === ComponentType.TEXT;
   const supportsColor =
     selectedNode.type === ComponentType.BUTTON ||
-    selectedNode.type === ComponentType.HEADER ||
+    selectedNode.type === ComponentType.TITLE ||
     selectedNode.type === ComponentType.TEXT;
   const colorKey = selectedNode.type === ComponentType.BUTTON ? "backgroundColor" : "color";
   const colorValue = selectedNode.props.style?.[colorKey] as string | undefined;

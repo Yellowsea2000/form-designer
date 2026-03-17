@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox } from "antd";
+import { Radio } from "antd";
 import { ElementRendererProps } from "./types";
 import { baseLabelClass, cn } from "./common";
 
@@ -9,7 +9,7 @@ const createDefaultOptions = (count = 2) =>
     value: `${index + 1}`,
   }));
 
-export const CheckboxElement: React.FC<ElementRendererProps> = ({ props }) => {
+export const RadioElement: React.FC<ElementRendererProps> = ({ props }) => {
   const { label, required, options, style, className } = props;
   const choiceOptions = options && options.length > 0 ? options : createDefaultOptions(2);
 
@@ -20,13 +20,13 @@ export const CheckboxElement: React.FC<ElementRendererProps> = ({ props }) => {
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
-      <Checkbox.Group className="flex flex-col gap-2">
+      <Radio.Group className="flex flex-col gap-2">
         {choiceOptions.map((option) => (
-          <Checkbox key={option.value} value={option.value}>
+          <Radio key={option.value} value={option.value}>
             {option.label}
-          </Checkbox>
+          </Radio>
         ))}
-      </Checkbox.Group>
+      </Radio.Group>
     </div>
   );
 };

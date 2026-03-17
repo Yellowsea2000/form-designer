@@ -7,7 +7,9 @@ import { datePickerDSL } from "./datePicker";
 import { headerDSL } from "./header";
 import { imageDSL } from "./image";
 import { inputDSL } from "./input";
+import { radioDSL } from "./radio";
 import { selectDSL } from "./select";
+import { switchDSL } from "./switch";
 import { tabItemDSL } from "./tabItem";
 import { tabsDSL } from "./tabs";
 import { textDSL } from "./text";
@@ -24,10 +26,12 @@ export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
   [ComponentType.TEXTAREA]: textareaDSL,
   [ComponentType.SELECT]: selectDSL,
   [ComponentType.CHECKBOX]: checkboxDSL,
+  [ComponentType.RADIO]: radioDSL,
+  [ComponentType.SWITCH]: switchDSL,
   [ComponentType.BUTTON]: buttonDSL,
   [ComponentType.TEXT]: textDSL,
-  [ComponentType.IMAGE]: imageDSL,
-  [ComponentType.HEADER]: headerDSL,
+  [ComponentType.ICON]: imageDSL,
+  [ComponentType.TITLE]: headerDSL,
 };
 
 export const DEFAULT_PROPS: Record<ComponentType, ComponentProps> = Object.values(

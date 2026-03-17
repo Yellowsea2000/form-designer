@@ -1,26 +1,9 @@
 import React from "react";
 import { AlignLeftOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Flex, Input, InputNumber, Space, Typography } from "antd";
-import { ComponentProps } from "../../types";
 import { ComponentType } from "../../types";
 import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
-
-const resolveCheckboxVariant = (props: ComponentProps): "checkbox" | "radio" | "switch" => {
-  if (props.controlVariant) {
-    return props.controlVariant;
-  }
-
-  const label = (props.label || "").toLowerCase();
-  if (label.includes("switch")) {
-    return "switch";
-  }
-  if (label.includes("radio")) {
-    return "radio";
-  }
-
-  return "checkbox";
-};
 
 const createDefaultOptions = (count: number) =>
   Array.from({ length: count }, (_, index) => ({
@@ -44,11 +27,8 @@ const resizeOptions = (
 
 export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onPropChange }) => {
   const isSelect = selectedNode.type === ComponentType.SELECT;
-  const checkboxVariant =
-    selectedNode.type === ComponentType.CHECKBOX
-      ? resolveCheckboxVariant(selectedNode.props)
-      : undefined;
-  const isCheckboxOrRadio = checkboxVariant === "checkbox" || checkboxVariant === "radio";
+  const isCheckboxOrRadio =
+    selectedNode.type === ComponentType.CHECKBOX || selectedNode.type === ComponentType.RADIO;
 
   if (!isSelect && !isCheckboxOrRadio) {
     return null;

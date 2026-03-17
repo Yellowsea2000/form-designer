@@ -13,12 +13,14 @@ export enum ComponentType {
   TEXTAREA = "textarea",
   SELECT = "select",
   CHECKBOX = "checkbox",
+  RADIO = "radio",
+  SWITCH = "switch",
   BUTTON = "button",
 
-  // Display
+  // Content
   TEXT = "text",
-  IMAGE = "image",
-  HEADER = "header",
+  ICON = "icon",
+  TITLE = "title",
 }
 
 export interface ComponentProps {
@@ -27,10 +29,9 @@ export interface ComponentProps {
   required?: boolean;
   defaultValue?: string;
   options?: { label: string; value: string }[]; // For select/checkbox/radio
-  controlVariant?: "checkbox" | "radio" | "switch";
-  src?: string; // For image
-  alt?: string; // For image
-  content?: string; // For text/header
+  src?: string; // For icon/image
+  alt?: string; // For icon/image
+  content?: string; // For text/title
   className?: string;
   style?: CSSProperties;
   buttonType?: "submit" | "button" | "reset";
@@ -50,7 +51,6 @@ export interface FormNode {
 export interface DragData {
   type: "sidebar-item" | "canvas-item" | "container-interior";
   componentType?: ComponentType;
-  componentPropsOverrides?: Partial<ComponentProps>;
   id?: string;
   isContainer?: boolean;
   nodeType?: ComponentType;

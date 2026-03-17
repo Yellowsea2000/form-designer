@@ -10,8 +10,10 @@ export const ALL_COMPONENT_TYPES: ComponentType[] = [
   ComponentType.TEXTAREA,
   ComponentType.SELECT,
   ComponentType.CHECKBOX,
+  ComponentType.RADIO,
+  ComponentType.SWITCH,
   ComponentType.BUTTON,
   ComponentType.TEXT,
-  ComponentType.IMAGE,
-  ComponentType.HEADER,
+  ComponentType.ICON,
+  ComponentType.TITLE,
 ];

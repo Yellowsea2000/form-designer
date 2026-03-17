@@ -7,7 +7,9 @@ import { DatePickerElement } from "./elements/DatePickerElement";
 import { HeaderElement } from "./elements/HeaderElement";
 import { ImageElement } from "./elements/ImageElement";
 import { InputElement } from "./elements/InputElement";
+import { RadioElement } from "./elements/RadioElement";
 import { SelectElement } from "./elements/SelectElement";
+import { SwitchElement } from "./elements/SwitchElement";
 import { TabItemElement } from "./elements/TabItemElement";
 import { TabsElement } from "./elements/TabsElement";
 import { TextElement } from "./elements/TextElement";
@@ -20,7 +22,7 @@ interface ElementRendererInput extends ElementRendererProps {
 }
 
 const renderers: Record<ComponentType, React.FC<ElementRendererProps>> = {
-  [ComponentType.HEADER]: HeaderElement,
+  [ComponentType.TITLE]: HeaderElement,
   [ComponentType.TEXT]: TextElement,
   [ComponentType.INPUT]: InputElement,
   [ComponentType.DATE_PICKER]: DatePickerElement,
@@ -28,8 +30,10 @@ const renderers: Record<ComponentType, React.FC<ElementRendererProps>> = {
   [ComponentType.TEXTAREA]: TextareaElement,
   [ComponentType.SELECT]: SelectElement,
   [ComponentType.CHECKBOX]: CheckboxElement,
+  [ComponentType.RADIO]: RadioElement,
+  [ComponentType.SWITCH]: SwitchElement,
   [ComponentType.BUTTON]: ButtonElement,
-  [ComponentType.IMAGE]: ImageElement,
+  [ComponentType.ICON]: ImageElement,
   [ComponentType.CONTAINER]: ContainerElement,
   [ComponentType.TABS]: TabsElement,
   [ComponentType.TAB_ITEM]: TabItemElement,
