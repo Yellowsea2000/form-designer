@@ -3,6 +3,7 @@ import { ComponentDSLDefinition } from "../types";
 import { buttonDSL } from "./button";
 import { checkboxDSL } from "./checkbox";
 import { containerDSL } from "./container";
+import { datePickerDSL } from "./datePicker";
 import { headerDSL } from "./header";
 import { imageDSL } from "./image";
 import { inputDSL } from "./input";
@@ -10,6 +11,7 @@ import { selectDSL } from "./select";
 import { tabItemDSL } from "./tabItem";
 import { tabsDSL } from "./tabs";
 import { textDSL } from "./text";
+import { timePickerDSL } from "./timePicker";
 import { textareaDSL } from "./textarea";
 
 export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
@@ -17,6 +19,8 @@ export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
   [ComponentType.TABS]: tabsDSL,
   [ComponentType.TAB_ITEM]: tabItemDSL,
   [ComponentType.INPUT]: inputDSL,
+  [ComponentType.DATE_PICKER]: datePickerDSL,
+  [ComponentType.TIME_PICKER]: timePickerDSL,
   [ComponentType.TEXTAREA]: textareaDSL,
   [ComponentType.SELECT]: selectDSL,
   [ComponentType.CHECKBOX]: checkboxDSL,

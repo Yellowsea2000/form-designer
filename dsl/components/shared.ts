@@ -5,6 +5,8 @@ export const ALL_COMPONENT_TYPES: ComponentType[] = [
   ComponentType.TABS,
   ComponentType.TAB_ITEM,
   ComponentType.INPUT,
+  ComponentType.DATE_PICKER,
+  ComponentType.TIME_PICKER,
   ComponentType.TEXTAREA,
   ComponentType.SELECT,
   ComponentType.CHECKBOX,

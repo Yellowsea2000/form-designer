@@ -3,13 +3,16 @@ import { useDraggable } from "@dnd-kit/core";
 import {
   AlignLeftOutlined,
   AppstoreOutlined,
-  BorderOutlined,
+  CalendarOutlined,
+  CheckCircleOutlined,
   CheckSquareOutlined,
+  ClockCircleOutlined,
+  FieldNumberOutlined,
+  FieldStringOutlined,
   FontSizeOutlined,
-  FolderOutlined,
-  LayoutOutlined,
   PictureOutlined,
   SelectOutlined,
+  SwitcherOutlined,
 } from "@ant-design/icons";
 import { ComponentType } from "../types";
 import { componentDSLs } from "../dsl/components";
@@ -17,6 +20,7 @@ import containerIcon from "../images/FormComponent/Container.png";
 import tabIcon from "../images/FormComponent/Tab.png";
 
 interface SidebarItemProps {
+  dragId: string;
   type: ComponentType;
   label: string;
   icon: React.ReactNode;
@@ -33,54 +37,131 @@ type SidebarPaletteType =
   | ComponentType.IMAGE
   | ComponentType.TABS
   | ComponentType.INPUT
+  | ComponentType.DATE_PICKER
+  | ComponentType.TIME_PICKER
   | ComponentType.TEXTAREA
   | ComponentType.SELECT
-  | ComponentType.CHECKBOX
-  | ComponentType.BUTTON;
+  | ComponentType.CHECKBOX;
 
-const sidebarItemIcons: Record<SidebarPaletteType, React.ReactNode> = {
-  [ComponentType.CONTAINER]: (
-    <img src={containerIcon} alt="Container" className={itemImageClassName} draggable={false} />
-  ),
-  [ComponentType.TEXT]: <AlignLeftOutlined style={itemIconStyle} />,
-  [ComponentType.HEADER]: <FontSizeOutlined style={itemIconStyle} />,
-  [ComponentType.IMAGE]: <PictureOutlined style={itemIconStyle} />,
-  [ComponentType.TABS]: (
-    <img src={tabIcon} alt="Tab" className={itemImageClassName} draggable={false} />
-  ),
-  [ComponentType.INPUT]: <FontSizeOutlined style={itemIconStyle} />,
-  [ComponentType.TEXTAREA]: <AlignLeftOutlined style={itemIconStyle} />,
-  [ComponentType.SELECT]: <SelectOutlined style={itemIconStyle} />,
-  [ComponentType.CHECKBOX]: <CheckSquareOutlined style={itemIconStyle} />,
-  [ComponentType.BUTTON]: <BorderOutlined style={itemIconStyle} />,
-};
+interface SidebarPaletteItem {
+  id: string;
+  type: SidebarPaletteType;
+  label: string;
+  icon: React.ReactNode;
+}
 
-const sidebarSections: Array<{ title: string; types: SidebarPaletteType[] }> = [
+const layoutItems: SidebarPaletteItem[] = [
   {
-    title: "Layout",
-    types: [
-      ComponentType.CONTAINER,
-      ComponentType.TEXT,
-      ComponentType.HEADER,
-      ComponentType.IMAGE,
-      ComponentType.TABS,
-    ],
+    id: "layout-container",
+    type: ComponentType.CONTAINER,
+    label: componentDSLs[ComponentType.CONTAINER].displayName,
+    icon: (
+      <img src={containerIcon} alt="Container" className={itemImageClassName} draggable={false} />
+    ),
   },
   {
-    title: "Form Control",
-    types: [
-      ComponentType.INPUT,
-      ComponentType.TEXTAREA,
-      ComponentType.SELECT,
-      ComponentType.CHECKBOX,
-      ComponentType.BUTTON,
-    ],
+    id: "layout-text",
+    type: ComponentType.TEXT,
+    label: componentDSLs[ComponentType.TEXT].displayName,
+    icon: <AlignLeftOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "layout-header",
+    type: ComponentType.HEADER,
+    label: componentDSLs[ComponentType.HEADER].displayName,
+    icon: <FontSizeOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "layout-image",
+    type: ComponentType.IMAGE,
+    label: componentDSLs[ComponentType.IMAGE].displayName,
+    icon: <PictureOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "layout-tabs",
+    type: ComponentType.TABS,
+    label: componentDSLs[ComponentType.TABS].displayName,
+    icon: <img src={tabIcon} alt="Tab" className={itemImageClassName} draggable={false} />,
   },
 ];
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ type, label, icon }) => {
+const formControlItems: SidebarPaletteItem[] = [
+  {
+    id: "control-input-box",
+    type: ComponentType.INPUT,
+    label: "Input Box",
+    icon: <FieldStringOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "control-number-input",
+    type: ComponentType.INPUT,
+    label: "Number Input",
+    icon: <FieldNumberOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "control-dropdown",
+    type: ComponentType.SELECT,
+    label: "Dropdown",
+    icon: <SelectOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "control-switch",
+    type: ComponentType.CHECKBOX,
+    label: "Switch",
+    icon: <SwitcherOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "control-radio",
+    type: ComponentType.CHECKBOX,
+    label: "Radio",
+    icon: <CheckCircleOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "control-checkbox",
+    type: ComponentType.CHECKBOX,
+    label: "Checkbox",
+    icon: <CheckSquareOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "control-text-area",
+    type: ComponentType.TEXTAREA,
+    label: "Text Area",
+    icon: <AlignLeftOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "control-date-picker",
+    type: ComponentType.DATE_PICKER,
+    label: "Date Picker",
+    icon: <CalendarOutlined style={itemIconStyle} />,
+  },
+  {
+    id: "control-time-picker",
+    type: ComponentType.TIME_PICKER,
+    label: "Time Picker",
+    icon: <ClockCircleOutlined style={itemIconStyle} />,
+  },
+];
+
+const sidebarSections: Array<{
+  title: string;
+  gridClassName: string;
+  items: SidebarPaletteItem[];
+}> = [
+  {
+    title: "Layout",
+    gridClassName: "grid grid-cols-3 gap-3",
+    items: layoutItems,
+  },
+  {
+    title: "Form Control",
+    gridClassName: "grid grid-cols-3 gap-3",
+    items: formControlItems,
+  },
+];
+
+const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-    id: `sidebar-${type}`,
+    id: dragId,
     data: {
       type: "sidebar-item",
       componentType: type,
@@ -123,13 +204,14 @@ export const Sidebar: React.FC = () => {
         {sidebarSections.map((section) => (
           <div key={section.title}>
             <h3 className={sectionTitleClassName}>{section.title}</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {section.types.map((type) => (
+            <div className={section.gridClassName}>
+              {section.items.map((item) => (
                 <SidebarItem
-                  key={type}
-                  type={type}
-                  label={componentDSLs[type].displayName}
-                  icon={sidebarItemIcons[type]}
+                  key={item.id}
+                  dragId={`sidebar-${item.id}`}
+                  type={item.type}
+                  label={item.label}
+                  icon={item.icon}
                 />
               ))}
             </div>

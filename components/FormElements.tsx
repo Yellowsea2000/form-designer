@@ -3,6 +3,7 @@ import { ComponentType } from "../types";
 import { ButtonElement } from "./elements/ButtonElement";
 import { CheckboxElement } from "./elements/CheckboxElement";
 import { ContainerElement } from "./elements/ContainerElement";
+import { DatePickerElement } from "./elements/DatePickerElement";
 import { HeaderElement } from "./elements/HeaderElement";
 import { ImageElement } from "./elements/ImageElement";
 import { InputElement } from "./elements/InputElement";
@@ -11,6 +12,7 @@ import { TabItemElement } from "./elements/TabItemElement";
 import { TabsElement } from "./elements/TabsElement";
 import { TextElement } from "./elements/TextElement";
 import { TextareaElement } from "./elements/TextareaElement";
+import { TimePickerElement } from "./elements/TimePickerElement";
 import { ElementRendererProps } from "./elements/types";
 
 interface ElementRendererInput extends ElementRendererProps {
@@ -21,6 +23,8 @@ const renderers: Record<ComponentType, React.FC<ElementRendererProps>> = {
   [ComponentType.HEADER]: HeaderElement,
   [ComponentType.TEXT]: TextElement,
   [ComponentType.INPUT]: InputElement,
+  [ComponentType.DATE_PICKER]: DatePickerElement,
+  [ComponentType.TIME_PICKER]: TimePickerElement,
   [ComponentType.TEXTAREA]: TextareaElement,
   [ComponentType.SELECT]: SelectElement,
   [ComponentType.CHECKBOX]: CheckboxElement,

@@ -8,6 +8,8 @@ export enum ComponentType {
 
   // Form Controls
   INPUT = "input",
+  DATE_PICKER = "date_picker",
+  TIME_PICKER = "time_picker",
   TEXTAREA = "textarea",
   SELECT = "select",
   CHECKBOX = "checkbox",
