@@ -13,6 +13,8 @@ import {
 } from "@ant-design/icons";
 import { ComponentType } from "../types";
 import { componentDSLs } from "../dsl/components";
+import containerIcon from "../images/FormComponent/Container.png";
+import tabIcon from "../images/FormComponent/Tab.png";
 
 interface SidebarItemProps {
   type: ComponentType;
@@ -21,6 +23,60 @@ interface SidebarItemProps {
 }
 
 const sectionTitleClassName = "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
+const itemIconStyle = { fontSize: 24 };
+const itemImageClassName = "w-10 h-10 object-contain";
+
+type SidebarPaletteType =
+  | ComponentType.CONTAINER
+  | ComponentType.TEXT
+  | ComponentType.HEADER
+  | ComponentType.IMAGE
+  | ComponentType.TABS
+  | ComponentType.INPUT
+  | ComponentType.TEXTAREA
+  | ComponentType.SELECT
+  | ComponentType.CHECKBOX
+  | ComponentType.BUTTON;
+
+const sidebarItemIcons: Record<SidebarPaletteType, React.ReactNode> = {
+  [ComponentType.CONTAINER]: (
+    <img src={containerIcon} alt="Container" className={itemImageClassName} draggable={false} />
+  ),
+  [ComponentType.TEXT]: <AlignLeftOutlined style={itemIconStyle} />,
+  [ComponentType.HEADER]: <FontSizeOutlined style={itemIconStyle} />,
+  [ComponentType.IMAGE]: <PictureOutlined style={itemIconStyle} />,
+  [ComponentType.TABS]: (
+    <img src={tabIcon} alt="Tab" className={itemImageClassName} draggable={false} />
+  ),
+  [ComponentType.INPUT]: <FontSizeOutlined style={itemIconStyle} />,
+  [ComponentType.TEXTAREA]: <AlignLeftOutlined style={itemIconStyle} />,
+  [ComponentType.SELECT]: <SelectOutlined style={itemIconStyle} />,
+  [ComponentType.CHECKBOX]: <CheckSquareOutlined style={itemIconStyle} />,
+  [ComponentType.BUTTON]: <BorderOutlined style={itemIconStyle} />,
+};
+
+const sidebarSections: Array<{ title: string; types: SidebarPaletteType[] }> = [
+  {
+    title: "Layout",
+    types: [
+      ComponentType.CONTAINER,
+      ComponentType.TEXT,
+      ComponentType.HEADER,
+      ComponentType.IMAGE,
+      ComponentType.TABS,
+    ],
+  },
+  {
+    title: "Form Control",
+    types: [
+      ComponentType.INPUT,
+      ComponentType.TEXTAREA,
+      ComponentType.SELECT,
+      ComponentType.CHECKBOX,
+      ComponentType.BUTTON,
+    ],
+  },
+];
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ type, label, icon }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -64,67 +120,21 @@ export const Sidebar: React.FC = () => {
       </div>
 
       <div className="p-4 space-y-6">
-        <div>
-          <h3 className={sectionTitleClassName}>Layout</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <SidebarItem
-              type={ComponentType.CONTAINER}
-              label={componentDSLs[ComponentType.CONTAINER].displayName}
-              icon={<LayoutOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.TEXT}
-              label={componentDSLs[ComponentType.TEXT].displayName}
-              icon={<AlignLeftOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.HEADER}
-              label={componentDSLs[ComponentType.HEADER].displayName}
-              icon={<FontSizeOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.IMAGE}
-              label={componentDSLs[ComponentType.IMAGE].displayName}
-              icon={<PictureOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.TABS}
-              label={componentDSLs[ComponentType.TABS].displayName}
-              icon={<FolderOutlined style={{ fontSize: 24 }} />}
-            />
+        {sidebarSections.map((section) => (
+          <div key={section.title}>
+            <h3 className={sectionTitleClassName}>{section.title}</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {section.types.map((type) => (
+                <SidebarItem
+                  key={type}
+                  type={type}
+                  label={componentDSLs[type].displayName}
+                  icon={sidebarItemIcons[type]}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-
-        <div>
-          <h3 className={sectionTitleClassName}>Form Control</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <SidebarItem
-              type={ComponentType.INPUT}
-              label={componentDSLs[ComponentType.INPUT].displayName}
-              icon={<FontSizeOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.TEXTAREA}
-              label={componentDSLs[ComponentType.TEXTAREA].displayName}
-              icon={<AlignLeftOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.SELECT}
-              label={componentDSLs[ComponentType.SELECT].displayName}
-              icon={<SelectOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.CHECKBOX}
-              label={componentDSLs[ComponentType.CHECKBOX].displayName}
-              icon={<CheckSquareOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.BUTTON}
-              label={componentDSLs[ComponentType.BUTTON].displayName}
-              icon={<BorderOutlined style={{ fontSize: 24 }} />}
-            />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
