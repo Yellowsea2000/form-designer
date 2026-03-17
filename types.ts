@@ -26,7 +26,8 @@ export interface ComponentProps {
   placeholder?: string;
   required?: boolean;
   defaultValue?: string;
-  options?: { label: string; value: string }[]; // For select
+  options?: { label: string; value: string }[]; // For select/checkbox/radio
+  controlVariant?: "checkbox" | "radio" | "switch";
   src?: string; // For image
   alt?: string; // For image
   content?: string; // For text/header
@@ -49,6 +50,7 @@ export interface FormNode {
 export interface DragData {
   type: "sidebar-item" | "canvas-item" | "container-interior";
   componentType?: ComponentType;
+  componentPropsOverrides?: Partial<ComponentProps>;
   id?: string;
   isContainer?: boolean;
   nodeType?: ComponentType;

@@ -4,7 +4,11 @@ import { ComponentDSLDefinition } from "../types";
 const defaultProps: ComponentProps = {
   label: "Checkbox",
   required: false,
-  content: "I agree to terms",
+  controlVariant: "checkbox",
+  options: [
+    { label: "Option 1", value: "1" },
+    { label: "Option 2", value: "2" },
+  ],
 };
 
 export const checkboxDSL: ComponentDSLDefinition = {
@@ -12,7 +16,7 @@ export const checkboxDSL: ComponentDSLDefinition = {
   displayName: "Checkbox",
   version: "1.0.0",
   category: "form-control",
-  description: "Checkbox input with an optional helper description.",
+  description: "Checkbox/Radio/Switch control with configurable choices.",
   defaultProps,
   props: [
     {
@@ -23,11 +27,11 @@ export const checkboxDSL: ComponentDSLDefinition = {
       defaultValue: defaultProps.label,
     },
     {
-      name: "content",
-      label: "Description",
-      type: "string",
-      description: "Helper text displayed under the label.",
-      defaultValue: defaultProps.content,
+      name: "options",
+      label: "Options",
+      type: "options",
+      description: "Choices shown for checkbox and radio groups.",
+      defaultValue: defaultProps.options,
     },
     {
       name: "required",

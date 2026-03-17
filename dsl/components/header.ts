@@ -8,10 +8,10 @@ const defaultProps: ComponentProps = {
 
 export const headerDSL: ComponentDSLDefinition = {
   type: ComponentType.HEADER,
-  displayName: "Header",
+  displayName: "Title",
   version: "1.0.0",
   category: "display",
-  description: "Section heading text.",
+  description: "Title text.",
   defaultProps,
   props: [
     {

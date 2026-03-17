@@ -9,10 +9,10 @@ const defaultProps: ComponentProps = {
 
 export const imageDSL: ComponentDSLDefinition = {
   type: ComponentType.IMAGE,
-  displayName: "Image",
+  displayName: "Icon",
   version: "1.0.0",
   category: "display",
-  description: "Responsive image with optional alt text.",
+  description: "Icon/image component with configurable source.",
   defaultProps,
   props: [
     {

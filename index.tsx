@@ -178,7 +178,7 @@ export const FormCraftPage: React.FC = observer(() => {
         }
       }
 
-      addNode(activeData.componentType, parentId, index, false);
+      addNode(activeData.componentType, parentId, index, false, activeData.componentPropsOverrides);
       return;
     }
 

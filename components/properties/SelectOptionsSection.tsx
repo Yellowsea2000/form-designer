@@ -1,12 +1,56 @@
 import React from "react";
 import { AlignLeftOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Flex, Input, Space } from "antd";
+import { Button, Flex, Input, InputNumber, Space, Typography } from "antd";
+import { ComponentProps } from "../../types";
 import { ComponentType } from "../../types";
 import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
 
+const resolveCheckboxVariant = (props: ComponentProps): "checkbox" | "radio" | "switch" => {
+  if (props.controlVariant) {
+    return props.controlVariant;
+  }
+
+  const label = (props.label || "").toLowerCase();
+  if (label.includes("switch")) {
+    return "switch";
+  }
+  if (label.includes("radio")) {
+    return "radio";
+  }
+
+  return "checkbox";
+};
+
+const createDefaultOptions = (count: number) =>
+  Array.from({ length: count }, (_, index) => ({
+    label: `Option ${index + 1}`,
+    value: `${index + 1}`,
+  }));
+
+const resizeOptions = (
+  options: { label: string; value: string }[],
+  count: number,
+): { label: string; value: string }[] => {
+  const normalized = options.length > 0 ? options : createDefaultOptions(1);
+  return Array.from({ length: count }, (_, index) => {
+    const current = normalized[index];
+    if (current) {
+      return { ...current };
+    }
+    return { label: `Option ${index + 1}`, value: `${index + 1}` };
+  });
+};
+
 export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onPropChange }) => {
-  if (selectedNode.type !== ComponentType.SELECT) {
+  const isSelect = selectedNode.type === ComponentType.SELECT;
+  const checkboxVariant =
+    selectedNode.type === ComponentType.CHECKBOX
+      ? resolveCheckboxVariant(selectedNode.props)
+      : undefined;
+  const isCheckboxOrRadio = checkboxVariant === "checkbox" || checkboxVariant === "radio";
+
+  if (!isSelect && !isCheckboxOrRadio) {
     return null;
   }
 
@@ -24,9 +68,26 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onP
     onPropChange("options", nextOptions);
   };
 
+  const handleCountChange = (value: number | null) => {
+    if (value === null || Number.isNaN(value)) {
+      return;
+    }
+    const count = Math.max(1, Math.min(20, Math.floor(value)));
+    onPropChange("options", resizeOptions(options, count));
+  };
+
+  const optionCount = Math.max(1, options.length || 1);
+
   return (
     <SectionCard title="Options" icon={<AlignLeftOutlined style={{ fontSize: 16 }} />}>
       <Space direction="vertical" size={8} style={{ width: "100%" }}>
+        {isCheckboxOrRadio ? (
+          <Flex justify="space-between" align="center" gap={8}>
+            <Typography.Text>Option Count</Typography.Text>
+            <InputNumber min={1} max={20} value={optionCount} onChange={handleCountChange} />
+          </Flex>
+        ) : null}
+
         {options.map((option, index) => (
           <Flex key={`${option.value}-${index}`} gap={8}>
             <Input
@@ -42,22 +103,25 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onP
             />
           </Flex>
         ))}
-        <Button
-          type="dashed"
-          block
-          icon={<PlusOutlined style={{ fontSize: 16 }} />}
-          onClick={() =>
-            onPropChange("options", [
-              ...options,
-              {
-                label: `Option ${options.length + 1}`,
-                value: `${options.length + 1}`,
-              },
-            ])
-          }
-        >
-          Add Option
-        </Button>
+
+        {isSelect ? (
+          <Button
+            type="dashed"
+            block
+            icon={<PlusOutlined style={{ fontSize: 16 }} />}
+            onClick={() =>
+              onPropChange("options", [
+                ...options,
+                {
+                  label: `Option ${options.length + 1}`,
+                  value: `${options.length + 1}`,
+                },
+              ])
+            }
+          >
+            Add Option
+          </Button>
+        ) : null}
       </Space>
     </SectionCard>
   );

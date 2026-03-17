@@ -1,12 +1,13 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { AppstoreOutlined, FontSizeOutlined, PictureOutlined } from "@ant-design/icons";
-import { ComponentType } from "../types";
+import { AppstoreOutlined } from "@ant-design/icons";
+import { ComponentProps, ComponentType } from "../types";
 import { componentDSLs } from "../dsl/components";
 import checkboxIcon from "../images/FormComponent/Checkbox.png";
 import containerIcon from "../images/FormComponent/Container.png";
 import datePickerIcon from "../images/FormComponent/DatePicker.png";
 import dropdownIcon from "../images/FormComponent/Dropdown.png";
+import iconComponentIcon from "../images/FormComponent/Icon.png";
 import inputBoxIcon from "../images/FormComponent/InputBox.png";
 import inputNumberIcon from "../images/FormComponent/InputNumber.png";
 import radioIcon from "../images/FormComponent/Radio.png";
@@ -15,16 +16,17 @@ import tabIcon from "../images/FormComponent/Tab.png";
 import textAreaIcon from "../images/FormComponent/TextArea.png";
 import textIcon from "../images/FormComponent/Text.png";
 import timePickerIcon from "../images/FormComponent/TimePicker.png";
+import titleIcon from "../images/FormComponent/Title.png";
 
 interface SidebarItemProps {
   dragId: string;
   type: ComponentType;
+  propsOverrides?: Partial<ComponentProps>;
   label: string;
   icon: React.ReactNode;
 }
 
 const sectionTitleClassName = "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
-const itemIconStyle = { fontSize: 24 };
 const itemImageClassName = "w-[36px] h-[36px]";
 const itemIconBoxClassName = "flex items-center justify-center text-slate-600";
 
@@ -44,6 +46,7 @@ type SidebarPaletteType =
 interface SidebarPaletteItem {
   id: string;
   type: SidebarPaletteType;
+  propsOverrides?: Partial<ComponentProps>;
   label: string;
   icon: React.ReactNode;
 }
@@ -67,13 +70,15 @@ const layoutItems: SidebarPaletteItem[] = [
     id: "layout-header",
     type: ComponentType.HEADER,
     label: componentDSLs[ComponentType.HEADER].displayName,
-    icon: <FontSizeOutlined style={itemIconStyle} />,
+    icon: <img src={titleIcon} alt="Title" className={itemImageClassName} draggable={false} />,
   },
   {
     id: "layout-image",
     type: ComponentType.IMAGE,
     label: componentDSLs[ComponentType.IMAGE].displayName,
-    icon: <PictureOutlined style={itemIconStyle} />,
+    icon: (
+      <img src={iconComponentIcon} alt="Icon" className={itemImageClassName} draggable={false} />
+    ),
   },
   {
     id: "layout-tabs",
@@ -117,18 +122,39 @@ const formControlItems: SidebarPaletteItem[] = [
     id: "control-switch",
     type: ComponentType.CHECKBOX,
     label: "Switch",
+    propsOverrides: {
+      controlVariant: "switch",
+      label: "Switch",
+      content: "Enable notifications",
+    },
     icon: <img src={switchIcon} alt="Switch" className={itemImageClassName} draggable={false} />,
   },
   {
     id: "control-radio",
     type: ComponentType.CHECKBOX,
     label: "Radio",
+    propsOverrides: {
+      controlVariant: "radio",
+      label: "Radio",
+      options: [
+        { label: "Option 1", value: "1" },
+        { label: "Option 2", value: "2" },
+      ],
+    },
     icon: <img src={radioIcon} alt="Radio" className={itemImageClassName} draggable={false} />,
   },
   {
     id: "control-checkbox",
     type: ComponentType.CHECKBOX,
     label: "Checkbox",
+    propsOverrides: {
+      controlVariant: "checkbox",
+      label: "Checkbox",
+      options: [
+        { label: "Option 1", value: "1" },
+        { label: "Option 2", value: "2" },
+      ],
+    },
     icon: (
       <img src={checkboxIcon} alt="Checkbox" className={itemImageClassName} draggable={false} />
     ),
@@ -186,12 +212,13 @@ const sidebarSections: Array<{
   },
 ];
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, propsOverrides, label, icon }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: dragId,
     data: {
       type: "sidebar-item",
       componentType: type,
+      componentPropsOverrides: propsOverrides,
     },
   });
 
@@ -241,6 +268,7 @@ export const Sidebar: React.FC = () => {
                   key={item.id}
                   dragId={`sidebar-${item.id}`}
                   type={item.type}
+                  propsOverrides={item.propsOverrides}
                   label={item.label}
                   icon={item.icon}
                 />
