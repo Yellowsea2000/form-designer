@@ -1,23 +1,20 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
-import {
-  AlignLeftOutlined,
-  AppstoreOutlined,
-  CalendarOutlined,
-  CheckCircleOutlined,
-  CheckSquareOutlined,
-  ClockCircleOutlined,
-  FieldNumberOutlined,
-  FieldStringOutlined,
-  FontSizeOutlined,
-  PictureOutlined,
-  SelectOutlined,
-  SwitcherOutlined,
-} from "@ant-design/icons";
+import { AppstoreOutlined, FontSizeOutlined, PictureOutlined } from "@ant-design/icons";
 import { ComponentType } from "../types";
 import { componentDSLs } from "../dsl/components";
+import checkboxIcon from "../images/FormComponent/Checkbox.png";
 import containerIcon from "../images/FormComponent/Container.png";
+import datePickerIcon from "../images/FormComponent/DatePicker.png";
+import dropdownIcon from "../images/FormComponent/Dropdown.png";
+import inputBoxIcon from "../images/FormComponent/InputBox.png";
+import inputNumberIcon from "../images/FormComponent/InputNumber.png";
+import radioIcon from "../images/FormComponent/Radio.png";
+import switchIcon from "../images/FormComponent/Switch.png";
 import tabIcon from "../images/FormComponent/Tab.png";
+import textAreaIcon from "../images/FormComponent/TextArea.png";
+import textIcon from "../images/FormComponent/Text.png";
+import timePickerIcon from "../images/FormComponent/TimePicker.png";
 
 interface SidebarItemProps {
   dragId: string;
@@ -28,7 +25,9 @@ interface SidebarItemProps {
 
 const sectionTitleClassName = "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
 const itemIconStyle = { fontSize: 24 };
-const itemImageClassName = "w-10 h-10 object-contain";
+const itemImageClassName = "w-[36px] h-[36px] object-contain";
+const itemIconBoxClassName =
+  "w-[60px] h-[60px] flex items-center justify-center text-slate-600 mb-2";
 
 type SidebarPaletteType =
   | ComponentType.CONTAINER
@@ -63,7 +62,7 @@ const layoutItems: SidebarPaletteItem[] = [
     id: "layout-text",
     type: ComponentType.TEXT,
     label: componentDSLs[ComponentType.TEXT].displayName,
-    icon: <AlignLeftOutlined style={itemIconStyle} />,
+    icon: <img src={textIcon} alt="Text" className={itemImageClassName} draggable={false} />,
   },
   {
     id: "layout-header",
@@ -90,55 +89,84 @@ const formControlItems: SidebarPaletteItem[] = [
     id: "control-input-box",
     type: ComponentType.INPUT,
     label: "Input Box",
-    icon: <FieldStringOutlined style={itemIconStyle} />,
+    icon: (
+      <img src={inputBoxIcon} alt="Input Box" className={itemImageClassName} draggable={false} />
+    ),
   },
   {
     id: "control-number-input",
     type: ComponentType.INPUT,
     label: "Number Input",
-    icon: <FieldNumberOutlined style={itemIconStyle} />,
+    icon: (
+      <img
+        src={inputNumberIcon}
+        alt="Number Input"
+        className={itemImageClassName}
+        draggable={false}
+      />
+    ),
   },
   {
     id: "control-dropdown",
     type: ComponentType.SELECT,
     label: "Dropdown",
-    icon: <SelectOutlined style={itemIconStyle} />,
+    icon: (
+      <img src={dropdownIcon} alt="Dropdown" className={itemImageClassName} draggable={false} />
+    ),
   },
   {
     id: "control-switch",
     type: ComponentType.CHECKBOX,
     label: "Switch",
-    icon: <SwitcherOutlined style={itemIconStyle} />,
+    icon: <img src={switchIcon} alt="Switch" className={itemImageClassName} draggable={false} />,
   },
   {
     id: "control-radio",
     type: ComponentType.CHECKBOX,
     label: "Radio",
-    icon: <CheckCircleOutlined style={itemIconStyle} />,
+    icon: <img src={radioIcon} alt="Radio" className={itemImageClassName} draggable={false} />,
   },
   {
     id: "control-checkbox",
     type: ComponentType.CHECKBOX,
     label: "Checkbox",
-    icon: <CheckSquareOutlined style={itemIconStyle} />,
+    icon: (
+      <img src={checkboxIcon} alt="Checkbox" className={itemImageClassName} draggable={false} />
+    ),
   },
   {
     id: "control-text-area",
     type: ComponentType.TEXTAREA,
     label: "Text Area",
-    icon: <AlignLeftOutlined style={itemIconStyle} />,
+    icon: (
+      <img src={textAreaIcon} alt="Text Area" className={itemImageClassName} draggable={false} />
+    ),
   },
   {
     id: "control-date-picker",
     type: ComponentType.DATE_PICKER,
     label: "Date Picker",
-    icon: <CalendarOutlined style={itemIconStyle} />,
+    icon: (
+      <img
+        src={datePickerIcon}
+        alt="Date Picker"
+        className={itemImageClassName}
+        draggable={false}
+      />
+    ),
   },
   {
     id: "control-time-picker",
     type: ComponentType.TIME_PICKER,
     label: "Time Picker",
-    icon: <ClockCircleOutlined style={itemIconStyle} />,
+    icon: (
+      <img
+        src={timePickerIcon}
+        alt="Time Picker"
+        className={itemImageClassName}
+        draggable={false}
+      />
+    ),
   },
 ];
 
@@ -183,7 +211,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) 
       style={style}
       className="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-lg cursor-grab hover:border-blue-400 hover:shadow-sm transition-all active:cursor-grabbing"
     >
-      <div className="text-slate-600 mb-2">{icon}</div>
+      <div className={itemIconBoxClassName}>{icon}</div>
       <span className="text-xs font-medium text-slate-700 text-center">{label}</span>
     </div>
   );
