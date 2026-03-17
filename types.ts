@@ -5,6 +5,9 @@ export enum ComponentType {
   CONTAINER = "container",
   TABS = "tabs",
   TAB_ITEM = "tab_item",
+  TEXT = "text",
+  ICON = "icon",
+  TITLE = "title",
 
   // Form Controls
   INPUT = "input",
@@ -16,11 +19,6 @@ export enum ComponentType {
   RADIO = "radio",
   SWITCH = "switch",
   BUTTON = "button",
-
-  // Content
-  TEXT = "text",
-  ICON = "icon",
-  TITLE = "title",
 }
 
 export interface ComponentProps {
