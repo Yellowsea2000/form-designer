@@ -25,9 +25,8 @@ interface SidebarItemProps {
 
 const sectionTitleClassName = "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
 const itemIconStyle = { fontSize: 24 };
-const itemImageClassName = "w-[36px] h-[36px] object-contain";
-const itemIconBoxClassName =
-  "w-[60px] h-[60px] flex items-center justify-center text-slate-600 mb-2";
+const itemImageClassName = "w-[36px] h-[36px]";
+const itemIconBoxClassName = "flex items-center justify-center text-slate-600";
 
 type SidebarPaletteType =
   | ComponentType.CONTAINER
@@ -196,7 +195,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) 
     },
   });
 
-  const style = isDragging
+  const cardStyle = isDragging
     ? {
         opacity: 0.5,
         border: "2px dashed #3b82f6",
@@ -208,11 +207,15 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) 
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      style={style}
-      className="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-lg cursor-grab hover:border-blue-400 hover:shadow-sm transition-all active:cursor-grabbing"
+      className="flex flex-col items-center cursor-grab active:cursor-grabbing"
     >
-      <div className={itemIconBoxClassName}>{icon}</div>
-      <span className="text-xs font-medium text-slate-700 text-center">{label}</span>
+      <div
+        style={cardStyle}
+        className="w-[60px] h-[60px] p-3 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:border-blue-400 hover:shadow-sm transition-all"
+      >
+        <div className={itemIconBoxClassName}>{icon}</div>
+      </div>
+      <span className="mt-2 text-xs font-medium text-slate-700 text-center">{label}</span>
     </div>
   );
 };
