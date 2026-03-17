@@ -53,7 +53,17 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./index.html",
+        templateContent: ({ htmlWebpackPlugin }) => `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${htmlWebpackPlugin.options.title || "FormCraft Pro"}</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>`,
       }),
       new webpack.DefinePlugin({
         "process.env.API_KEY": JSON.stringify(envVars.GEMINI_API_KEY || ""),
