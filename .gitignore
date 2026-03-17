@@ -25,3 +25,8 @@ dist-ssr
 .claude
 .husky
 .vscode
+
+tailwind.config.js
+postcss.config.js
+webpack.config.js
+eslint.config.js

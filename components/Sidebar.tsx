@@ -20,6 +20,8 @@ interface SidebarItemProps {
   icon: React.ReactNode;
 }
 
+const sectionTitleClassName = "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
+
 const SidebarItem: React.FC<SidebarItemProps> = ({ type, label, icon }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `sidebar-${type}`,
@@ -63,12 +65,27 @@ export const Sidebar: React.FC = () => {
 
       <div className="p-4 space-y-6">
         <div>
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Layout</h3>
+          <h3 className={sectionTitleClassName}>Layout</h3>
           <div className="grid grid-cols-2 gap-3">
             <SidebarItem
               type={ComponentType.CONTAINER}
               label={componentDSLs[ComponentType.CONTAINER].displayName}
               icon={<LayoutOutlined style={{ fontSize: 24 }} />}
+            />
+            <SidebarItem
+              type={ComponentType.TEXT}
+              label={componentDSLs[ComponentType.TEXT].displayName}
+              icon={<AlignLeftOutlined style={{ fontSize: 24 }} />}
+            />
+            <SidebarItem
+              type={ComponentType.HEADER}
+              label={componentDSLs[ComponentType.HEADER].displayName}
+              icon={<FontSizeOutlined style={{ fontSize: 24 }} />}
+            />
+            <SidebarItem
+              type={ComponentType.IMAGE}
+              label={componentDSLs[ComponentType.IMAGE].displayName}
+              icon={<PictureOutlined style={{ fontSize: 24 }} />}
             />
             <SidebarItem
               type={ComponentType.TABS}
@@ -79,9 +96,7 @@ export const Sidebar: React.FC = () => {
         </div>
 
         <div>
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
-            Form Controls
-          </h3>
+          <h3 className={sectionTitleClassName}>Form Control</h3>
           <div className="grid grid-cols-2 gap-3">
             <SidebarItem
               type={ComponentType.INPUT}
@@ -107,29 +122,6 @@ export const Sidebar: React.FC = () => {
               type={ComponentType.BUTTON}
               label={componentDSLs[ComponentType.BUTTON].displayName}
               icon={<BorderOutlined style={{ fontSize: 24 }} />}
-            />
-          </div>
-        </div>
-
-        <div>
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
-            Display
-          </h3>
-          <div className="grid grid-cols-2 gap-3">
-            <SidebarItem
-              type={ComponentType.HEADER}
-              label={componentDSLs[ComponentType.HEADER].displayName}
-              icon={<FontSizeOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.TEXT}
-              label={componentDSLs[ComponentType.TEXT].displayName}
-              icon={<FontSizeOutlined style={{ fontSize: 24 }} />}
-            />
-            <SidebarItem
-              type={ComponentType.IMAGE}
-              label={componentDSLs[ComponentType.IMAGE].displayName}
-              icon={<PictureOutlined style={{ fontSize: 24 }} />}
             />
           </div>
         </div>
