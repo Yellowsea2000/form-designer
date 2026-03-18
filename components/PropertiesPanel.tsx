@@ -4,12 +4,13 @@ import { Button, Flex, Space, Tag, Typography } from "antd";
 import { observer } from "mobx-react-lite";
 import { useDesignerStore } from "../store";
 import { ComponentType } from "../types";
-import { AppearanceSection } from "./properties/AppearanceSection";
+import { BindFieldSection } from "./properties/BindFieldSection";
 import { ContentSection } from "./properties/ContentSection";
 import { EmptyProperties } from "./properties/EmptyProperties";
 import { ImageSettingsSection } from "./properties/ImageSettingsSection";
 import { LayoutSettingsSection } from "./properties/LayoutSettingsSection";
 import { SelectOptionsSection } from "./properties/SelectOptionsSection";
+import { SwitchPropertiesSection } from "./properties/SwitchPropertiesSection";
 import { TabItemHint } from "./properties/TabItemHint";
 import { TabsManagementSection } from "./properties/TabsManagementSection";
 import { StyleChangeFn, PropChangeFn } from "./properties/types";
@@ -37,17 +38,6 @@ export const PropertiesPanel: React.FC = observer(() => {
     });
   };
 
-  const handlePaddingChange = (padding: number) => {
-    const value = `${padding}px`;
-    updateNode(selectedNode.id, {
-      style: {
-        ...selectedNode.props.style,
-        paddingTop: value,
-        paddingBottom: value,
-      },
-    });
-  };
-
   const isContainer = [
     ComponentType.CONTAINER,
     ComponentType.TAB_ITEM,
@@ -55,6 +45,7 @@ export const PropertiesPanel: React.FC = observer(() => {
   ].includes(selectedNode.type);
 
   const isTabItem = selectedNode.type === ComponentType.TAB_ITEM;
+  const isSwitch = selectedNode.type === ComponentType.SWITCH;
 
   return (
     <div className="w-80 bg-white border-l border-slate-200 flex flex-col h-full shadow-xl z-30">
@@ -78,8 +69,17 @@ export const PropertiesPanel: React.FC = observer(() => {
         <Space direction="vertical" size={12} style={{ width: "100%" }}>
           {isTabItem ? (
             <TabItemHint />
+          ) : isSwitch ? (
+            <SwitchPropertiesSection selectedNode={selectedNode} onPropChange={handlePropChange} />
           ) : (
             <>
+              {!isContainer &&
+                ![ComponentType.TEXT, ComponentType.ICON, ComponentType.TITLE].includes(
+                  selectedNode.type,
+                ) && (
+                  <BindFieldSection selectedNode={selectedNode} onPropChange={handlePropChange} />
+                )}
+
               {isContainer && (
                 <LayoutSettingsSection
                   selectedNode={selectedNode}
@@ -115,18 +115,7 @@ export const PropertiesPanel: React.FC = observer(() => {
                 onStyleChange={handleStyleChange}
               />
 
-              <ValidationSection
-                selectedNode={selectedNode}
-                onPropChange={handlePropChange}
-                onStyleChange={handleStyleChange}
-              />
-
-              <AppearanceSection
-                selectedNode={selectedNode}
-                onPropChange={handlePropChange}
-                onStyleChange={handleStyleChange}
-                onPaddingChange={handlePaddingChange}
-              />
+              <ValidationSection selectedNode={selectedNode} onPropChange={handlePropChange} />
             </>
           )}
         </Space>

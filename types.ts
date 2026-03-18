@@ -22,10 +22,11 @@ export enum ComponentType {
 }
 
 export interface ComponentProps {
+  bindField?: string;
   label?: string;
   placeholder?: string;
   required?: boolean;
-  defaultValue?: string;
+  defaultValue?: string | boolean;
   options?: { label: string; value: string }[]; // For select/checkbox/radio
   src?: string; // For icon/image
   alt?: string; // For icon/image

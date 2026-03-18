@@ -4,7 +4,7 @@ import { ElementRendererProps } from "./types";
 import { baseLabelClass, mergeCn } from "./common";
 
 export const SwitchElement: React.FC<ElementRendererProps> = ({ props }) => {
-  const { label, required, content, style, className } = props;
+  const { label, required, defaultValue, style, className } = props;
 
   return (
     <div style={style} className={mergeCn(className)}>
@@ -13,10 +13,7 @@ export const SwitchElement: React.FC<ElementRendererProps> = ({ props }) => {
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
-      <div className="flex items-center gap-2">
-        <Switch />
-        {content && <p className="text-slate-500 pointer-events-none text-sm">{content}</p>}
-      </div>
+      <Switch defaultChecked={Boolean(defaultValue)} />
     </div>
   );
 };

@@ -3,8 +3,8 @@ import { ComponentDSLDefinition } from "../types";
 
 const defaultProps: ComponentProps = {
   label: "Switch",
+  defaultValue: false,
   required: false,
-  content: "Enable notifications",
 };
 
 export const switchDSL: ComponentDSLDefinition = {
@@ -12,7 +12,7 @@ export const switchDSL: ComponentDSLDefinition = {
   displayName: "Switch",
   version: "1.0.0",
   category: "form-control",
-  description: "Switch control with optional helper text.",
+  description: "Switch control with configurable default value and validation.",
   defaultProps,
   props: [
     {
@@ -23,11 +23,11 @@ export const switchDSL: ComponentDSLDefinition = {
       defaultValue: defaultProps.label,
     },
     {
-      name: "content",
-      label: "Description",
-      type: "string",
-      description: "Helper text shown next to the switch.",
-      defaultValue: defaultProps.content,
+      name: "defaultValue",
+      label: "Default Value",
+      type: "boolean",
+      description: "Default checked state for the switch.",
+      defaultValue: defaultProps.defaultValue,
     },
     {
       name: "required",
