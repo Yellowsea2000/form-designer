@@ -40,10 +40,19 @@ interface SortableNodeProps {
   node: FormNode;
   isSelected: boolean;
   isPreview: boolean;
+  hoveredNodeId: string | null;
+  setHoveredNodeId: React.Dispatch<React.SetStateAction<string | null>>;
   onClick: (e: React.MouseEvent) => void;
 }
 
-const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview, onClick }) => {
+const SortableNode: React.FC<SortableNodeProps> = ({
+  node,
+  isSelected,
+  isPreview,
+  hoveredNodeId,
+  setHoveredNodeId,
+  onClick,
+}) => {
   const { activeDragData, overId, overData } = useDragContext();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging, isOver } =
     useSortable({
@@ -80,13 +89,19 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
   // Initialize active tab if needed
   useEffect(() => {
     if (node.type === ComponentType.TABS && node.children.length > 0) {
-      // If no active tab or active tab is not in children anymore, set to first
       const childIds = node.children.map((c) => c.id);
+      const preferredDefaultTabId = node.props.defaultTabId;
+      const fallbackTabId =
+        preferredDefaultTabId && childIds.includes(preferredDefaultTabId)
+          ? preferredDefaultTabId
+          : node.children[0].id;
+
+      // If no active tab or active tab is not in children anymore, set to default/fallback tab.
       if (!activeTabId || !childIds.includes(activeTabId)) {
-        setActiveTabId(node.children[0].id);
+        setActiveTabId(fallbackTabId);
       }
     }
-  }, [node.type, node.children, activeTabId]);
+  }, [node.type, node.children, node.props.defaultTabId, activeTabId]);
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -94,6 +109,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
   };
 
   const isContainer = node.type === ComponentType.CONTAINER || node.type === ComponentType.TAB_ITEM;
+  const isPlainContainer = node.type === ComponentType.CONTAINER;
 
   const isTabs = node.type === ComponentType.TABS;
 
@@ -107,7 +123,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
 
   // Calculate Grid Style
   const columns = node.props.columns || 1;
-  const gap = node.props.gap || 16;
+  const gap = isPlainContainer ? 0 : node.props.gap || 16;
 
   // Only apply grid to containers (Container, TabItem). Tabs component wrapper doesn't need grid usually.
   const showGrid = isContainer && columns > 1;
@@ -141,7 +157,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
       ref={setNodeRef}
       style={style}
       className={cn(
-        "group relative my-3 rounded-lg transition-all bg-white",
+        "group relative my-3 rounded-lg transition-all",
+        isPlainContainer ? "bg-transparent" : "bg-white",
         isPreview
           ? "border-0 shadow-none cursor-default"
           : "border-2 hover:shadow-md cursor-grab active:cursor-grabbing",
@@ -172,6 +189,20 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
         }
         e.stopPropagation();
         listeners?.onTouchStart?.(e);
+      }}
+      onMouseMove={(e) => {
+        if (isPreview) {
+          return;
+        }
+        e.stopPropagation();
+        setHoveredNodeId(node.id);
+      }}
+      onMouseLeave={(e) => {
+        if (isPreview) {
+          return;
+        }
+        e.stopPropagation();
+        setHoveredNodeId((current) => (current === node.id ? null : current));
       }}
     >
       {/* Content */}
@@ -217,23 +248,26 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
                     />
                   ))}
                 {visibleChildren.map((child) => (
-                  <SortableNode
-                    key={child.id}
-                    node={child}
-                    isSelected={selectedNodeId === child.id}
-                    isPreview={isPreview}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      selectNode(child.id);
-                    }}
-                  />
+                  <div key={child.id} className="relative z-10">
+                    <SortableNode
+                      node={child}
+                      isSelected={selectedNodeId === child.id}
+                      isPreview={isPreview}
+                      hoveredNodeId={hoveredNodeId}
+                      setHoveredNodeId={setHoveredNodeId}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        selectNode(child.id);
+                      }}
+                    />
+                  </div>
                 ))}
                 {/* Show placeholder at the end when hovering interior - AFTER all children */}
                 {!isPreview &&
                   visibleChildren.length > 0 &&
                   activeDragData?.type === "sidebar-item" &&
                   isOverInterior && (
-                    <div className="col-span-full">
+                    <div className="relative z-10 col-span-full">
                       <DragPlaceholder isInterior />
                     </div>
                   )}
@@ -244,9 +278,14 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
       </div>
 
       {/* Actions */}
-      {!isPreview && isSelected && (
+      {!isPreview && (
         <div
-          className="absolute -bottom-3 left-2 z-20 flex overflow-hidden rounded-md border border-blue-500 shadow-lg"
+          className={cn(
+            "absolute -bottom-3 left-2 z-20 flex items-center gap-[6px] transition-opacity",
+            hoveredNodeId === node.id
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none",
+          )}
           onMouseDown={(e) => e.stopPropagation()} // Prevent drag when clicking action buttons
           onTouchStart={(e) => e.stopPropagation()}
         >
@@ -255,7 +294,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
               e.stopPropagation();
               duplicateNode(node.id);
             }}
-            className="flex items-center gap-1 border-r border-blue-500 bg-blue-600 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-blue-700"
+            className="flex items-center gap-1 rounded-md border border-blue-500 bg-blue-600 px-2 py-1 text-xs font-medium text-white shadow-lg transition-colors hover:bg-blue-700"
             title="Duplicate component"
           >
             <CopyOutlined style={{ fontSize: 12 }} />
@@ -266,7 +305,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
               e.stopPropagation();
               removeNode(node.id);
             }}
-            className="flex items-center gap-1 bg-blue-600 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-blue-700"
+            className="flex items-center gap-1 rounded-md border border-blue-500 bg-blue-600 px-2 py-1 text-xs font-medium text-white shadow-lg transition-colors hover:bg-blue-700"
             title="Delete component"
           >
             <DeleteOutlined style={{ fontSize: 12 }} />
@@ -291,6 +330,7 @@ interface CanvasProps {
 export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) => {
   const { nodes, selectedNodeId, selectNode } = useDesignerStore();
   const { activeDragData, overId } = useDragContext();
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const { setNodeRef, isOver } = useDroppable({
     id: "canvas-droppable",
     data: {
@@ -311,6 +351,7 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
           selectNode(null);
         }
       }}
+      onMouseLeave={() => setHoveredNodeId(null)}
     >
       <div className="w-full">
         <div
@@ -351,6 +392,8 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
                 node={node}
                 isSelected={selectedNodeId === node.id}
                 isPreview={isPreview}
+                hoveredNodeId={hoveredNodeId}
+                setHoveredNodeId={setHoveredNodeId}
                 onClick={(e) => {
                   e.stopPropagation();
                   selectNode(node.id);

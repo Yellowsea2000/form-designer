@@ -254,13 +254,13 @@ export const FormCraftPage: React.FC = observer(() => {
                 <EyeOutlined style={{ fontSize: 16 }} />
                 {showPreview ? "Edit Mode" : "Preview"}
               </button>
-              <button
+              {/* <button
                 onClick={() => setShowJsonModal(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors"
               >
                 <CodeOutlined style={{ fontSize: 16 }} />
                 JSON
-              </button>
+              </button> */}
               <button
                 onClick={saveForm}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 shadow-sm transition-colors"

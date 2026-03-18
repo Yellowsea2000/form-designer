@@ -1,6 +1,6 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { AppstoreOutlined } from "@ant-design/icons";
+import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { ComponentType } from "../types";
 import { componentDSLs } from "../dsl/components";
 import checkboxIcon from "../images/FormComponent/Checkbox.png";
@@ -17,6 +17,7 @@ import textAreaIcon from "../images/FormComponent/TextArea.png";
 import textIcon from "../images/FormComponent/Text.png";
 import timePickerIcon from "../images/FormComponent/TimePicker.png";
 import titleIcon from "../images/FormComponent/Title.png";
+import panelBg from "../images/panelBg.png";
 
 interface SidebarItemProps {
   dragId: string;
@@ -228,12 +229,29 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) 
 export const Sidebar: React.FC = () => {
   return (
     <div className="w-72 bg-white border-r border-slate-200 flex flex-col h-full overflow-y-auto">
-      <div className="p-4 border-b border-slate-100">
-        <h2 className="font-semibold text-slate-800 flex items-center gap-2">
-          <AppstoreOutlined className="text-blue-600" style={{ fontSize: 20 }} />
-          Components
-        </h2>
-        <p className="text-xs text-slate-500 mt-1">Drag items to the canvas</p>
+      <div
+        className="p-4 border-b border-slate-200 bg-no-repeat bg-cover bg-center"
+        style={{ backgroundImage: `url(${panelBg})` }}
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-xs leading-4 font-bold text-[#4d4d4d]">Elements</span>
+          <span className="text-xs leading-4 font-normal text-[#4d4d4d]">Fields</span>
+          <button
+            type="button"
+            aria-label="Close sidebar header"
+            className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full text-[#595959] hover:bg-white/70"
+          >
+            <CloseOutlined style={{ fontSize: 12 }} />
+          </button>
+        </div>
+        <div className="mt-2 h-6 rounded-full border border-[#cccccc] bg-white px-3 flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Search the elements"
+            className="h-full min-w-0 flex-1 bg-transparent text-xs text-[#4d4d4d] placeholder:text-[#b2b2b2] outline-none"
+          />
+          <SearchOutlined style={{ fontSize: 12, color: "#4d4d4d" }} />
+        </div>
       </div>
 
       <div className="p-4 space-y-6">

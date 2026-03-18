@@ -3,7 +3,7 @@ import { ComponentDSLDefinition } from "../types";
 import { ALL_COMPONENT_TYPES } from "./shared";
 
 const defaultProps: ComponentProps = {
-  style: { padding: "20px", borderRadius: "8px", backgroundColor: "#ffffff", minHeight: "100px" },
+  style: { padding: "20px", borderRadius: "8px", minHeight: "100px" },
   columns: 1,
   gap: 16,
 };

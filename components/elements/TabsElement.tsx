@@ -28,7 +28,7 @@ export const TabsElement: React.FC<ElementRendererProps> = ({
                 : "border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50",
             )}
           >
-            {child.props.label || "Tab"}
+            {child.props.label || "View"}
           </button>
         ))}
       </div>

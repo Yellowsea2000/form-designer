@@ -3,6 +3,7 @@ import { ComponentDSLDefinition } from "../types";
 
 const defaultProps: ComponentProps = {
   label: "Dropdown",
+  placeholder: "Select Value",
   required: false,
   options: [
     { label: "Option 1", value: "1" },
@@ -25,6 +26,13 @@ export const selectDSL: ComponentDSLDefinition = {
       type: "string",
       description: "Field label displayed above the select.",
       defaultValue: defaultProps.label,
+    },
+    {
+      name: "placeholder",
+      label: "Placeholder",
+      type: "string",
+      description: "Placeholder text displayed when no value is selected.",
+      defaultValue: defaultProps.placeholder,
     },
     {
       name: "required",

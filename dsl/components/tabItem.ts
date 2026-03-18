@@ -3,7 +3,7 @@ import { ComponentDSLDefinition } from "../types";
 import { ALL_COMPONENT_TYPES } from "./shared";
 
 const defaultProps: ComponentProps = {
-  label: "Tab",
+  label: "View",
   style: { padding: "20px", minHeight: "100px" },
   columns: 1,
   gap: 16,
@@ -19,9 +19,9 @@ export const tabItemDSL: ComponentDSLDefinition = {
   props: [
     {
       name: "label",
-      label: "Tab Label",
+      label: "View Label",
       type: "string",
-      description: "Displayed text for the tab trigger.",
+      description: "Displayed text for the view trigger.",
       defaultValue: defaultProps.label,
     },
     {

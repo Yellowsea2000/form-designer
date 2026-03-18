@@ -1,9 +1,8 @@
-import React from "react";
-import { ClusterOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Flex, Input, Space } from "antd";
+import React, { useMemo } from "react";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Flex, Form, Input, Radio, Select, Typography } from "antd";
 import { ComponentType, FormNode } from "../../types";
 import { AddNodeFn, RemoveNodeFn, UpdateNodeFn } from "./types";
-import { SectionCard } from "./SectionCard";
 
 interface TabsManagementSectionProps {
   selectedNode: FormNode;
@@ -18,33 +17,105 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
   addNode,
   removeNode,
 }) => {
+  const tabs = selectedNode.children;
+
+  const defaultTabId = useMemo(() => {
+    if (tabs.length === 0) {
+      return undefined;
+    }
+
+    const savedDefault = selectedNode.props.defaultTabId;
+    if (savedDefault && tabs.some((tab) => tab.id === savedDefault)) {
+      return savedDefault;
+    }
+
+    return tabs[0].id;
+  }, [tabs, selectedNode.props.defaultTabId]);
+
+  const defaultViewOptions = tabs.map((tab, index) => ({
+    label: tab.props.label || `View ${index + 1}`,
+    value: tab.id,
+  }));
+
+  const handleLabelChange = (tabId: string, label: string) => {
+    updateNode(tabId, { label });
+  };
+
+  const handleAddTab = () => {
+    addNode(ComponentType.TAB_ITEM, selectedNode.id);
+  };
+
+  const handleRemoveTab = (tabId: string) => {
+    if (tabs.length <= 1) {
+      return;
+    }
+
+    const fallbackDefaultTabId = tabs.find((tab) => tab.id !== tabId)?.id;
+
+    if (defaultTabId === tabId) {
+      updateNode(selectedNode.id, { defaultTabId: fallbackDefaultTabId });
+    }
+
+    removeNode(tabId);
+  };
+
   return (
-    <SectionCard title="Tab Items" icon={<ClusterOutlined style={{ fontSize: 16 }} />}>
-      <Space direction="vertical" style={{ width: "100%" }} size={8}>
-        {selectedNode.children.map((child, idx) => (
-          <Flex key={child.id} gap={8}>
-            <Input
-              value={child.props.label || `Tab ${idx + 1}`}
-              placeholder={`Tab ${idx + 1}`}
-              onChange={(event) => updateNode(child.id, { label: event.target.value })}
-            />
+    <div className="space-y-4">
+      <Form layout="vertical" size="small">
+        <Form.Item label="Default View" style={{ marginBottom: 0 }}>
+          <Select
+            placeholder="Select View"
+            options={defaultViewOptions}
+            value={defaultTabId}
+            onChange={(value) => updateNode(selectedNode.id, { defaultTabId: value })}
+          />
+        </Form.Item>
+      </Form>
+
+      <div className="border-t border-slate-200 pt-3">
+        <Typography.Text strong className="text-blue-600">
+          Tab Component Control
+        </Typography.Text>
+
+        <div className="mt-3">
+          <Flex justify="space-between" align="center" style={{ marginBottom: 8 }}>
+            <Typography.Text>Views</Typography.Text>
             <Button
-              danger
               type="text"
-              icon={<DeleteOutlined style={{ fontSize: 16 }} />}
-              onClick={() => removeNode(child.id)}
+              size="small"
+              icon={<PlusOutlined style={{ fontSize: 14 }} />}
+              onClick={handleAddTab}
             />
           </Flex>
-        ))}
-        <Button
-          block
-          type="dashed"
-          icon={<PlusOutlined style={{ fontSize: 16 }} />}
-          onClick={() => addNode(ComponentType.TAB_ITEM, selectedNode.id)}
-        >
-          Add Tab
-        </Button>
-      </Space>
-    </SectionCard>
+
+          <div className="rounded-lg border border-slate-200 bg-white">
+            {tabs.map((tab, index) => (
+              <div
+                key={tab.id}
+                className="flex items-center gap-2 px-2 py-1.5"
+                style={index < tabs.length - 1 ? { borderBottom: "1px solid #e2e8f0" } : undefined}
+              >
+                <Radio
+                  checked={defaultTabId === tab.id}
+                  onChange={() => updateNode(selectedNode.id, { defaultTabId: tab.id })}
+                />
+                <Input
+                  bordered={false}
+                  value={tab.props.label || `View ${index + 1}`}
+                  onChange={(event) => handleLabelChange(tab.id, event.target.value)}
+                />
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<DeleteOutlined style={{ fontSize: 14 }} />}
+                  disabled={tabs.length <= 1}
+                  onClick={() => handleRemoveTab(tab.id)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };

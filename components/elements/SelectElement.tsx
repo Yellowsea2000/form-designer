@@ -4,7 +4,7 @@ import { ElementRendererProps } from "./types";
 import { baseLabelClass, mergeCn } from "./common";
 
 export const SelectElement: React.FC<ElementRendererProps> = ({ props }) => {
-  const { label, required, options, style, className } = props;
+  const { label, required, options, defaultValue, placeholder, style, className } = props;
 
   return (
     <div style={style} className={mergeCn(className)}>
@@ -14,7 +14,8 @@ export const SelectElement: React.FC<ElementRendererProps> = ({ props }) => {
         </label>
       )}
       <Select
-        placeholder="Select an option"
+        placeholder={placeholder || "Select an option"}
+        defaultValue={typeof defaultValue === "string" ? defaultValue : undefined}
         options={options?.map((opt) => ({ label: opt.label, value: opt.value }))}
       />
     </div>

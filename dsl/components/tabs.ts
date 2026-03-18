@@ -19,6 +19,12 @@ export const tabsDSL: ComponentDSLDefinition = {
   defaultProps,
   props: [
     {
+      name: "defaultTabId",
+      label: "Default Tab",
+      type: "string",
+      description: "The default active tab item id.",
+    },
+    {
       name: "style",
       label: "Style",
       type: "style",

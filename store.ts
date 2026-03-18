@@ -189,22 +189,23 @@ export class DesignerStore {
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
-          props: { label: "Tab 1", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
+          props: { label: "View 1", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
           children: [],
         },
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
-          props: { label: "Tab 2", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
+          props: { label: "View 2", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
           children: [],
         },
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
-          props: { label: "Tab 3", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
+          props: { label: "View 3", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
           children: [],
         },
       ];
+      newNode.props.defaultTabId = newNode.children[0].id;
     }
 
     // Auto-set label for TAB_ITEM based on sibling count
@@ -212,7 +213,7 @@ export class DesignerStore {
       const parent = getNodeById(this.nodes, parentId);
       if (parent?.type === ComponentType.TABS) {
         const tabNumber = parent.children.length + 1;
-        newNode.props.label = `Tab ${tabNumber}`;
+        newNode.props.label = `View ${tabNumber}`;
       }
     }
 

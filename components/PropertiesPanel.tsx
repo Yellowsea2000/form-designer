@@ -1,14 +1,16 @@
 import React from "react";
 import { CloseOutlined } from "@ant-design/icons";
-import { Button, Flex, Space, Tag, Typography } from "antd";
+import { Button, Flex, Space, Tag } from "antd";
 import { observer } from "mobx-react-lite";
 import { useDesignerStore } from "../store";
 import { ComponentType } from "../types";
+import panelBg from "../images/panelBg.png";
 import { BindFieldSection } from "./properties/BindFieldSection";
 import { ContentSection } from "./properties/ContentSection";
+import { ContainerPropertiesSection } from "./properties/ContainerPropertiesSection";
+import { DropdownPropertiesSection } from "./properties/DropdownPropertiesSection";
 import { EmptyProperties } from "./properties/EmptyProperties";
 import { ImageSettingsSection } from "./properties/ImageSettingsSection";
-import { LayoutSettingsSection } from "./properties/LayoutSettingsSection";
 import { SelectOptionsSection } from "./properties/SelectOptionsSection";
 import { SwitchPropertiesSection } from "./properties/SwitchPropertiesSection";
 import { TabItemHint } from "./properties/TabItemHint";
@@ -46,17 +48,18 @@ export const PropertiesPanel: React.FC = observer(() => {
 
   const isTabItem = selectedNode.type === ComponentType.TAB_ITEM;
   const isSwitch = selectedNode.type === ComponentType.SWITCH;
+  const isDropdown = selectedNode.type === ComponentType.SELECT;
+  const isContainerComponent = selectedNode.type === ComponentType.CONTAINER;
+  const isTabs = selectedNode.type === ComponentType.TABS;
 
   return (
     <div className="w-80 bg-white border-l border-slate-200 flex flex-col h-full shadow-xl z-30">
-      <div className="p-4 border-b border-slate-100 bg-slate-50/50">
-        <Flex justify="space-between" align="center">
-          <div>
-            <Typography.Title level={5} style={{ margin: 0 }}>
-              Properties
-            </Typography.Title>
-            <Tag style={{ marginTop: 4, textTransform: "uppercase" }}>{selectedNode.type}</Tag>
-          </div>
+      <div
+        className="h-10 px-3 border-b border-slate-200 bg-no-repeat bg-cover bg-center flex items-center"
+        style={{ backgroundImage: `url(${panelBg})` }}
+      >
+        <Flex justify="space-between" align="center" style={{ width: "100%" }}>
+          <Tag style={{ margin: 0, textTransform: "uppercase" }}>{selectedNode.type}</Tag>
           <Button
             type="text"
             icon={<CloseOutlined style={{ fontSize: 20 }} />}
@@ -71,6 +74,23 @@ export const PropertiesPanel: React.FC = observer(() => {
             <TabItemHint />
           ) : isSwitch ? (
             <SwitchPropertiesSection selectedNode={selectedNode} onPropChange={handlePropChange} />
+          ) : isDropdown ? (
+            <DropdownPropertiesSection
+              selectedNode={selectedNode}
+              onPropChange={handlePropChange}
+            />
+          ) : isContainerComponent ? (
+            <ContainerPropertiesSection
+              selectedNode={selectedNode}
+              onPropChange={handlePropChange}
+            />
+          ) : isTabs ? (
+            <TabsManagementSection
+              selectedNode={selectedNode}
+              updateNode={updateNode}
+              addNode={addNode}
+              removeNode={removeNode}
+            />
           ) : (
             <>
               {!isContainer &&
@@ -79,23 +99,6 @@ export const PropertiesPanel: React.FC = observer(() => {
                 ) && (
                   <BindFieldSection selectedNode={selectedNode} onPropChange={handlePropChange} />
                 )}
-
-              {isContainer && (
-                <LayoutSettingsSection
-                  selectedNode={selectedNode}
-                  onPropChange={handlePropChange}
-                  onStyleChange={handleStyleChange}
-                />
-              )}
-
-              {selectedNode.type === ComponentType.TABS && (
-                <TabsManagementSection
-                  selectedNode={selectedNode}
-                  updateNode={updateNode}
-                  addNode={addNode}
-                  removeNode={removeNode}
-                />
-              )}
 
               <ContentSection
                 selectedNode={selectedNode}

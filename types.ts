@@ -25,6 +25,7 @@ export interface ComponentProps {
   bindField?: string;
   label?: string;
   placeholder?: string;
+  defaultTabId?: string;
   required?: boolean;
   defaultValue?: string | boolean;
   options?: { label: string; value: string }[]; // For select/checkbox/radio
