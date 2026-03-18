@@ -12,14 +12,14 @@ import { observer } from "mobx-react-lite";
 import { useDesignerStore } from "../store";
 import { FormNode, ComponentType } from "../types";
 import { FormElementRenderer } from "./FormElements";
-import { clsx } from "clsx";
+import cn from "classnames";
 import { useDragContext } from "../dragContext";
 import emptyCanvasImage from "../images/emptyCanvas.png";
 
 // Drag Placeholder Component - shows where the component will be placed
 const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({ isInterior }) => (
   <div
-    className={clsx(
+    className={cn(
       "my-3 rounded-lg border-2 border-dashed transition-all animate-pulse",
       isInterior
         ? "border-green-400 bg-green-50/50 min-h-[60px]"
@@ -28,7 +28,7 @@ const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({ isInterior }) => 
   >
     <div className="flex items-center justify-center h-full min-h-[60px] text-slate-400">
       <PlusOutlined
-        className={clsx("mr-2", isInterior ? "text-green-400" : "text-blue-400")}
+        className={cn("mr-2", isInterior ? "text-green-400" : "text-blue-400")}
         style={{ fontSize: 20 }}
       />
       <span className="text-sm font-medium">Drop here</span>
@@ -140,7 +140,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
     <div
       ref={setNodeRef}
       style={style}
-      className={clsx(
+      className={cn(
         "group relative my-3 rounded-lg transition-all bg-white",
         isPreview
           ? "border-0 shadow-none cursor-default"
@@ -186,7 +186,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
           {(isContainer || isTabs) && (
             <SortableContext items={visibleChildren.map((c) => c.id)} strategy={sortingStrategy}>
               <div
-                className={clsx(
+                className={cn(
                   "w-full transition-colors rounded relative",
                   !isTabs && "min-h-[50px]",
                 )}
@@ -197,7 +197,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
                   (visibleChildren.length === 0 ? (
                     <div
                       ref={setDroppableRef}
-                      className={clsx(
+                      className={cn(
                         "absolute inset-2 rounded-lg transition-all min-h-[80px]",
                         isOverInterior
                           ? "ring-2 ring-inset ring-green-400 bg-green-50/50 border-2 border-dashed border-green-400"
@@ -210,7 +210,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({ node, isSelected, isPreview
                     /* When has children, show a full-area drop zone for easier dropping */
                     <div
                       ref={setDroppableRef}
-                      className={clsx(
+                      className={cn(
                         "absolute inset-0 rounded-lg transition-all pointer-events-auto z-0",
                         isOverInterior && "ring-2 ring-inset ring-green-400 bg-green-50/30",
                       )}
@@ -315,7 +315,7 @@ export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) =>
       <div className="w-full">
         <div
           ref={setNodeRef}
-          className={clsx(
+          className={cn(
             "min-h-[calc(100vh-100px)] bg-white rounded-xl shadow-sm border transition-colors p-8 pb-32",
             isOver ? "border-blue-400 bg-blue-50/30" : "border-slate-200",
           )}

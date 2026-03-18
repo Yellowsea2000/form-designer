@@ -1,7 +1,7 @@
-import { clsx } from "clsx";
+import cn from "classnames";
 import { twMerge } from "tailwind-merge";
 
-export const cn = (...inputs: (string | undefined | null | false)[]) => twMerge(clsx(inputs));
+export const mergeCn = (...inputs: (string | undefined | null | false)[]) => twMerge(cn(...inputs));
 
 export const baseLabelClass = "block text-sm font-medium text-slate-700 mb-1 pointer-events-none";
 

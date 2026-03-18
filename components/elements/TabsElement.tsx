@@ -1,6 +1,6 @@
 import React from "react";
 import { ElementRendererProps } from "./types";
-import { cn } from "./common";
+import { mergeCn } from "./common";
 
 export const TabsElement: React.FC<ElementRendererProps> = ({
   props,
@@ -12,7 +12,7 @@ export const TabsElement: React.FC<ElementRendererProps> = ({
   const { style, className } = props;
 
   return (
-    <div style={style} className={cn("flex flex-col", className)}>
+    <div style={style} className={mergeCn("flex flex-col", className)}>
       <div className="flex border-b border-slate-200 bg-slate-50/50 rounded-t-lg overflow-x-auto">
         {node?.children.map((child) => (
           <button
@@ -21,7 +21,7 @@ export const TabsElement: React.FC<ElementRendererProps> = ({
               e.stopPropagation();
               onTabChange?.(child.id);
             }}
-            className={cn(
+            className={mergeCn(
               "px-4 py-3 text-sm font-medium transition-colors focus:outline-none border-b-2 whitespace-nowrap",
               activeTabId === child.id
                 ? "border-blue-500 text-blue-600 bg-white"
