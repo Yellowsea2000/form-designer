@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
+import { CloseOutlined, SearchOutlined, VerticalAlignTopOutlined } from "@ant-design/icons";
 import { ComponentType } from "../types";
 import { componentDSLs } from "../dsl/components";
+import { FieldsImportModal, ImportedField } from "./FieldsImportModal";
+import { FieldsTabContent } from "./FieldsTabContent";
 import checkboxIcon from "../images/FormComponent/Checkbox.png";
 import containerIcon from "../images/FormComponent/Container.png";
 import datePickerIcon from "../images/FormComponent/DatePicker.png";
@@ -29,6 +31,8 @@ interface SidebarItemProps {
 const sectionTitleClassName = "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
 const itemImageClassName = "w-[36px] h-[36px]";
 const itemIconBoxClassName = "flex items-center justify-center text-slate-600";
+
+type SidebarTab = "elements" | "fields";
 
 type SidebarPaletteType =
   | ComponentType.CONTAINER
@@ -227,6 +231,26 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) 
 };
 
 export const Sidebar: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<SidebarTab>("fields");
+  const [keyword, setKeyword] = useState("");
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [importedFields, setImportedFields] = useState<ImportedField[]>([]);
+
+  const filteredSidebarSections = useMemo(() => {
+    const searchKey = keyword.trim().toLowerCase();
+
+    if (!searchKey) {
+      return sidebarSections;
+    }
+
+    return sidebarSections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) => item.label.toLowerCase().includes(searchKey)),
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [keyword]);
+
   return (
     <div className="w-72 bg-white border-r border-slate-200 flex flex-col h-full overflow-y-auto">
       <div
@@ -234,8 +258,26 @@ export const Sidebar: React.FC = () => {
         style={{ backgroundImage: `url(${panelBg})` }}
       >
         <div className="flex items-center gap-2">
-          <span className="text-xs leading-4 font-bold text-[#4d4d4d]">Elements</span>
-          <span className="text-xs leading-4 font-normal text-[#4d4d4d]">Fields</span>
+          <button
+            type="button"
+            onClick={() => setActiveTab("elements")}
+            className={`text-[14px] leading-5 transition-colors ${
+              activeTab === "elements"
+                ? "font-semibold text-[#4d4d4d]"
+                : "font-medium text-[#737373]"
+            }`}
+          >
+            Elements
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("fields")}
+            className={`text-[14px] leading-5 transition-colors ${
+              activeTab === "fields" ? "font-semibold text-[#4d4d4d]" : "font-medium text-[#737373]"
+            }`}
+          >
+            Fields
+          </button>
           <button
             type="button"
             aria-label="Close sidebar header"
@@ -247,31 +289,54 @@ export const Sidebar: React.FC = () => {
         <div className="mt-2 h-6 rounded-full border border-[#cccccc] bg-white px-3 flex items-center gap-2">
           <input
             type="text"
-            placeholder="Search the elements"
+            value={keyword}
+            onChange={(event) => setKeyword(event.target.value)}
+            placeholder={activeTab === "fields" ? "Search the fields" : "Search the elements"}
             className="h-full min-w-0 flex-1 bg-transparent text-xs text-[#4d4d4d] placeholder:text-[#b2b2b2] outline-none"
           />
           <SearchOutlined style={{ fontSize: 12, color: "#4d4d4d" }} />
+          {activeTab === "fields" && (
+            <button
+              type="button"
+              onClick={() => setIsImportModalOpen(true)}
+              aria-label="Import fields"
+              className="ml-1 h-[18px] w-[18px] rounded-full border border-[#d9d9d9] bg-[#f5f5f5] text-[#595959] inline-flex items-center justify-center hover:border-[#1677ff] hover:text-[#1677ff]"
+            >
+              <VerticalAlignTopOutlined style={{ fontSize: 10 }} />
+            </button>
+          )}
         </div>
       </div>
 
       <div className="p-4 space-y-6">
-        {sidebarSections.map((section) => (
-          <div key={section.title}>
-            <h3 className={sectionTitleClassName}>{section.title}</h3>
-            <div className={section.gridClassName}>
-              {section.items.map((item) => (
-                <SidebarItem
-                  key={item.id}
-                  dragId={`sidebar-${item.id}`}
-                  type={item.type}
-                  label={item.label}
-                  icon={item.icon}
-                />
-              ))}
+        {activeTab === "elements" ? (
+          filteredSidebarSections.map((section) => (
+            <div key={section.title}>
+              <h3 className={sectionTitleClassName}>{section.title}</h3>
+              <div className={section.gridClassName}>
+                {section.items.map((item) => (
+                  <SidebarItem
+                    key={item.id}
+                    dragId={`sidebar-${item.id}`}
+                    type={item.type}
+                    label={item.label}
+                    icon={item.icon}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <FieldsTabContent fields={importedFields} keyword={keyword} />
+        )}
       </div>
+
+      <FieldsImportModal
+        open={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        initialSelectedIds={importedFields.map((field) => field.id)}
+        onImport={(fields) => setImportedFields(fields)}
+      />
     </div>
   );
 };
