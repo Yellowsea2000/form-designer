@@ -107,6 +107,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({
     transform: CSS.Translate.toString(transform),
     transition,
   };
+  const isSidebarDragging = !isPreview && activeDragData?.type === "sidebar-item";
+  const showDragOutline = isSidebarDragging && !isSelected;
 
   const isContainer = node.type === ComponentType.CONTAINER || node.type === ComponentType.TAB_ITEM;
   const isPlainContainer = node.type === ComponentType.CONTAINER;
@@ -165,6 +167,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({
         !isPreview && isSelected ? "border-blue-500 ring-1 ring-blue-500 z-10" : "",
         !isPreview && !isSelected ? "border-transparent hover:border-blue-200" : "",
         !isPreview && isOver && !isOverInterior ? "ring-2 ring-blue-400" : "",
+        showDragOutline &&
+          "before:pointer-events-none before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-dashed before:border-sky-300/80 before:content-['']",
       )}
       onClick={(e) => {
         if (isPreview) {
