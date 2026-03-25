@@ -1,22 +1,15 @@
 import "antd/dist/reset.css";
 import "./index.css";
 
-import {
-  CodeOutlined,
-  CopyOutlined,
-  EyeOutlined,
-  SaveOutlined,
-} from "@ant-design/icons";
+import { CopyOutlined } from "@ant-design/icons";
 import {
   defaultDropAnimationSideEffects,
   DndContext,
   DragEndEvent,
   DragOverEvent,
   DragOverlay,
-  DragOverlayProps,
   DragStartEvent,
   DropAnimation,
-  getFirstCollision,
   Modifier,
   MouseSensor,
   pointerWithin,
@@ -27,7 +20,7 @@ import {
 } from "@dnd-kit/core";
 import { Button, Input, message, Modal, Space } from "antd";
 import { observer } from "mobx-react-lite";
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { Canvas } from "./components/Canvas";
 import { PropertiesPanel } from "./components/PropertiesPanel";
@@ -209,7 +202,13 @@ export const FormCraftPage: React.FC = observer(() => {
   const saveForm = () => {
     const document = createFormDocument(nodes, { name: "FormCraft Pro DSL" });
     console.log("Form DSL document:", JSON.stringify(document, null, 2));
-    alert("Form DSL saved to console!");
+    message.success("Form saved");
+  };
+
+  const publishForm = () => {
+    const document = createFormDocument(nodes, { name: "FormCraft Pro DSL" });
+    console.log("Published form document:", JSON.stringify(document, null, 2));
+    message.success("Form published");
   };
 
   const pageJson = useMemo(() => {
@@ -256,27 +255,29 @@ export const FormCraftPage: React.FC = observer(() => {
           {/* Header */}
           <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-20">
             <div className="flex items-center gap-3"></div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowPreview(!showPreview)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${showPreview ? "bg-blue-50 text-blue-600" : "text-slate-600 hover:bg-slate-100"}`}
+                aria-pressed={showPreview}
+                className={`inline-flex h-8 items-center justify-center rounded-full px-2 text-[13px] font-medium transition-colors ${
+                  showPreview
+                    ? "text-[#0958d9]"
+                    : "text-[#1677ff] hover:text-[#0958d9]"
+                }`}
               >
-                <EyeOutlined style={{ fontSize: 16 }} />
-                {showPreview ? "Edit Mode" : "Preview"}
+                Preview
               </button>
-              {/* <button
-                onClick={() => setShowJsonModal(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors"
-              >
-                <CodeOutlined style={{ fontSize: 16 }} />
-                JSON
-              </button> */}
               <button
                 onClick={saveForm}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 shadow-sm transition-colors"
+                className="inline-flex h-8 items-center justify-center rounded-full border border-[#d9d9d9] bg-white px-4 text-[13px] font-medium text-[#262626] shadow-[0_1px_2px_rgba(15,23,42,0.08)] transition-colors hover:border-[#bfbfbf] hover:bg-[#fafafa]"
               >
-                <SaveOutlined style={{ fontSize: 16 }} />
                 Save
+              </button>
+              <button
+                onClick={publishForm}
+                className="inline-flex h-8 items-center justify-center rounded-full bg-[#1677ff] px-4 text-[13px] font-medium text-white shadow-[0_6px_16px_rgba(22,119,255,0.22)] transition-colors hover:bg-[#0958d9]"
+              >
+                Publish
               </button>
             </div>
           </header>

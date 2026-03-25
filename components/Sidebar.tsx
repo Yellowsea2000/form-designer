@@ -1,5 +1,6 @@
 import {
   CloseOutlined,
+  CodeSandboxOutlined,
   SearchOutlined,
   VerticalAlignTopOutlined,
 } from "@ant-design/icons";
@@ -309,8 +310,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
 };
 
 export const Sidebar: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<SidebarTab>("fields");
+  const [activeTab, setActiveTab] = useState<SidebarTab>("elements");
   const [keyword, setKeyword] = useState("");
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [importedFields, setImportedFields] = useState<ImportedField[]>([]);
 
@@ -332,89 +334,128 @@ export const Sidebar: React.FC = () => {
   }, [keyword]);
 
   return (
-    <div className="w-72 bg-white border-r border-slate-200 flex flex-col h-full overflow-y-auto">
-      <div
-        className="p-4 border-b border-slate-200 bg-no-repeat bg-cover bg-center"
-        style={{ backgroundImage: `url(${panelBg})` }}
-      >
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setActiveTab("elements")}
-            className={`text-[14px] leading-5 transition-colors ${
-              activeTab === "elements"
-                ? "font-semibold text-[#4d4d4d]"
-                : "font-medium text-[#737373]"
-            }`}
-          >
-            Elements
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("fields")}
-            className={`text-[14px] leading-5 transition-colors ${
-              activeTab === "fields"
-                ? "font-semibold text-[#4d4d4d]"
-                : "font-medium text-[#737373]"
-            }`}
-          >
-            Fields
-          </button>
-          <button
-            type="button"
-            aria-label="Close sidebar header"
-            className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full text-[#595959] hover:bg-white/70"
-          >
-            <CloseOutlined style={{ fontSize: 12 }} />
-          </button>
-        </div>
-        <div className="mt-2 h-6 rounded-full border border-[#cccccc] bg-white px-3 flex items-center gap-2">
-          <input
-            type="text"
-            value={keyword}
-            onChange={(event) => setKeyword(event.target.value)}
-            placeholder={
-              activeTab === "fields"
-                ? "Search the fields"
-                : "Search the elements"
+    <div className="flex h-full overflow-hidden bg-white">
+      <div className="flex w-[56px] shrink-0 flex-col items-center border-r border-slate-200 bg-white py-3">
+        <button
+          type="button"
+          onClick={() => {
+            if (!isPanelOpen) {
+              setActiveTab("elements");
+              setIsPanelOpen(true);
+              return;
             }
-            className="h-full min-w-0 flex-1 bg-transparent text-xs text-[#4d4d4d] placeholder:text-[#b2b2b2] outline-none"
-          />
-          <SearchOutlined style={{ fontSize: 12, color: "#4d4d4d" }} />
-          {activeTab === "fields" && (
-            <button
-              type="button"
-              onClick={() => setIsImportModalOpen(true)}
-              aria-label="Import fields"
-              className="ml-1 h-[18px] w-[18px] rounded-full border border-[#d9d9d9] bg-[#f5f5f5] text-[#595959] inline-flex items-center justify-center hover:border-[#1677ff] hover:text-[#1677ff]"
-            >
-              <VerticalAlignTopOutlined style={{ fontSize: 10 }} />
-            </button>
-          )}
-        </div>
+
+            if (activeTab !== "elements") {
+              setActiveTab("elements");
+              return;
+            }
+
+            setIsPanelOpen(false);
+          }}
+          aria-label={
+            isPanelOpen ? "Collapse elements panel" : "Open elements panel"
+          }
+          className={`mt-1 inline-flex h-10 w-10 items-center justify-center rounded-xl text-[18px] transition-all ${
+            isPanelOpen
+              ? "bg-[#e6f4ff] text-[#434343]"
+              : "bg-transparent text-[#434343] hover:bg-slate-50"
+          }`}
+        >
+          <CodeSandboxOutlined />
+        </button>
       </div>
 
-      <div className="p-4 space-y-6">
-        {activeTab === "elements" ? (
-          filteredSidebarSections.map((section) => (
-            <div key={section.title}>
-              <h3 className={sectionTitleClassName}>{section.title}</h3>
-              <div className={section.gridClassName}>
-                {section.items.map((item) => (
-                  <SidebarItem
-                    key={item.id}
-                    dragId={`sidebar-${item.id}`}
-                    type={item.type}
-                    label={item.label}
-                    icon={item.icon}
-                  />
-                ))}
+      <div
+        className={`flex h-full min-w-0 flex-col overflow-hidden bg-white transition-[width,opacity,border-color] duration-200 ${
+          isPanelOpen
+            ? "w-72 border-r border-slate-200 opacity-100"
+            : "w-0 border-r-0 opacity-0 pointer-events-none"
+        }`}
+      >
+        <div
+          className="border-b border-slate-200 bg-center bg-cover bg-no-repeat p-4"
+          style={{ backgroundImage: `url(${panelBg})` }}
+        >
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setActiveTab("elements")}
+              className={`text-[14px] leading-5 transition-colors ${
+                activeTab === "elements"
+                  ? "font-semibold text-[#4d4d4d]"
+                  : "font-medium text-[#737373]"
+              }`}
+            >
+              Elements
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("fields")}
+              className={`text-[14px] leading-5 transition-colors ${
+                activeTab === "fields"
+                  ? "font-semibold text-[#4d4d4d]"
+                  : "font-medium text-[#737373]"
+              }`}
+            >
+              Fields
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsPanelOpen(false)}
+              aria-label="Close sidebar panel"
+              className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full text-[#595959] hover:bg-white/70"
+            >
+              <CloseOutlined style={{ fontSize: 12 }} />
+            </button>
+          </div>
+          <div className="mt-2 flex h-6 items-center gap-2 rounded-full border border-[#cccccc] bg-white px-3">
+            <input
+              type="text"
+              value={keyword}
+              onChange={(event) => setKeyword(event.target.value)}
+              placeholder={
+                activeTab === "fields"
+                  ? "Search the fields"
+                  : "Search the elements"
+              }
+              className="h-full min-w-0 flex-1 bg-transparent text-xs text-[#4d4d4d] outline-none placeholder:text-[#b2b2b2]"
+            />
+            <SearchOutlined style={{ fontSize: 12, color: "#4d4d4d" }} />
+            {activeTab === "fields" && (
+              <button
+                type="button"
+                onClick={() => setIsImportModalOpen(true)}
+                aria-label="Import fields"
+                className="ml-1 inline-flex h-[18px] w-[18px] items-center justify-center rounded-full border border-[#d9d9d9] bg-[#f5f5f5] text-[#595959] hover:border-[#1677ff] hover:text-[#1677ff]"
+              >
+                <VerticalAlignTopOutlined style={{ fontSize: 10 }} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="flex-1 space-y-6 overflow-y-auto p-4">
+          {activeTab === "elements" ? (
+            filteredSidebarSections.map((section) => (
+              <div key={section.title}>
+                <h3 className={sectionTitleClassName}>{section.title}</h3>
+                <div className={section.gridClassName}>
+                  {section.items.map((item) => (
+                    <SidebarItem
+                      key={item.id}
+                      dragId={`sidebar-${item.id}`}
+                      type={item.type}
+                      label={item.label}
+                      icon={item.icon}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <FieldsTabContent fields={importedFields} keyword={keyword} />
-        )}
+            ))
+          ) : (
+            <FieldsTabContent fields={importedFields} keyword={keyword} />
+          )}
+        </div>
       </div>
 
       <FieldsImportModal
