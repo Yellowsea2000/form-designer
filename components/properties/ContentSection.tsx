@@ -1,4 +1,3 @@
-import { FontSizeOutlined } from "@ant-design/icons";
 import { Form, Input } from "antd";
 import React from "react";
 
@@ -20,10 +19,7 @@ export const ContentSection: React.FC<SectionProps> = ({
   }
 
   return (
-    <SectionCard
-      title="Content"
-      icon={<FontSizeOutlined style={{ fontSize: 16 }} />}
-    >
+    <SectionCard title="Content">
       <Form layout="vertical" size="small">
         {selectedNode.props.label !== undefined && (
           <Form.Item label="Label" style={{ marginBottom: 12 }}>

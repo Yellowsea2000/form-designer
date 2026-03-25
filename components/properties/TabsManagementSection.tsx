@@ -3,6 +3,7 @@ import { Button, Flex, Form, Input, Radio, Select, Typography } from "antd";
 import React, { useMemo } from "react";
 
 import { ComponentType, FormNode } from "../../types";
+import { SectionCard } from "./SectionCard";
 import { AddNodeFn, RemoveNodeFn, UpdateNodeFn } from "./types";
 
 interface TabsManagementSectionProps {
@@ -75,12 +76,8 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
         </Form.Item>
       </Form>
 
-      <div className="border-t border-slate-200 pt-3">
-        <Typography.Text strong className="text-blue-600">
-          Tab Component Control
-        </Typography.Text>
-
-        <div className="mt-3">
+      <SectionCard title="Tab Component Control">
+        <div>
           <Flex
             justify="space-between"
             align="center"
@@ -95,7 +92,7 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
             />
           </Flex>
 
-          <div className="rounded-lg border border-slate-200 bg-white">
+          <div className="bg-white">
             {tabs.map((tab, index) => (
               <div
                 key={tab.id}
@@ -130,7 +127,7 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
             ))}
           </div>
         </div>
-      </div>
+      </SectionCard>
     </div>
   );
 };

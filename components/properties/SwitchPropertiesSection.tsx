@@ -1,6 +1,7 @@
 import { Form, Input, Select, Switch, Typography } from "antd";
 import React from "react";
 
+import { SectionCard } from "./SectionCard";
 import { SectionProps } from "./types";
 import { ValidationSection } from "./ValidationSection";
 
@@ -16,24 +17,23 @@ export const SwitchPropertiesSection: React.FC<
 > = ({ selectedNode, onPropChange }) => {
   return (
     <div className="space-y-4">
-      <Form layout="vertical" size="small">
-        <Form.Item label="Bind Field" style={{ marginBottom: 0 }}>
-          <Select
-            placeholder="Select Value"
-            value={selectedNode.props.bindField || undefined}
-            options={EMPTY_BIND_FIELD_OPTIONS}
-            onChange={(value) => onPropChange("bindField", value)}
-            allowClear
-            notFoundContent={null}
-          />
-        </Form.Item>
-      </Form>
+      <SectionCard title="Bind Field">
+        <Form layout="vertical" size="small">
+          <Form.Item label="Bind Field" style={{ marginBottom: 0 }}>
+            <Select
+              placeholder="Select Value"
+              value={selectedNode.props.bindField || undefined}
+              options={EMPTY_BIND_FIELD_OPTIONS}
+              onChange={(value) => onPropChange("bindField", value)}
+              allowClear
+              notFoundContent={null}
+            />
+          </Form.Item>
+        </Form>
+      </SectionCard>
 
-      <div className="border-t border-slate-200 pt-3">
-        <Typography.Text strong className="text-blue-600">
-          Content
-        </Typography.Text>
-        <Form layout="vertical" size="small" style={{ marginTop: 12 }}>
+      <SectionCard title="Content">
+        <Form layout="vertical" size="small">
           <Form.Item label="Label" style={{ marginBottom: 12 }}>
             <Input
               placeholder="Enter Value"
@@ -51,7 +51,7 @@ export const SwitchPropertiesSection: React.FC<
             </div>
           </Form.Item>
         </Form>
-      </div>
+      </SectionCard>
 
       <ValidationSection
         selectedNode={selectedNode}

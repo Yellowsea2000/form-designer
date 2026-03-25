@@ -1,6 +1,7 @@
-import { Form, Select, Typography } from "antd";
+import { Form, Select } from "antd";
 import React from "react";
 
+import { SectionCard } from "./SectionCard";
 import { SectionProps } from "./types";
 
 const VALIDATION_RULE_OPTIONS = [{ label: "Required", value: "required" }];
@@ -19,11 +20,8 @@ export const ValidationSection: React.FC<ValidationSectionProps> = ({
   }
 
   return (
-    <div className="border-t border-slate-200 pt-3">
-      <Typography.Text strong className="text-blue-600">
-        Validation
-      </Typography.Text>
-      <Form layout="vertical" size="small" style={{ marginTop: 12 }}>
+    <SectionCard title="Validation">
+      <Form layout="vertical" size="small">
         <Form.Item label="Validation Rule" style={{ marginBottom: 0 }}>
           <Select
             placeholder="Select Rule"
@@ -34,6 +32,6 @@ export const ValidationSection: React.FC<ValidationSectionProps> = ({
           />
         </Form.Item>
       </Form>
-    </div>
+    </SectionCard>
   );
 };

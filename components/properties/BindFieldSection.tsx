@@ -1,4 +1,3 @@
-import { LinkOutlined } from "@ant-design/icons";
 import { Form, Select } from "antd";
 import React from "react";
 
@@ -17,10 +16,7 @@ export const BindFieldSection: React.FC<BindFieldSectionProps> = ({
   onPropChange
 }) => {
   return (
-    <SectionCard
-      title="Bind Field"
-      icon={<LinkOutlined style={{ fontSize: 16 }} />}
-    >
+    <SectionCard title="Bind Field">
       <Form layout="vertical" size="small">
         <Form.Item label="Bind Field" style={{ marginBottom: 0 }}>
           <Select

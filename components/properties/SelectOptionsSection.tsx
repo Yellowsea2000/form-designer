@@ -1,4 +1,4 @@
-import { AlignLeftOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Button, Flex, Input, InputNumber, Space, Typography } from "antd";
 import React from "react";
 
@@ -64,10 +64,7 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({
   const optionCount = Math.max(1, options.length || 1);
 
   return (
-    <SectionCard
-      title="Options"
-      icon={<AlignLeftOutlined style={{ fontSize: 16 }} />}
-    >
+    <SectionCard title="Options">
       <Space direction="vertical" size={8} style={{ width: "100%" }}>
         {isCheckboxOrRadio ? (
           <Flex justify="space-between" align="center" gap={8}>

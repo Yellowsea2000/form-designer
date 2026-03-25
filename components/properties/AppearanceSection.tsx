@@ -1,4 +1,3 @@
-import { BgColorsOutlined } from "@ant-design/icons";
 import { Button, Flex, Form, Select, Slider, Space, Typography } from "antd";
 import React from "react";
 
@@ -29,10 +28,7 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
   const padding = getPxNumber(selectedNode.props.style?.paddingTop, 0);
 
   return (
-    <SectionCard
-      title="Appearance"
-      icon={<BgColorsOutlined style={{ fontSize: 16 }} />}
-    >
+    <SectionCard title="Appearance">
       <Form layout="vertical" size="small">
         {supportsFontSize && (
           <Form.Item label="Font Size" style={{ marginBottom: 12 }}>

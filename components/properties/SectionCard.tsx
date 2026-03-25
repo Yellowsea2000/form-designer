@@ -1,29 +1,21 @@
-import { Card, Flex, Typography } from "antd";
+import { Typography } from "antd";
 import React from "react";
 
 interface SectionCardProps {
   title: string;
-  icon: React.ReactNode;
   children: React.ReactNode;
 }
 
 export const SectionCard: React.FC<SectionCardProps> = ({
   title,
-  icon,
   children
 }) => {
   return (
-    <Card
-      size="small"
-      styles={{
-        body: { padding: 12 }
-      }}
-    >
-      <Flex align="center" gap={8} style={{ marginBottom: 12 }}>
-        <span className="text-blue-500">{icon}</span>
-        <Typography.Text strong>{title}</Typography.Text>
-      </Flex>
-      {children}
-    </Card>
+    <div className="space-y-3">
+      <Typography.Text strong className="block">
+        {title}
+      </Typography.Text>
+      <div>{children}</div>
+    </div>
   );
 };
