@@ -8,8 +8,8 @@ const defaultProps: ComponentProps = {
   options: [
     { label: "Option 1", value: "1" },
     { label: "Option 2", value: "2" },
-    { label: "Option 3", value: "3" },
-  ],
+    { label: "Option 3", value: "3" }
+  ]
 };
 
 export const selectDSL: ComponentDSLDefinition = {
@@ -25,28 +25,28 @@ export const selectDSL: ComponentDSLDefinition = {
       label: "Label",
       type: "string",
       description: "Field label displayed above the select.",
-      defaultValue: defaultProps.label,
+      defaultValue: defaultProps.label
     },
     {
       name: "placeholder",
       label: "Placeholder",
       type: "string",
       description: "Placeholder text displayed when no value is selected.",
-      defaultValue: defaultProps.placeholder,
+      defaultValue: defaultProps.placeholder
     },
     {
       name: "required",
       label: "Required",
       type: "boolean",
       description: "Whether this field must be selected.",
-      defaultValue: defaultProps.required,
+      defaultValue: defaultProps.required
     },
     {
       name: "options",
       label: "Options",
       type: "options",
       description: "List of selectable options with label/value.",
-      defaultValue: defaultProps.options,
-    },
-  ],
+      defaultValue: defaultProps.options
+    }
+  ]
 };

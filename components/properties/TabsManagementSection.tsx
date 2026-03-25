@@ -16,7 +16,7 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
   selectedNode,
   updateNode,
   addNode,
-  removeNode,
+  removeNode
 }) => {
   const tabs = selectedNode.children;
 
@@ -35,7 +35,7 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
 
   const defaultViewOptions = tabs.map((tab, index) => ({
     label: tab.props.label || `View ${index + 1}`,
-    value: tab.id,
+    value: tab.id
   }));
 
   const handleLabelChange = (tabId: string, label: string) => {

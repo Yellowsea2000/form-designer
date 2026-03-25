@@ -14,7 +14,7 @@ type BindFieldSectionProps = Pick<
 
 export const BindFieldSection: React.FC<BindFieldSectionProps> = ({
   selectedNode,
-  onPropChange,
+  onPropChange
 }) => {
   return (
     <SectionCard

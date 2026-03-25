@@ -3,7 +3,7 @@ import { ComponentDSLDefinition } from "../types";
 
 const defaultProps: ComponentProps = {
   content: "Form Title",
-  style: { fontSize: "24px", fontWeight: "bold", color: "#1e293b" },
+  style: { fontSize: "24px", fontWeight: "bold", color: "#1e293b" }
 };
 
 export const headerDSL: ComponentDSLDefinition = {
@@ -19,14 +19,14 @@ export const headerDSL: ComponentDSLDefinition = {
       label: "Title Text",
       type: "string",
       description: "Displayed title string.",
-      defaultValue: defaultProps.content,
+      defaultValue: defaultProps.content
     },
     {
       name: "style",
       label: "Style",
       type: "style",
       description: "Inline style overrides for the title.",
-      defaultValue: defaultProps.style,
-    },
-  ],
+      defaultValue: defaultProps.style
+    }
+  ]
 };

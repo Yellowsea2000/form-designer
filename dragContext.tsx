@@ -11,7 +11,7 @@ interface DragContextType {
 export const DragContext = createContext<DragContextType>({
   activeDragData: null,
   overId: null,
-  overData: {} as DragData,
+  overData: {} as DragData
 });
 
 export const useDragContext = () => useContext(DragContext);

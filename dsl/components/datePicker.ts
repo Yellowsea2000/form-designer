@@ -4,7 +4,7 @@ import { ComponentDSLDefinition } from "../types";
 const defaultProps: ComponentProps = {
   label: "Date Picker",
   placeholder: "Select date",
-  required: false,
+  required: false
 };
 
 export const datePickerDSL: ComponentDSLDefinition = {
@@ -20,21 +20,21 @@ export const datePickerDSL: ComponentDSLDefinition = {
       label: "Label",
       type: "string",
       description: "Field label displayed above the date picker.",
-      defaultValue: defaultProps.label,
+      defaultValue: defaultProps.label
     },
     {
       name: "placeholder",
       label: "Placeholder",
       type: "string",
       description: "Hint text shown when no date is selected.",
-      defaultValue: defaultProps.placeholder,
+      defaultValue: defaultProps.placeholder
     },
     {
       name: "required",
       label: "Required",
       type: "boolean",
       description: "Whether this date field must be filled.",
-      defaultValue: defaultProps.required,
-    },
-  ],
+      defaultValue: defaultProps.required
+    }
+  ]
 };

@@ -4,7 +4,7 @@ import {
   rectSortingStrategy,
   SortableContext,
   useSortable,
-  verticalListSortingStrategy,
+  verticalListSortingStrategy
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import cn from "classnames";
@@ -19,14 +19,14 @@ import { FormElementRenderer } from "./FormElements";
 
 // Drag Placeholder Component - shows where the component will be placed
 const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({
-  isInterior,
+  isInterior
 }) => (
   <div
     className={cn(
       "my-3 rounded-lg border-2 border-dashed transition-all animate-pulse",
       isInterior
         ? "border-green-400 bg-green-50/50 min-h-[60px]"
-        : "border-blue-400 bg-blue-50/50 min-h-[80px]",
+        : "border-blue-400 bg-blue-50/50 min-h-[80px]"
     )}
   >
     <div className="flex items-center justify-center h-full min-h-[60px] text-slate-400">
@@ -54,7 +54,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
   isPreview,
   hoveredNodeId,
   setHoveredNodeId,
-  onClick,
+  onClick
 }) => {
   const { activeDragData, overId, overData } = useDragContext();
   const {
@@ -64,7 +64,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
     transform,
     transition,
     isDragging,
-    isOver,
+    isOver
   } = useSortable({
     id: node.id,
     data: {
@@ -75,9 +75,9 @@ const SortableNode: React.FC<SortableNodeProps> = ({
       isContainer:
         node.type === ComponentType.CONTAINER ||
         node.type === ComponentType.TABS ||
-        node.type === ComponentType.TAB_ITEM,
+        node.type === ComponentType.TAB_ITEM
     },
-    disabled: isPreview,
+    disabled: isPreview
   });
 
   // Add a separate droppable for container interior
@@ -86,9 +86,9 @@ const SortableNode: React.FC<SortableNodeProps> = ({
     data: {
       type: "container-interior",
       parentId: node.id,
-      nodeType: node.type,
+      nodeType: node.type
     },
-    disabled: isPreview,
+    disabled: isPreview
   });
 
   const { duplicateNode, removeNode, selectNode, selectedNodeId } =
@@ -116,7 +116,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
 
   const style = {
     transform: CSS.Translate.toString(transform),
-    transition,
+    transition
   };
   const isSidebarDragging =
     !isPreview && activeDragData?.type === "sidebar-item";
@@ -149,7 +149,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
       return {
         display: "grid",
         gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        gap: `${gap}px`,
+        gap: `${gap}px`
       } as React.CSSProperties;
     }
     return undefined;
@@ -188,7 +188,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
           : "",
         !isPreview && isOver && !isOverInterior ? "ring-2 ring-blue-400" : "",
         showDragOutline &&
-          "before:pointer-events-none before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-dashed before:border-sky-300/80 before:content-['']",
+          "before:pointer-events-none before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-dashed before:border-sky-300/80 before:content-['']"
       )}
       onClick={(e) => {
         if (isPreview) {
@@ -246,7 +246,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
               <div
                 className={cn(
                   "w-full transition-colors rounded relative",
-                  !isTabs && "min-h-[50px]",
+                  !isTabs && "min-h-[50px]"
                 )}
                 style={containerStyle}
               >
@@ -261,7 +261,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
                           ? "ring-2 ring-inset ring-green-400 bg-green-50/50 border-2 border-dashed border-green-400"
                           : activeDragData
                             ? "border-2 border-dashed border-green-300 bg-green-50/20"
-                            : "",
+                            : ""
                       )}
                     />
                   ) : (
@@ -271,7 +271,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
                       className={cn(
                         "absolute inset-0 rounded-lg transition-all pointer-events-auto z-0",
                         isOverInterior &&
-                          "ring-2 ring-inset ring-green-400 bg-green-50/30",
+                          "ring-2 ring-inset ring-green-400 bg-green-50/30"
                       )}
                     />
                   ))}
@@ -312,7 +312,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
             "absolute -bottom-3 left-2 z-20 flex items-center gap-[6px] transition-opacity",
             hoveredNodeId === node.id
               ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none",
+              : "opacity-0 pointer-events-none"
           )}
           onMouseDown={(e) => e.stopPropagation()} // Prevent drag when clicking action buttons
           onTouchStart={(e) => e.stopPropagation()}
@@ -363,9 +363,9 @@ export const Canvas: React.FC<CanvasProps> = observer(
     const { setNodeRef, isOver } = useDroppable({
       id: "canvas-droppable",
       data: {
-        type: "canvas",
+        type: "canvas"
       },
-      disabled: isPreview,
+      disabled: isPreview
     });
 
     // Show placeholder when dragging to empty canvas or at the end
@@ -389,7 +389,7 @@ export const Canvas: React.FC<CanvasProps> = observer(
             ref={setNodeRef}
             className={cn(
               "min-h-[calc(100vh-100px)] bg-white rounded-xl shadow-sm border transition-colors p-8 pb-32",
-              isOver ? "border-blue-400 bg-blue-50/30" : "border-slate-200",
+              isOver ? "border-blue-400 bg-blue-50/30" : "border-slate-200"
             )}
           >
             {nodes.length === 0 && !isOver && !showCanvasPlaceholder && (
@@ -442,5 +442,5 @@ export const Canvas: React.FC<CanvasProps> = observer(
         </div>
       </div>
     );
-  },
+  }
 );

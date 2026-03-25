@@ -7,7 +7,7 @@ export const COLOR_OPTIONS = [
   "#10b981",
   "#f59e0b",
   "#6366f1",
-  "#ffffff",
+  "#ffffff"
 ] as const;
 
 export const FONT_SIZE_OPTIONS = [
@@ -16,12 +16,12 @@ export const FONT_SIZE_OPTIONS = [
   { label: "Medium", value: "16px" },
   { label: "Large", value: "20px" },
   { label: "Extra Large", value: "24px" },
-  { label: "Huge", value: "32px" },
+  { label: "Huge", value: "32px" }
 ];
 
 export const findNodeById = (
   nodes: FormNode[],
-  id: string,
+  id: string
 ): FormNode | undefined => {
   for (const node of nodes) {
     if (node.id === id) {

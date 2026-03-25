@@ -4,7 +4,7 @@ import { ComponentDSLDefinition } from "../types";
 const defaultProps: ComponentProps = {
   label: "Time Picker",
   placeholder: "Select time",
-  required: false,
+  required: false
 };
 
 export const timePickerDSL: ComponentDSLDefinition = {
@@ -20,21 +20,21 @@ export const timePickerDSL: ComponentDSLDefinition = {
       label: "Label",
       type: "string",
       description: "Field label displayed above the time picker.",
-      defaultValue: defaultProps.label,
+      defaultValue: defaultProps.label
     },
     {
       name: "placeholder",
       label: "Placeholder",
       type: "string",
       description: "Hint text shown when no time is selected.",
-      defaultValue: defaultProps.placeholder,
+      defaultValue: defaultProps.placeholder
     },
     {
       name: "required",
       label: "Required",
       type: "boolean",
       description: "Whether this time field must be filled.",
-      defaultValue: defaultProps.required,
-    },
-  ],
+      defaultValue: defaultProps.required
+    }
+  ]
 };

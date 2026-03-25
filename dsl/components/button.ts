@@ -8,8 +8,8 @@ const defaultProps: ComponentProps = {
     backgroundColor: "#3b82f6",
     color: "white",
     padding: "8px 16px",
-    borderRadius: "4px",
-  },
+    borderRadius: "4px"
+  }
 };
 
 export const buttonDSL: ComponentDSLDefinition = {
@@ -26,7 +26,7 @@ export const buttonDSL: ComponentDSLDefinition = {
       label: "Label",
       type: "string",
       description: "Text shown inside the button.",
-      defaultValue: defaultProps.content,
+      defaultValue: defaultProps.content
     },
     {
       name: "buttonType",
@@ -37,15 +37,15 @@ export const buttonDSL: ComponentDSLDefinition = {
       enumValues: [
         { label: "Submit", value: "submit" },
         { label: "Button", value: "button" },
-        { label: "Reset", value: "reset" },
-      ],
+        { label: "Reset", value: "reset" }
+      ]
     },
     {
       name: "style",
       label: "Style",
       type: "style",
       description: "Inline style overrides for the button.",
-      defaultValue: defaultProps.style,
-    },
-  ],
+      defaultValue: defaultProps.style
+    }
+  ]
 };

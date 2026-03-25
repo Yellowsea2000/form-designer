@@ -8,7 +8,7 @@ import { SectionProps } from "./types";
 
 export const ContentSection: React.FC<SectionProps> = ({
   selectedNode,
-  onPropChange,
+  onPropChange
 }) => {
   const hasContentFields =
     selectedNode.props.label !== undefined ||

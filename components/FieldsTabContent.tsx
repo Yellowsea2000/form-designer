@@ -1,7 +1,7 @@
 import {
   BorderOutlined,
   FolderFilled,
-  HolderOutlined,
+  HolderOutlined
 } from "@ant-design/icons";
 import { useDraggable } from "@dnd-kit/core";
 import React, { useMemo } from "react";
@@ -25,8 +25,8 @@ const FieldRowItem: React.FC<FieldRowItemProps> = ({ field }) => {
     id: `sidebar-imported-${field.id}`,
     data: {
       type: "sidebar-item",
-      componentType: field.componentType,
-    },
+      componentType: field.componentType
+    }
   });
 
   return (
@@ -55,7 +55,7 @@ const FieldRowItem: React.FC<FieldRowItemProps> = ({ field }) => {
 
 export const FieldsTabContent: React.FC<FieldsTabContentProps> = ({
   fields,
-  keyword,
+  keyword
 }) => {
   const filteredFields = useMemo(() => {
     const searchKey = keyword.trim().toLowerCase();
@@ -64,7 +64,7 @@ export const FieldsTabContent: React.FC<FieldsTabContentProps> = ({
     }
 
     return fields.filter((field) =>
-      field.name.toLowerCase().includes(searchKey),
+      field.name.toLowerCase().includes(searchKey)
     );
   }, [fields, keyword]);
 

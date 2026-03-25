@@ -4,7 +4,7 @@ import { ComponentDSLDefinition } from "../types";
 const defaultProps: ComponentProps = {
   label: "Text Input",
   placeholder: "Enter text here...",
-  required: false,
+  required: false
 };
 
 export const inputDSL: ComponentDSLDefinition = {
@@ -20,21 +20,21 @@ export const inputDSL: ComponentDSLDefinition = {
       label: "Label",
       type: "string",
       description: "Field label displayed above the input.",
-      defaultValue: defaultProps.label,
+      defaultValue: defaultProps.label
     },
     {
       name: "placeholder",
       label: "Placeholder",
       type: "string",
       description: "Hint text shown when the input is empty.",
-      defaultValue: defaultProps.placeholder,
+      defaultValue: defaultProps.placeholder
     },
     {
       name: "required",
       label: "Required",
       type: "boolean",
       description: "Whether this input must be filled.",
-      defaultValue: defaultProps.required,
-    },
-  ],
+      defaultValue: defaultProps.required
+    }
+  ]
 };

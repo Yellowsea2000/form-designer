@@ -35,7 +35,7 @@ const renderers: Record<ComponentType, React.FC<ElementRendererProps>> = {
   [ComponentType.BUTTON]: ButtonElement,
   [ComponentType.CONTAINER]: ContainerElement,
   [ComponentType.TABS]: TabsElement,
-  [ComponentType.TAB_ITEM]: TabItemElement,
+  [ComponentType.TAB_ITEM]: TabItemElement
 };
 
 export const FormElementRenderer: React.FC<ElementRendererInput> = ({
@@ -44,7 +44,7 @@ export const FormElementRenderer: React.FC<ElementRendererInput> = ({
   children,
   node,
   activeTabId,
-  onTabChange,
+  onTabChange
 }) => {
   const Renderer = renderers[type];
 

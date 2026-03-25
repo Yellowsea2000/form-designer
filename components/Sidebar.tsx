@@ -2,7 +2,7 @@ import {
   CloseOutlined,
   CodeSandboxOutlined,
   SearchOutlined,
-  VerticalAlignTopOutlined,
+  VerticalAlignTopOutlined
 } from "@ant-design/icons";
 import { useDraggable } from "@dnd-kit/core";
 import React, { useMemo, useState } from "react";
@@ -73,7 +73,7 @@ const layoutItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "layout-text",
@@ -86,7 +86,7 @@ const layoutItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "layout-title",
@@ -99,7 +99,7 @@ const layoutItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "layout-tabs",
@@ -112,8 +112,8 @@ const layoutItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
-  },
+    )
+  }
 ];
 
 const formControlItems: SidebarPaletteItem[] = [
@@ -128,7 +128,7 @@ const formControlItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "control-number-input",
@@ -141,7 +141,7 @@ const formControlItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "control-dropdown",
@@ -154,7 +154,7 @@ const formControlItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "control-switch",
@@ -167,7 +167,7 @@ const formControlItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "control-radio",
@@ -180,7 +180,7 @@ const formControlItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "control-checkbox",
@@ -193,7 +193,7 @@ const formControlItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "control-text-area",
@@ -206,7 +206,7 @@ const formControlItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "control-date-picker",
@@ -219,7 +219,7 @@ const formControlItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
+    )
   },
   {
     id: "control-time-picker",
@@ -232,8 +232,8 @@ const formControlItems: SidebarPaletteItem[] = [
         className={itemImageClassName}
         draggable={false}
       />
-    ),
-  },
+    )
+  }
 ];
 
 const sidebarSections: Array<{
@@ -244,33 +244,33 @@ const sidebarSections: Array<{
   {
     title: "Layout",
     gridClassName: "grid grid-cols-3 gap-3",
-    items: layoutItems,
+    items: layoutItems
   },
   {
     title: "Form Control",
     gridClassName: "grid grid-cols-3 gap-3",
-    items: formControlItems,
-  },
+    items: formControlItems
+  }
 ];
 
 const SidebarItem: React.FC<SidebarItemProps> = ({
   dragId,
   type,
   label,
-  icon,
+  icon
 }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: dragId,
     data: {
       type: "sidebar-item",
-      componentType: type,
-    },
+      componentType: type
+    }
   });
 
   const cardStyle = isDragging
     ? {
         opacity: 0.5,
-        border: "2px dashed #3b82f6",
+        border: "2px dashed #3b82f6"
       }
     : undefined;
 
@@ -312,8 +312,8 @@ export const Sidebar: React.FC = () => {
       .map((section) => ({
         ...section,
         items: section.items.filter((item) =>
-          item.label.toLowerCase().includes(searchKey),
-        ),
+          item.label.toLowerCase().includes(searchKey)
+        )
       }))
       .filter((section) => section.items.length > 0);
   }, [keyword]);

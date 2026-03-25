@@ -2,7 +2,7 @@ import {
   CloseOutlined,
   EyeOutlined,
   LinkOutlined,
-  SearchOutlined,
+  SearchOutlined
 } from "@ant-design/icons";
 import { Button, Checkbox, Input, Modal, Switch } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
@@ -27,27 +27,27 @@ const baseFieldNames = [
   "Deposit",
   "Withdrawal",
   "Transfer",
-  "Payment",
+  "Payment"
 ];
 
 const fieldLibrary: ImportedField[] = [
   ...baseFieldNames.map((name, index) => ({
     id: `field-${index + 1}`,
     name,
-    componentType: ComponentType.INPUT,
+    componentType: ComponentType.INPUT
   })),
   ...Array.from({ length: 156 }, (_, index) => ({
     id: `field-${index + 6}`,
     name: `Field ${index + 6}`,
-    componentType: ComponentType.INPUT,
-  })),
+    componentType: ComponentType.INPUT
+  }))
 ];
 
 export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
   open,
   onClose,
   onImport,
-  initialSelectedIds,
+  initialSelectedIds
 }) => {
   const [modalKeyword, setModalKeyword] = useState("");
   const [selectedFieldIds, setSelectedFieldIds] = useState<string[]>([]);
@@ -67,7 +67,7 @@ export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
     }
 
     return fieldLibrary.filter((item) =>
-      item.name.toLowerCase().includes(searchKey),
+      item.name.toLowerCase().includes(searchKey)
     );
   }, [modalKeyword]);
 
@@ -84,7 +84,7 @@ export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
     if (checked) {
       const merged = new Set([
         ...selectedFieldIds,
-        ...modalFilteredFields.map((item) => item.id),
+        ...modalFilteredFields.map((item) => item.id)
       ]);
       setSelectedFieldIds(Array.from(merged));
       return;
@@ -105,7 +105,7 @@ export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
 
   const handleImport = () => {
     const selectedFields = fieldLibrary.filter((field) =>
-      selectedFieldIds.includes(field.id),
+      selectedFieldIds.includes(field.id)
     );
     onImport?.(selectedFields);
     onClose();

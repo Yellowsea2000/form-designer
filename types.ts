@@ -17,7 +17,7 @@ export enum ComponentType {
   CHECKBOX = "checkbox",
   RADIO = "radio",
   SWITCH = "switch",
-  BUTTON = "button",
+  BUTTON = "button"
 }
 
 export interface ComponentProps {

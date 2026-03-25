@@ -3,7 +3,7 @@ import { ComponentDSLDefinition } from "../types";
 
 const defaultProps: ComponentProps = {
   content: "This is a text block. You can edit this content.",
-  style: { color: "#64748b", fontSize: "14px" },
+  style: { color: "#64748b", fontSize: "14px" }
 };
 
 export const textDSL: ComponentDSLDefinition = {
@@ -19,14 +19,14 @@ export const textDSL: ComponentDSLDefinition = {
       label: "Text Content",
       type: "string",
       description: "Displayed paragraph text.",
-      defaultValue: defaultProps.content,
+      defaultValue: defaultProps.content
     },
     {
       name: "style",
       label: "Style",
       type: "style",
       description: "Inline style overrides for the text node.",
-      defaultValue: defaultProps.style,
-    },
-  ],
+      defaultValue: defaultProps.style
+    }
+  ]
 };

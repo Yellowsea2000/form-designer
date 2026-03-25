@@ -9,7 +9,7 @@ export const HeaderElement: React.FC<ElementRendererProps> = ({ props }) => {
     <h2
       className={mergeCn(
         "text-2xl font-bold text-slate-900 pointer-events-none",
-        className,
+        className
       )}
       style={style}
     >

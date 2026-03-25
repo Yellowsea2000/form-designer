@@ -16,7 +16,7 @@ import {
   rectIntersection,
   TouchSensor,
   useSensor,
-  useSensors,
+  useSensors
 } from "@dnd-kit/core";
 import { Button, Input, message, Modal, Space } from "antd";
 import { observer } from "mobx-react-lite";
@@ -38,11 +38,11 @@ const dropAnimation: DropAnimation = {
   sideEffects: defaultDropAnimationSideEffects({
     styles: {
       active: {
-        opacity: "0.5",
-      },
-    },
+        opacity: "0.5"
+      }
+    }
   }),
-  duration: 0,
+  duration: 0
 };
 
 // Modifier to position the drag overlay near the cursor
@@ -50,7 +50,7 @@ const cursorModifier: Modifier = ({ transform }) => {
   return {
     ...transform,
     x: transform.x - 10, // Small offset from cursor
-    y: transform.y + 10, // Slightly below cursor
+    y: transform.y + 10 // Slightly below cursor
   };
 };
 
@@ -65,15 +65,15 @@ export const FormCraftPage: React.FC = observer(() => {
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 10, // 10px movement before drag starts prevents accidental clicks
-      },
+        distance: 10 // 10px movement before drag starts prevents accidental clicks
+      }
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
         delay: 250,
-        tolerance: 5,
-      },
-    }),
+        tolerance: 5
+      }
+    })
   );
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -119,7 +119,7 @@ export const FormCraftPage: React.FC = observer(() => {
         // Dropping on container border/edge - place as sibling
         const findParentAndIndex = (
           nodes: FormNode[],
-          childId: string,
+          childId: string
         ): { parentId: string | null; index: number } | null => {
           for (const node of nodes) {
             const idx = node.children.findIndex((c) => c.id === childId);
@@ -151,7 +151,7 @@ export const FormCraftPage: React.FC = observer(() => {
         // Dropping over a regular item - insert next to it
         const findParentAndIndex = (
           nodes: FormNode[],
-          childId: string,
+          childId: string
         ): { parentId: string | null; index: number } | null => {
           for (const node of nodes) {
             const idx = node.children.findIndex((c) => c.id === childId);
@@ -193,7 +193,7 @@ export const FormCraftPage: React.FC = observer(() => {
           active.id as string,
           over.id as string,
           overData?.type === "container-interior",
-          dragData.nodeType,
+          dragData.nodeType
         );
       }
     }
@@ -230,7 +230,7 @@ export const FormCraftPage: React.FC = observer(() => {
     // First check pointer-based collision for interior zones
     const pointerCollisions = pointerWithin(args);
     const interiorCollision = pointerCollisions.find((collision: any) =>
-      collision.id.toString().endsWith("-interior"),
+      collision.id.toString().endsWith("-interior")
     );
 
     // If pointer is over an interior zone, use it
@@ -346,7 +346,7 @@ export const FormCraftPage: React.FC = observer(() => {
                 onClick={() => setShowJsonModal(false)}
               >
                 Close
-              </Button>,
+              </Button>
             ]}
           >
             <Space direction="vertical" size={10} style={{ width: "100%" }}>
@@ -358,8 +358,8 @@ export const FormCraftPage: React.FC = observer(() => {
                   textarea: {
                     fontFamily:
                       'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                    fontSize: 12,
-                  },
+                    fontSize: 12
+                  }
                 }}
               />
             </Space>

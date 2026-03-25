@@ -4,7 +4,7 @@ import { ComponentDSLDefinition } from "../types";
 const defaultProps: ComponentProps = {
   label: "Text Area",
   placeholder: "Enter long text here...",
-  required: false,
+  required: false
 };
 
 export const textareaDSL: ComponentDSLDefinition = {
@@ -20,21 +20,21 @@ export const textareaDSL: ComponentDSLDefinition = {
       label: "Label",
       type: "string",
       description: "Field label displayed above the textarea.",
-      defaultValue: defaultProps.label,
+      defaultValue: defaultProps.label
     },
     {
       name: "placeholder",
       label: "Placeholder",
       type: "string",
       description: "Hint text shown when the textarea is empty.",
-      defaultValue: defaultProps.placeholder,
+      defaultValue: defaultProps.placeholder
     },
     {
       name: "required",
       label: "Required",
       type: "boolean",
       description: "Whether this textarea must be filled.",
-      defaultValue: defaultProps.required,
-    },
-  ],
+      defaultValue: defaultProps.required
+    }
+  ]
 };

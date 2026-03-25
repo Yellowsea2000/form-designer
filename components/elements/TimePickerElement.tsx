@@ -5,7 +5,7 @@ import { baseLabelClass, mergeCn } from "./common";
 import { ElementRendererProps } from "./types";
 
 export const TimePickerElement: React.FC<ElementRendererProps> = ({
-  props,
+  props
 }) => {
   const { label, required, placeholder, style, className } = props;
 

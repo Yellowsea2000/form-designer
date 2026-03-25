@@ -6,7 +6,7 @@ const defaultProps: ComponentProps = {
   label: "View",
   style: { padding: "20px", minHeight: "100px" },
   columns: 1,
-  gap: 16,
+  gap: 16
 };
 
 export const tabItemDSL: ComponentDSLDefinition = {
@@ -22,32 +22,32 @@ export const tabItemDSL: ComponentDSLDefinition = {
       label: "View Label",
       type: "string",
       description: "Displayed text for the view trigger.",
-      defaultValue: defaultProps.label,
+      defaultValue: defaultProps.label
     },
     {
       name: "columns",
       label: "Grid Columns",
       type: "number",
       description: "How many grid columns to render inside the tab content.",
-      defaultValue: defaultProps.columns,
+      defaultValue: defaultProps.columns
     },
     {
       name: "gap",
       label: "Grid Gap",
       type: "number",
       description: "Spacing between grid items in pixels.",
-      defaultValue: defaultProps.gap,
+      defaultValue: defaultProps.gap
     },
     {
       name: "style",
       label: "Style",
       type: "style",
       description: "Inline style overrides for the tab content area.",
-      defaultValue: defaultProps.style,
-    },
+      defaultValue: defaultProps.style
+    }
   ],
   children: {
     allow: ALL_COMPONENT_TYPES,
-    description: "Tab items can host any other component.",
-  },
+    description: "Tab items can host any other component."
+  }
 };

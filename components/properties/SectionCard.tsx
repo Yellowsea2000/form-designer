@@ -10,13 +10,13 @@ interface SectionCardProps {
 export const SectionCard: React.FC<SectionCardProps> = ({
   title,
   icon,
-  children,
+  children
 }) => {
   return (
     <Card
       size="small"
       styles={{
-        body: { padding: 12 },
+        body: { padding: 12 }
       }}
     >
       <Flex align="center" gap={8} style={{ marginBottom: 12 }}>

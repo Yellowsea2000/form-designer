@@ -7,7 +7,7 @@ import { ElementRendererProps } from "./types";
 const createDefaultOptions = (count = 2) =>
   Array.from({ length: count }, (_, index) => ({
     label: `Option ${index + 1}`,
-    value: `${index + 1}`,
+    value: `${index + 1}`
   }));
 
 export const RadioElement: React.FC<ElementRendererProps> = ({ props }) => {

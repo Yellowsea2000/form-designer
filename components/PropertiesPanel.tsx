@@ -38,15 +38,15 @@ export const PropertiesPanel: React.FC = observer(() => {
     updateNode(selectedNode.id, {
       style: {
         ...selectedNode.props.style,
-        [key]: value,
-      },
+        [key]: value
+      }
     });
   };
 
   const isContainer = [
     ComponentType.CONTAINER,
     ComponentType.TAB_ITEM,
-    ComponentType.TABS,
+    ComponentType.TABS
   ].includes(selectedNode.type);
 
   const isTabItem = selectedNode.type === ComponentType.TAB_ITEM;
@@ -103,7 +103,7 @@ export const PropertiesPanel: React.FC = observer(() => {
             <>
               {!isContainer &&
                 ![ComponentType.TEXT, ComponentType.TITLE].includes(
-                  selectedNode.type,
+                  selectedNode.type
                 ) && (
                   <BindFieldSection
                     selectedNode={selectedNode}

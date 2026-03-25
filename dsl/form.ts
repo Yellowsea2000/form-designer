@@ -6,16 +6,16 @@ export const FORM_DSL_VERSION = "1.0.0";
 
 export const formDSLSpec: FormDSLSpec = {
   version: FORM_DSL_VERSION,
-  components: componentDSLs,
+  components: componentDSLs
 };
 
 export const createFormDocument = (
   nodes: FormNode[],
-  metadata?: FormDSLDocument["metadata"],
+  metadata?: FormDSLDocument["metadata"]
 ): FormDSLDocument => ({
   version: FORM_DSL_VERSION,
   metadata,
-  nodes,
+  nodes
 });
 
 export const validateFormDocument = (doc: FormDSLDocument): string[] => {
@@ -31,7 +31,7 @@ export const validateFormDocument = (doc: FormDSLDocument): string[] => {
 
     if (!dsl.children && node.children.length > 0) {
       errors.push(
-        `Component "${node.id}" of type ${node.type} should not have children`,
+        `Component "${node.id}" of type ${node.type} should not have children`
       );
     }
 
@@ -39,7 +39,7 @@ export const validateFormDocument = (doc: FormDSLDocument): string[] => {
       node.children.forEach((child) => {
         if (!dsl.children?.allow.includes(child.type)) {
           errors.push(
-            `Child type ${child.type} is not allowed inside ${node.type} (parent node ${node.id})`,
+            `Child type ${child.type} is not allowed inside ${node.type} (parent node ${node.id})`
           );
         }
       });

@@ -29,7 +29,7 @@ export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
   [ComponentType.SWITCH]: switchDSL,
   [ComponentType.BUTTON]: buttonDSL,
   [ComponentType.TEXT]: textDSL,
-  [ComponentType.TITLE]: headerDSL,
+  [ComponentType.TITLE]: headerDSL
 };
 
 export const DEFAULT_PROPS: Record<ComponentType, ComponentProps> =
@@ -38,5 +38,5 @@ export const DEFAULT_PROPS: Record<ComponentType, ComponentProps> =
       acc[dsl.type] = dsl.defaultProps;
       return acc;
     },
-    {} as Record<ComponentType, ComponentProps>,
+    {} as Record<ComponentType, ComponentProps>
   );

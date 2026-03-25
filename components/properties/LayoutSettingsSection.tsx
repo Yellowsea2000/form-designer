@@ -7,7 +7,7 @@ import { SectionProps } from "./types";
 
 export const LayoutSettingsSection: React.FC<SectionProps> = ({
   selectedNode,
-  onPropChange,
+  onPropChange
 }) => {
   const columns = selectedNode.props.columns ?? 1;
   const gap = selectedNode.props.gap ?? 16;

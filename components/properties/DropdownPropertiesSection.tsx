@@ -3,7 +3,7 @@ import {
   InfoCircleOutlined,
   PlusOutlined,
   StarFilled,
-  StarOutlined,
+  StarOutlined
 } from "@ant-design/icons";
 import { Button, Flex, Form, Input, Select, Space, Typography } from "antd";
 import React from "react";
@@ -47,7 +47,7 @@ export const DropdownPropertiesSection: React.FC<
   const handleDeleteOption = (index: number) => {
     const removedOption = options[index];
     const nextOptions = options.filter(
-      (_, optionIndex) => optionIndex !== index,
+      (_, optionIndex) => optionIndex !== index
     );
     onPropChange("options", nextOptions);
 
@@ -60,7 +60,7 @@ export const DropdownPropertiesSection: React.FC<
     const nextIndex = options.length + 1;
     onPropChange("options", [
       ...options,
-      { label: `Option ${nextIndex}`, value: `${nextIndex}` },
+      { label: `Option ${nextIndex}`, value: `${nextIndex}` }
     ]);
   };
 

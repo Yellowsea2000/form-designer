@@ -9,12 +9,12 @@ import { SectionProps } from "./types";
 const createDefaultOptions = (count: number) =>
   Array.from({ length: count }, (_, index) => ({
     label: `Option ${index + 1}`,
-    value: `${index + 1}`,
+    value: `${index + 1}`
   }));
 
 const resizeOptions = (
   options: { label: string; value: string }[],
-  count: number,
+  count: number
 ): { label: string; value: string }[] => {
   const normalized = options.length > 0 ? options : createDefaultOptions(1);
   return Array.from({ length: count }, (_, index) => {
@@ -28,7 +28,7 @@ const resizeOptions = (
 
 export const SelectOptionsSection: React.FC<SectionProps> = ({
   selectedNode,
-  onPropChange,
+  onPropChange
 }) => {
   const isSelect = selectedNode.type === ComponentType.SELECT;
   const isCheckboxOrRadio =
@@ -107,8 +107,8 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({
                 ...options,
                 {
                   label: `Option ${options.length + 1}`,
-                  value: `${options.length + 1}`,
-                },
+                  value: `${options.length + 1}`
+                }
               ])
             }
           >

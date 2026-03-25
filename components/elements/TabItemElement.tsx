@@ -5,7 +5,7 @@ import { ElementRendererProps } from "./types";
 
 export const TabItemElement: React.FC<ElementRendererProps> = ({
   props,
-  children,
+  children
 }) => {
   const { style, className, label } = props;
 

@@ -11,7 +11,7 @@ const addNodeRecursively = (
   nodes: FormNode[],
   parentId: string | null,
   newNode: FormNode,
-  index?: number,
+  index?: number
 ): FormNode[] => {
   if (parentId === null) {
     const newNodes = [...nodes];
@@ -36,7 +36,7 @@ const addNodeRecursively = (
     if (node.children.length > 0) {
       return {
         ...node,
-        children: addNodeRecursively(node.children, parentId, newNode, index),
+        children: addNodeRecursively(node.children, parentId, newNode, index)
       };
     }
     return node;
@@ -49,7 +49,7 @@ const removeNodeRecursively = (nodes: FormNode[], id: string): FormNode[] => {
     .filter((node) => node.id !== id)
     .map((node) => ({
       ...node,
-      children: removeNodeRecursively(node.children, id),
+      children: removeNodeRecursively(node.children, id)
     }));
 };
 
@@ -57,7 +57,7 @@ const removeNodeRecursively = (nodes: FormNode[], id: string): FormNode[] => {
 const updateNodeRecursively = (
   nodes: FormNode[],
   id: string,
-  updates: Partial<FormNode> | Partial<ComponentProps>,
+  updates: Partial<FormNode> | Partial<ComponentProps>
 ): FormNode[] => {
   return nodes.map((node) => {
     if (node.id === id) {
@@ -72,7 +72,7 @@ const updateNodeRecursively = (
     if (node.children.length > 0) {
       return {
         ...node,
-        children: updateNodeRecursively(node.children, id, updates),
+        children: updateNodeRecursively(node.children, id, updates)
       };
     }
     return node;
@@ -130,7 +130,7 @@ interface NodeLocation {
 const findNodeLocation = (
   nodes: FormNode[],
   id: string,
-  parentId: string | null = null,
+  parentId: string | null = null
 ): NodeLocation | null => {
   for (let index = 0; index < nodes.length; index++) {
     const node = nodes[index];
@@ -158,9 +158,9 @@ const cloneNodeWithNewIds = (node: FormNode): FormNode => {
     props: {
       ...node.props,
       style: node.props.style ? { ...node.props.style } : undefined,
-      options: node.props.options?.map((option) => ({ ...option })),
+      options: node.props.options?.map((option) => ({ ...option }))
     },
-    children: node.children.map((child) => cloneNodeWithNewIds(child)),
+    children: node.children.map((child) => cloneNodeWithNewIds(child))
   };
 };
 
@@ -173,9 +173,9 @@ export class DesignerStore {
       this,
       {
         // Keep form tree as plain JS objects to avoid React style freeze conflict.
-        nodes: observable.ref,
+        nodes: observable.ref
       },
-      { autoBind: true },
+      { autoBind: true }
     );
   }
 
@@ -183,13 +183,13 @@ export class DesignerStore {
     type: ComponentType,
     parentId: string | null,
     index?: number,
-    autoSelect = true,
+    autoSelect = true
   ) {
     const newNode: FormNode = {
       id: generateId(),
       type,
       props: { ...DEFAULT_PROPS[type] },
-      children: [],
+      children: []
     };
 
     // Pre-populate tabs with default items
@@ -200,28 +200,28 @@ export class DesignerStore {
           type: ComponentType.TAB_ITEM,
           props: {
             label: "View 1",
-            style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style,
+            style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style
           },
-          children: [],
+          children: []
         },
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
           props: {
             label: "View 2",
-            style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style,
+            style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style
           },
-          children: [],
+          children: []
         },
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
           props: {
             label: "View 3",
-            style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style,
+            style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style
           },
-          children: [],
-        },
+          children: []
+        }
       ];
       newNode.props.defaultTabId = newNode.children[0].id;
     }
@@ -259,7 +259,7 @@ export class DesignerStore {
       this.nodes,
       location.parentId,
       duplicatedNode,
-      location.index + 1,
+      location.index + 1
     );
     this.selectNode(duplicatedNode.id);
   }
@@ -288,7 +288,7 @@ export class DesignerStore {
     activeId: string,
     overId: string,
     isInteriorDrop?: boolean,
-    _activeNodeType?: ComponentType,
+    _activeNodeType?: ComponentType
   ) {
     const cloneNodes: FormNode[] = JSON.parse(JSON.stringify(this.nodes));
 

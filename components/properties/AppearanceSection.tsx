@@ -14,7 +14,7 @@ interface AppearanceSectionProps extends SectionProps {
 export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
   selectedNode,
   onStyleChange,
-  onPaddingChange,
+  onPaddingChange
 }) => {
   const supportsFontSize =
     selectedNode.type === ComponentType.TITLE ||
@@ -72,7 +72,7 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
                         : "1px solid #d9d9d9",
                       boxShadow: isSelected
                         ? "0 0 0 2px rgba(22, 119, 255, 0.2)"
-                        : undefined,
+                        : undefined
                     }}
                   />
                 );

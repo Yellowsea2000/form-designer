@@ -6,8 +6,8 @@ const defaultProps: ComponentProps = {
   required: false,
   options: [
     { label: "Option 1", value: "1" },
-    { label: "Option 2", value: "2" },
-  ],
+    { label: "Option 2", value: "2" }
+  ]
 };
 
 export const checkboxDSL: ComponentDSLDefinition = {
@@ -23,21 +23,21 @@ export const checkboxDSL: ComponentDSLDefinition = {
       label: "Label",
       type: "string",
       description: "Field label rendered next to the checkbox.",
-      defaultValue: defaultProps.label,
+      defaultValue: defaultProps.label
     },
     {
       name: "options",
       label: "Options",
       type: "options",
       description: "Choices shown for checkbox and radio groups.",
-      defaultValue: defaultProps.options,
+      defaultValue: defaultProps.options
     },
     {
       name: "required",
       label: "Required",
       type: "boolean",
       description: "Whether the checkbox must be checked.",
-      defaultValue: defaultProps.required,
-    },
-  ],
+      defaultValue: defaultProps.required
+    }
+  ]
 };

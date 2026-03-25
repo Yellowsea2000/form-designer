@@ -8,7 +8,7 @@ export const TabsElement: React.FC<ElementRendererProps> = ({
   children,
   node,
   activeTabId,
-  onTabChange,
+  onTabChange
 }) => {
   const { style, className } = props;
 
@@ -26,7 +26,7 @@ export const TabsElement: React.FC<ElementRendererProps> = ({
               "px-4 py-3 text-sm font-medium transition-colors focus:outline-none border-b-2 whitespace-nowrap",
               activeTabId === child.id
                 ? "border-blue-500 text-blue-600 bg-white"
-                : "border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50",
+                : "border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50"
             )}
           >
             {child.props.label || "View"}

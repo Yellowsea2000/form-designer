@@ -12,7 +12,7 @@ type ValidationSectionProps = Pick<
 
 export const ValidationSection: React.FC<ValidationSectionProps> = ({
   selectedNode,
-  onPropChange,
+  onPropChange
 }) => {
   if (selectedNode.props.required === undefined) {
     return null;

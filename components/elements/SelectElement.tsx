@@ -12,7 +12,7 @@ export const SelectElement: React.FC<ElementRendererProps> = ({ props }) => {
     defaultValue,
     placeholder,
     style,
-    className,
+    className
   } = props;
 
   return (
@@ -29,7 +29,7 @@ export const SelectElement: React.FC<ElementRendererProps> = ({ props }) => {
         }
         options={options?.map((opt) => ({
           label: opt.label,
-          value: opt.value,
+          value: opt.value
         }))}
       />
     </div>

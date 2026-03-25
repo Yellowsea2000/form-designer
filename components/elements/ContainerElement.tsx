@@ -5,7 +5,7 @@ import { ElementRendererProps } from "./types";
 
 export const ContainerElement: React.FC<ElementRendererProps> = ({
   props,
-  children,
+  children
 }) => {
   const { style, className } = props;
 

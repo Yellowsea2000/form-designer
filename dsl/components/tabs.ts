@@ -6,8 +6,8 @@ const defaultProps: ComponentProps = {
     width: "100%",
     backgroundColor: "#ffffff",
     borderRadius: "8px",
-    border: "1px solid #e2e8f0",
-  },
+    border: "1px solid #e2e8f0"
+  }
 };
 
 export const tabsDSL: ComponentDSLDefinition = {
@@ -22,19 +22,19 @@ export const tabsDSL: ComponentDSLDefinition = {
       name: "defaultTabId",
       label: "Default Tab",
       type: "string",
-      description: "The default active tab item id.",
+      description: "The default active tab item id."
     },
     {
       name: "style",
       label: "Style",
       type: "style",
       description: "Inline style overrides for the tabs wrapper.",
-      defaultValue: defaultProps.style,
-    },
+      defaultValue: defaultProps.style
+    }
   ],
   children: {
     allow: [ComponentType.TAB_ITEM],
     min: 1,
-    description: "Tabs can only contain tab_item components.",
-  },
+    description: "Tabs can only contain tab_item components."
+  }
 };
