@@ -12,7 +12,6 @@ import checkboxIcon from "../images/FormComponent/Checkbox.png";
 import containerIcon from "../images/FormComponent/Container.png";
 import datePickerIcon from "../images/FormComponent/DatePicker.png";
 import dropdownIcon from "../images/FormComponent/Dropdown.png";
-import iconComponentIcon from "../images/FormComponent/Icon.png";
 import inputBoxIcon from "../images/FormComponent/InputBox.png";
 import inputNumberIcon from "../images/FormComponent/InputNumber.png";
 import radioIcon from "../images/FormComponent/Radio.png";
@@ -45,7 +44,6 @@ type SidebarPaletteType =
   | ComponentType.CONTAINER
   | ComponentType.TEXT
   | ComponentType.TITLE
-  | ComponentType.ICON
   | ComponentType.TABS
   | ComponentType.INPUT
   | ComponentType.DATE_PICKER
@@ -98,19 +96,6 @@ const layoutItems: SidebarPaletteItem[] = [
       <img
         src={titleIcon}
         alt="Title"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    ),
-  },
-  {
-    id: "layout-icon",
-    type: ComponentType.ICON,
-    label: componentDSLs[ComponentType.ICON].displayName,
-    icon: (
-      <img
-        src={iconComponentIcon}
-        alt="Icon"
         className={itemImageClassName}
         draggable={false}
       />

@@ -5,7 +5,6 @@ import { checkboxDSL } from "./checkbox";
 import { containerDSL } from "./container";
 import { datePickerDSL } from "./datePicker";
 import { headerDSL } from "./header";
-import { imageDSL } from "./image";
 import { inputDSL } from "./input";
 import { radioDSL } from "./radio";
 import { selectDSL } from "./select";
@@ -30,7 +29,6 @@ export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
   [ComponentType.SWITCH]: switchDSL,
   [ComponentType.BUTTON]: buttonDSL,
   [ComponentType.TEXT]: textDSL,
-  [ComponentType.ICON]: imageDSL,
   [ComponentType.TITLE]: headerDSL,
 };
 

@@ -6,7 +6,6 @@ export enum ComponentType {
   TABS = "tabs",
   TAB_ITEM = "tab_item",
   TEXT = "text",
-  ICON = "icon",
   TITLE = "title",
 
   // Form Controls
@@ -29,8 +28,6 @@ export interface ComponentProps {
   required?: boolean;
   defaultValue?: string | boolean;
   options?: { label: string; value: string }[]; // For select/checkbox/radio
-  src?: string; // For icon/image
-  alt?: string; // For icon/image
   content?: string; // For text/title
   className?: string;
   style?: CSSProperties;

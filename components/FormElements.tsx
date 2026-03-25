@@ -6,7 +6,6 @@ import { CheckboxElement } from "./elements/CheckboxElement";
 import { ContainerElement } from "./elements/ContainerElement";
 import { DatePickerElement } from "./elements/DatePickerElement";
 import { HeaderElement } from "./elements/HeaderElement";
-import { ImageElement } from "./elements/ImageElement";
 import { InputElement } from "./elements/InputElement";
 import { RadioElement } from "./elements/RadioElement";
 import { SelectElement } from "./elements/SelectElement";
@@ -34,7 +33,6 @@ const renderers: Record<ComponentType, React.FC<ElementRendererProps>> = {
   [ComponentType.RADIO]: RadioElement,
   [ComponentType.SWITCH]: SwitchElement,
   [ComponentType.BUTTON]: ButtonElement,
-  [ComponentType.ICON]: ImageElement,
   [ComponentType.CONTAINER]: ContainerElement,
   [ComponentType.TABS]: TabsElement,
   [ComponentType.TAB_ITEM]: TabItemElement,

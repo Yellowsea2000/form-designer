@@ -11,7 +11,6 @@ import { ContainerPropertiesSection } from "./properties/ContainerPropertiesSect
 import { ContentSection } from "./properties/ContentSection";
 import { DropdownPropertiesSection } from "./properties/DropdownPropertiesSection";
 import { EmptyProperties } from "./properties/EmptyProperties";
-import { ImageSettingsSection } from "./properties/ImageSettingsSection";
 import { SelectOptionsSection } from "./properties/SelectOptionsSection";
 import { SwitchPropertiesSection } from "./properties/SwitchPropertiesSection";
 import { TabItemHint } from "./properties/TabItemHint";
@@ -103,11 +102,9 @@ export const PropertiesPanel: React.FC = observer(() => {
           ) : (
             <>
               {!isContainer &&
-                ![
-                  ComponentType.TEXT,
-                  ComponentType.ICON,
-                  ComponentType.TITLE,
-                ].includes(selectedNode.type) && (
+                ![ComponentType.TEXT, ComponentType.TITLE].includes(
+                  selectedNode.type,
+                ) && (
                   <BindFieldSection
                     selectedNode={selectedNode}
                     onPropChange={handlePropChange}
@@ -115,12 +112,6 @@ export const PropertiesPanel: React.FC = observer(() => {
                 )}
 
               <ContentSection
-                selectedNode={selectedNode}
-                onPropChange={handlePropChange}
-                onStyleChange={handleStyleChange}
-              />
-
-              <ImageSettingsSection
                 selectedNode={selectedNode}
                 onPropChange={handlePropChange}
                 onStyleChange={handleStyleChange}

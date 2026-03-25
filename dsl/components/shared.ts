@@ -14,6 +14,5 @@ export const ALL_COMPONENT_TYPES: ComponentType[] = [
   ComponentType.SWITCH,
   ComponentType.BUTTON,
   ComponentType.TEXT,
-  ComponentType.ICON,
   ComponentType.TITLE,
 ];
