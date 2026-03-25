@@ -1,8 +1,12 @@
 import React from "react";
-import { ElementRendererProps } from "./types";
-import { mergeCn } from "./common";
 
-export const ContainerElement: React.FC<ElementRendererProps> = ({ props, children }) => {
+import { mergeCn } from "./common";
+import { ElementRendererProps } from "./types";
+
+export const ContainerElement: React.FC<ElementRendererProps> = ({
+  props,
+  children,
+}) => {
   const { style, className } = props;
 
   return (

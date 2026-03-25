@@ -1,4 +1,5 @@
 import React from "react";
+
 import { ComponentType } from "../types";
 import { ButtonElement } from "./elements/ButtonElement";
 import { CheckboxElement } from "./elements/CheckboxElement";
@@ -12,8 +13,8 @@ import { SelectElement } from "./elements/SelectElement";
 import { SwitchElement } from "./elements/SwitchElement";
 import { TabItemElement } from "./elements/TabItemElement";
 import { TabsElement } from "./elements/TabsElement";
-import { TextElement } from "./elements/TextElement";
 import { TextareaElement } from "./elements/TextareaElement";
+import { TextElement } from "./elements/TextElement";
 import { TimePickerElement } from "./elements/TimePickerElement";
 import { ElementRendererProps } from "./elements/types";
 

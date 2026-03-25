@@ -1,9 +1,12 @@
-import React from "react";
 import { TimePicker } from "antd";
-import { ElementRendererProps } from "./types";
-import { baseLabelClass, mergeCn } from "./common";
+import React from "react";
 
-export const TimePickerElement: React.FC<ElementRendererProps> = ({ props }) => {
+import { baseLabelClass, mergeCn } from "./common";
+import { ElementRendererProps } from "./types";
+
+export const TimePickerElement: React.FC<ElementRendererProps> = ({
+  props,
+}) => {
   const { label, required, placeholder, style, className } = props;
 
   return (
@@ -13,7 +16,10 @@ export const TimePickerElement: React.FC<ElementRendererProps> = ({ props }) => 
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
-      <TimePicker placeholder={placeholder || "Select time"} style={{ width: "100%" }} />
+      <TimePicker
+        placeholder={placeholder || "Select time"}
+        style={{ width: "100%" }}
+      />
     </div>
   );
 };

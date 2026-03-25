@@ -1,6 +1,11 @@
-import React, { useMemo } from "react";
+import {
+  BorderOutlined,
+  FolderFilled,
+  HolderOutlined,
+} from "@ant-design/icons";
 import { useDraggable } from "@dnd-kit/core";
-import { BorderOutlined, FolderFilled, HolderOutlined } from "@ant-design/icons";
+import React, { useMemo } from "react";
+
 import { ImportedField } from "./FieldsImportModal";
 
 interface FieldsTabContentProps {
@@ -8,7 +13,8 @@ interface FieldsTabContentProps {
   keyword: string;
 }
 
-const sectionTitleClassName = "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
+const sectionTitleClassName =
+  "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
 
 interface FieldRowItemProps {
   field: ImportedField;
@@ -47,14 +53,19 @@ const FieldRowItem: React.FC<FieldRowItemProps> = ({ field }) => {
   );
 };
 
-export const FieldsTabContent: React.FC<FieldsTabContentProps> = ({ fields, keyword }) => {
+export const FieldsTabContent: React.FC<FieldsTabContentProps> = ({
+  fields,
+  keyword,
+}) => {
   const filteredFields = useMemo(() => {
     const searchKey = keyword.trim().toLowerCase();
     if (!searchKey) {
       return fields;
     }
 
-    return fields.filter((field) => field.name.toLowerCase().includes(searchKey));
+    return fields.filter((field) =>
+      field.name.toLowerCase().includes(searchKey),
+    );
   }, [fields, keyword]);
 
   if (fields.length === 0) {
@@ -85,7 +96,9 @@ export const FieldsTabContent: React.FC<FieldsTabContentProps> = ({ fields, keyw
         {filteredFields.length === 0 ? (
           <div className="text-xs text-[#8c8c8c]">No matching fields.</div>
         ) : (
-          filteredFields.map((field) => <FieldRowItem key={field.id} field={field} />)
+          filteredFields.map((field) => (
+            <FieldRowItem key={field.id} field={field} />
+          ))
         )}
       </div>
     </div>

@@ -1,6 +1,12 @@
 import { ComponentProps, ComponentType, FormNode } from "../types";
 
-export type DSLPrimitiveType = "string" | "boolean" | "number" | "enum" | "options" | "style";
+export type DSLPrimitiveType =
+  | "string"
+  | "boolean"
+  | "number"
+  | "enum"
+  | "options"
+  | "style";
 
 export interface ComponentPropDSL {
   name: keyof ComponentProps | string;

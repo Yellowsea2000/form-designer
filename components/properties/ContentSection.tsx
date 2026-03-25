@@ -1,11 +1,15 @@
-import React from "react";
 import { FontSizeOutlined } from "@ant-design/icons";
 import { Form, Input } from "antd";
-import { ComponentType } from "../../types";
-import { SectionProps } from "./types";
-import { SectionCard } from "./SectionCard";
+import React from "react";
 
-export const ContentSection: React.FC<SectionProps> = ({ selectedNode, onPropChange }) => {
+import { ComponentType } from "../../types";
+import { SectionCard } from "./SectionCard";
+import { SectionProps } from "./types";
+
+export const ContentSection: React.FC<SectionProps> = ({
+  selectedNode,
+  onPropChange,
+}) => {
   const hasContentFields =
     selectedNode.props.label !== undefined ||
     selectedNode.props.content !== undefined ||
@@ -16,7 +20,10 @@ export const ContentSection: React.FC<SectionProps> = ({ selectedNode, onPropCha
   }
 
   return (
-    <SectionCard title="Content" icon={<FontSizeOutlined style={{ fontSize: 16 }} />}>
+    <SectionCard
+      title="Content"
+      icon={<FontSizeOutlined style={{ fontSize: 16 }} />}
+    >
       <Form layout="vertical" size="small">
         {selectedNode.props.label !== undefined && (
           <Form.Item label="Label" style={{ marginBottom: 12 }}>
@@ -28,7 +35,11 @@ export const ContentSection: React.FC<SectionProps> = ({ selectedNode, onPropCha
         )}
         {selectedNode.props.content !== undefined && (
           <Form.Item
-            label={selectedNode.type === ComponentType.BUTTON ? "Button Text" : "Text Content"}
+            label={
+              selectedNode.type === ComponentType.BUTTON
+                ? "Button Text"
+                : "Text Content"
+            }
             style={{ marginBottom: 12 }}
           >
             <Input
@@ -41,7 +52,9 @@ export const ContentSection: React.FC<SectionProps> = ({ selectedNode, onPropCha
           <Form.Item label="Placeholder" style={{ marginBottom: 0 }}>
             <Input
               value={selectedNode.props.placeholder ?? ""}
-              onChange={(event) => onPropChange("placeholder", event.target.value)}
+              onChange={(event) =>
+                onPropChange("placeholder", event.target.value)
+              }
             />
           </Form.Item>
         )}

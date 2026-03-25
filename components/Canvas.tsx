@@ -1,23 +1,26 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useDroppable } from "@dnd-kit/core";
 import { CopyOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { useDroppable } from "@dnd-kit/core";
 import {
-  SortableContext,
-  verticalListSortingStrategy,
   rectSortingStrategy,
+  SortableContext,
   useSortable,
+  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { observer } from "mobx-react-lite";
-import { useDesignerStore } from "../store";
-import { FormNode, ComponentType } from "../types";
-import { FormElementRenderer } from "./FormElements";
 import cn from "classnames";
+import { observer } from "mobx-react-lite";
+import React, { useEffect, useMemo, useState } from "react";
+
 import { useDragContext } from "../dragContext";
 import emptyCanvasImage from "../images/emptyCanvas.png";
+import { useDesignerStore } from "../store";
+import { ComponentType, FormNode } from "../types";
+import { FormElementRenderer } from "./FormElements";
 
 // Drag Placeholder Component - shows where the component will be placed
-const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({ isInterior }) => (
+const DragPlaceholder: React.FC<{ isInterior?: boolean }> = ({
+  isInterior,
+}) => (
   <div
     className={cn(
       "my-3 rounded-lg border-2 border-dashed transition-all animate-pulse",
@@ -54,21 +57,28 @@ const SortableNode: React.FC<SortableNodeProps> = ({
   onClick,
 }) => {
   const { activeDragData, overId, overData } = useDragContext();
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging, isOver } =
-    useSortable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+    isOver,
+  } = useSortable({
+    id: node.id,
+    data: {
+      type: "canvas-item",
       id: node.id,
-      data: {
-        type: "canvas-item",
-        id: node.id,
-        nodeType: node.type,
-        // Pass children info to help drag handling determine if this is a container
-        isContainer:
-          node.type === ComponentType.CONTAINER ||
-          node.type === ComponentType.TABS ||
-          node.type === ComponentType.TAB_ITEM,
-      },
-      disabled: isPreview,
-    });
+      nodeType: node.type,
+      // Pass children info to help drag handling determine if this is a container
+      isContainer:
+        node.type === ComponentType.CONTAINER ||
+        node.type === ComponentType.TABS ||
+        node.type === ComponentType.TAB_ITEM,
+    },
+    disabled: isPreview,
+  });
 
   // Add a separate droppable for container interior
   const { setNodeRef: setDroppableRef, isOver: isOverInterior } = useDroppable({
@@ -81,7 +91,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({
     disabled: isPreview,
   });
 
-  const { duplicateNode, removeNode, selectNode, selectedNodeId } = useDesignerStore();
+  const { duplicateNode, removeNode, selectNode, selectedNodeId } =
+    useDesignerStore();
 
   // Tabs specific state
   const [activeTabId, setActiveTabId] = useState<string | null>(null);
@@ -107,10 +118,13 @@ const SortableNode: React.FC<SortableNodeProps> = ({
     transform: CSS.Translate.toString(transform),
     transition,
   };
-  const isSidebarDragging = !isPreview && activeDragData?.type === "sidebar-item";
+  const isSidebarDragging =
+    !isPreview && activeDragData?.type === "sidebar-item";
   const showDragOutline = isSidebarDragging && !isSelected;
 
-  const isContainer = node.type === ComponentType.CONTAINER || node.type === ComponentType.TAB_ITEM;
+  const isContainer =
+    node.type === ComponentType.CONTAINER ||
+    node.type === ComponentType.TAB_ITEM;
   const isPlainContainer = node.type === ComponentType.CONTAINER;
 
   const isTabs = node.type === ComponentType.TABS;
@@ -142,7 +156,9 @@ const SortableNode: React.FC<SortableNodeProps> = ({
   }, [showGrid, columns, gap]);
 
   // Switch strategy based on layout
-  const sortingStrategy = showGrid ? rectSortingStrategy : verticalListSortingStrategy;
+  const sortingStrategy = showGrid
+    ? rectSortingStrategy
+    : verticalListSortingStrategy;
 
   if (isDragging) {
     return (
@@ -164,8 +180,12 @@ const SortableNode: React.FC<SortableNodeProps> = ({
         isPreview
           ? "border-0 shadow-none cursor-default"
           : "border-2 hover:shadow-md cursor-grab active:cursor-grabbing",
-        !isPreview && isSelected ? "border-blue-500 ring-1 ring-blue-500 z-10" : "",
-        !isPreview && !isSelected ? "border-transparent hover:border-blue-200" : "",
+        !isPreview && isSelected
+          ? "border-blue-500 ring-1 ring-blue-500 z-10"
+          : "",
+        !isPreview && !isSelected
+          ? "border-transparent hover:border-blue-200"
+          : "",
         !isPreview && isOver && !isOverInterior ? "ring-2 ring-blue-400" : "",
         showDragOutline &&
           "before:pointer-events-none before:absolute before:inset-0 before:rounded-lg before:border-2 before:border-dashed before:border-sky-300/80 before:content-['']",
@@ -219,7 +239,10 @@ const SortableNode: React.FC<SortableNodeProps> = ({
           onTabChange={setActiveTabId}
         >
           {(isContainer || isTabs) && (
-            <SortableContext items={visibleChildren.map((c) => c.id)} strategy={sortingStrategy}>
+            <SortableContext
+              items={visibleChildren.map((c) => c.id)}
+              strategy={sortingStrategy}
+            >
               <div
                 className={cn(
                   "w-full transition-colors rounded relative",
@@ -247,7 +270,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({
                       ref={setDroppableRef}
                       className={cn(
                         "absolute inset-0 rounded-lg transition-all pointer-events-auto z-0",
-                        isOverInterior && "ring-2 ring-inset ring-green-400 bg-green-50/30",
+                        isOverInterior &&
+                          "ring-2 ring-inset ring-green-400 bg-green-50/30",
                       )}
                     />
                   ))}
@@ -331,85 +355,92 @@ interface CanvasProps {
   isPreview?: boolean;
 }
 
-export const Canvas: React.FC<CanvasProps> = observer(({ isPreview = false }) => {
-  const { nodes, selectedNodeId, selectNode } = useDesignerStore();
-  const { activeDragData, overId } = useDragContext();
-  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
-  const { setNodeRef, isOver } = useDroppable({
-    id: "canvas-droppable",
-    data: {
-      type: "canvas",
-    },
-    disabled: isPreview,
-  });
+export const Canvas: React.FC<CanvasProps> = observer(
+  ({ isPreview = false }) => {
+    const { nodes, selectedNodeId, selectNode } = useDesignerStore();
+    const { activeDragData, overId } = useDragContext();
+    const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
+    const { setNodeRef, isOver } = useDroppable({
+      id: "canvas-droppable",
+      data: {
+        type: "canvas",
+      },
+      disabled: isPreview,
+    });
 
-  // Show placeholder when dragging to empty canvas or at the end
-  const showCanvasPlaceholder =
-    !isPreview && activeDragData?.type === "sidebar-item" && overId === "canvas-droppable";
+    // Show placeholder when dragging to empty canvas or at the end
+    const showCanvasPlaceholder =
+      !isPreview &&
+      activeDragData?.type === "sidebar-item" &&
+      overId === "canvas-droppable";
 
-  return (
-    <div
-      className="flex-1 h-full bg-canvas overflow-y-auto p-[36px]"
-      onClick={() => {
-        if (!isPreview) {
-          selectNode(null);
-        }
-      }}
-      onMouseLeave={() => setHoveredNodeId(null)}
-    >
-      <div className="w-full">
-        <div
-          ref={setNodeRef}
-          className={cn(
-            "min-h-[calc(100vh-100px)] bg-white rounded-xl shadow-sm border transition-colors p-8 pb-32",
-            isOver ? "border-blue-400 bg-blue-50/30" : "border-slate-200",
-          )}
-        >
-          {nodes.length === 0 && !isOver && !showCanvasPlaceholder && (
-            <div className="flex min-h-[calc(100vh-220px)] items-center justify-center">
-              <div className="w-full max-w-[760px] rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/40 px-8 py-12">
-                <div className="mx-auto flex max-w-[620px] flex-col items-center text-center">
-                  <img
-                    src={emptyCanvasImage}
-                    alt="Empty canvas illustration"
-                    className="mb-5 w-[260px] max-w-full select-none"
-                    draggable={false}
-                  />
-                  <p className="text-[31px] font-semibold leading-tight text-[#2f3338]">
-                    This space is your blank canvas
-                  </p>
-                  <p className="mt-3 text-[18px] font-normal leading-[1.35] text-[#5f6368]">
-                    Please drag and drop elements from the left panel here.
-                  </p>
+    return (
+      <div
+        className="flex-1 h-full bg-canvas overflow-y-auto p-[36px]"
+        onClick={() => {
+          if (!isPreview) {
+            selectNode(null);
+          }
+        }}
+        onMouseLeave={() => setHoveredNodeId(null)}
+      >
+        <div className="w-full">
+          <div
+            ref={setNodeRef}
+            className={cn(
+              "min-h-[calc(100vh-100px)] bg-white rounded-xl shadow-sm border transition-colors p-8 pb-32",
+              isOver ? "border-blue-400 bg-blue-50/30" : "border-slate-200",
+            )}
+          >
+            {nodes.length === 0 && !isOver && !showCanvasPlaceholder && (
+              <div className="flex min-h-[calc(100vh-220px)] items-center justify-center">
+                <div className="w-full max-w-[760px] rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/40 px-8 py-12">
+                  <div className="mx-auto flex max-w-[620px] flex-col items-center text-center">
+                    <img
+                      src={emptyCanvasImage}
+                      alt="Empty canvas illustration"
+                      className="mb-5 w-[260px] max-w-full select-none"
+                      draggable={false}
+                    />
+                    <p className="text-[31px] font-semibold leading-tight text-[#2f3338]">
+                      This space is your blank canvas
+                    </p>
+                    <p className="mt-3 text-[18px] font-normal leading-[1.35] text-[#5f6368]">
+                      Please drag and drop elements from the left panel here.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Show placeholder at the start of canvas when empty and dragging */}
-          {nodes.length === 0 && showCanvasPlaceholder && <DragPlaceholder />}
+            {/* Show placeholder at the start of canvas when empty and dragging */}
+            {nodes.length === 0 && showCanvasPlaceholder && <DragPlaceholder />}
 
-          <SortableContext items={nodes.map((n) => n.id)} strategy={verticalListSortingStrategy}>
-            {nodes.map((node) => (
-              <SortableNode
-                key={node.id}
-                node={node}
-                isSelected={selectedNodeId === node.id}
-                isPreview={isPreview}
-                hoveredNodeId={hoveredNodeId}
-                setHoveredNodeId={setHoveredNodeId}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  selectNode(node.id);
-                }}
-              />
-            ))}
-          </SortableContext>
+            <SortableContext
+              items={nodes.map((n) => n.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {nodes.map((node) => (
+                <SortableNode
+                  key={node.id}
+                  node={node}
+                  isSelected={selectedNodeId === node.id}
+                  isPreview={isPreview}
+                  hoveredNodeId={hoveredNodeId}
+                  setHoveredNodeId={setHoveredNodeId}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    selectNode(node.id);
+                  }}
+                />
+              ))}
+            </SortableContext>
 
-          {/* Show placeholder at the end of canvas when has nodes and dragging */}
-          {nodes.length > 0 && showCanvasPlaceholder && <DragPlaceholder />}
+            {/* Show placeholder at the end of canvas when has nodes and dragging */}
+            {nodes.length > 0 && showCanvasPlaceholder && <DragPlaceholder />}
+          </div>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);

@@ -13,8 +13,8 @@ import { switchDSL } from "./switch";
 import { tabItemDSL } from "./tabItem";
 import { tabsDSL } from "./tabs";
 import { textDSL } from "./text";
-import { timePickerDSL } from "./timePicker";
 import { textareaDSL } from "./textarea";
+import { timePickerDSL } from "./timePicker";
 
 export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
   [ComponentType.CONTAINER]: containerDSL,
@@ -34,12 +34,11 @@ export const componentDSLs: Record<ComponentType, ComponentDSLDefinition> = {
   [ComponentType.TITLE]: headerDSL,
 };
 
-export const DEFAULT_PROPS: Record<ComponentType, ComponentProps> = Object.values(
-  componentDSLs,
-).reduce(
-  (acc, dsl) => {
-    acc[dsl.type] = dsl.defaultProps;
-    return acc;
-  },
-  {} as Record<ComponentType, ComponentProps>,
-);
+export const DEFAULT_PROPS: Record<ComponentType, ComponentProps> =
+  Object.values(componentDSLs).reduce(
+    (acc, dsl) => {
+      acc[dsl.type] = dsl.defaultProps;
+      return acc;
+    },
+    {} as Record<ComponentType, ComponentProps>,
+  );

@@ -4,7 +4,12 @@ import { ComponentDSLDefinition } from "../types";
 const defaultProps: ComponentProps = {
   src: "https://picsum.photos/400/200",
   alt: "Placeholder Image",
-  style: { borderRadius: "8px", width: "100%", height: "auto", objectFit: "cover" },
+  style: {
+    borderRadius: "8px",
+    width: "100%",
+    height: "auto",
+    objectFit: "cover",
+  },
 };
 
 export const imageDSL: ComponentDSLDefinition = {

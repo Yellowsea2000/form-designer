@@ -1,9 +1,10 @@
-import React from "react";
 import { AlignLeftOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Flex, Input, InputNumber, Space, Typography } from "antd";
+import React from "react";
+
 import { ComponentType } from "../../types";
-import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
+import { SectionProps } from "./types";
 
 const createDefaultOptions = (count: number) =>
   Array.from({ length: count }, (_, index) => ({
@@ -25,10 +26,14 @@ const resizeOptions = (
   });
 };
 
-export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onPropChange }) => {
+export const SelectOptionsSection: React.FC<SectionProps> = ({
+  selectedNode,
+  onPropChange,
+}) => {
   const isSelect = selectedNode.type === ComponentType.SELECT;
   const isCheckboxOrRadio =
-    selectedNode.type === ComponentType.CHECKBOX || selectedNode.type === ComponentType.RADIO;
+    selectedNode.type === ComponentType.CHECKBOX ||
+    selectedNode.type === ComponentType.RADIO;
 
   if (!isSelect && !isCheckboxOrRadio) {
     return null;
@@ -59,12 +64,20 @@ export const SelectOptionsSection: React.FC<SectionProps> = ({ selectedNode, onP
   const optionCount = Math.max(1, options.length || 1);
 
   return (
-    <SectionCard title="Options" icon={<AlignLeftOutlined style={{ fontSize: 16 }} />}>
+    <SectionCard
+      title="Options"
+      icon={<AlignLeftOutlined style={{ fontSize: 16 }} />}
+    >
       <Space direction="vertical" size={8} style={{ width: "100%" }}>
         {isCheckboxOrRadio ? (
           <Flex justify="space-between" align="center" gap={8}>
             <Typography.Text>Option Count</Typography.Text>
-            <InputNumber min={1} max={20} value={optionCount} onChange={handleCountChange} />
+            <InputNumber
+              min={1}
+              max={20}
+              value={optionCount}
+              onChange={handleCountChange}
+            />
           </Flex>
         ) : null}
 

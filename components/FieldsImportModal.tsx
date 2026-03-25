@@ -1,6 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { CloseOutlined, EyeOutlined, LinkOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  EyeOutlined,
+  LinkOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { Button, Checkbox, Input, Modal, Switch } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
+
 import { ComponentType } from "../types";
 
 export interface ImportedField {
@@ -16,7 +22,13 @@ interface FieldsImportModalProps {
   initialSelectedIds?: string[];
 }
 
-const baseFieldNames = ["Transaction Type", "Deposit", "Withdrawal", "Transfer", "Payment"];
+const baseFieldNames = [
+  "Transaction Type",
+  "Deposit",
+  "Withdrawal",
+  "Transfer",
+  "Payment",
+];
 
 const fieldLibrary: ImportedField[] = [
   ...baseFieldNames.map((name, index) => ({
@@ -54,7 +66,9 @@ export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
       return fieldLibrary;
     }
 
-    return fieldLibrary.filter((item) => item.name.toLowerCase().includes(searchKey));
+    return fieldLibrary.filter((item) =>
+      item.name.toLowerCase().includes(searchKey),
+    );
   }, [modalKeyword]);
 
   const allVisibleSelected =
@@ -68,7 +82,10 @@ export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
 
   const toggleSelectAllVisible = (checked: boolean) => {
     if (checked) {
-      const merged = new Set([...selectedFieldIds, ...modalFilteredFields.map((item) => item.id)]);
+      const merged = new Set([
+        ...selectedFieldIds,
+        ...modalFilteredFields.map((item) => item.id),
+      ]);
       setSelectedFieldIds(Array.from(merged));
       return;
     }
@@ -87,14 +104,20 @@ export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
   };
 
   const handleImport = () => {
-    const selectedFields = fieldLibrary.filter((field) => selectedFieldIds.includes(field.id));
+    const selectedFields = fieldLibrary.filter((field) =>
+      selectedFieldIds.includes(field.id),
+    );
     onImport?.(selectedFields);
     onClose();
   };
 
   return (
     <Modal
-      title={<span className="text-[30px] leading-8 font-semibold">Fields Import</span>}
+      title={
+        <span className="text-[30px] leading-8 font-semibold">
+          Fields Import
+        </span>
+      }
       open={open}
       onCancel={onClose}
       width={980}
@@ -104,9 +127,14 @@ export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
       <div className="mt-3">
         <div className="flex items-center justify-between text-[14px] leading-5 text-[#595959]">
           <div>
-            Selected Fields - <span className="text-[#1677ff]">{selectedFieldIds.length}</span>
+            Selected Fields -{" "}
+            <span className="text-[#1677ff]">{selectedFieldIds.length}</span>
           </div>
-          <button type="button" className="text-[#003a8c]" onClick={() => setSelectedFieldIds([])}>
+          <button
+            type="button"
+            className="text-[#003a8c]"
+            onClick={() => setSelectedFieldIds([])}
+          >
             Clear All
           </button>
         </div>
@@ -131,7 +159,10 @@ export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
             </div>
             <div className="flex items-center gap-3">
               <span className="text-[14px] text-[#434343]">Select all</span>
-              <Switch checked={allVisibleSelected} onChange={toggleSelectAllVisible} />
+              <Switch
+                checked={allVisibleSelected}
+                onChange={toggleSelectAllVisible}
+              />
             </div>
           </div>
 
@@ -147,7 +178,9 @@ export const FieldsImportModal: React.FC<FieldsImportModalProps> = ({
                   <label className="flex items-center gap-3 text-[14px] leading-5 text-[#434343] cursor-pointer">
                     <Checkbox
                       checked={checked}
-                      onChange={(event) => handleToggleField(fieldItem.id, event.target.checked)}
+                      onChange={(event) =>
+                        handleToggleField(fieldItem.id, event.target.checked)
+                      }
                     />
                     <span>{fieldItem.name}</span>
                   </label>

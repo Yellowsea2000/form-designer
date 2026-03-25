@@ -1,4 +1,5 @@
 import React from "react";
+
 import { ElementRendererProps } from "./types";
 
 export const ImageElement: React.FC<ElementRendererProps> = ({ props }) => {

@@ -1,7 +1,8 @@
-import React from "react";
 import { Switch } from "antd";
-import { ElementRendererProps } from "./types";
+import React from "react";
+
 import { baseLabelClass, mergeCn } from "./common";
+import { ElementRendererProps } from "./types";
 
 export const SwitchElement: React.FC<ElementRendererProps> = ({ props }) => {
   const { label, required, defaultValue, style, className } = props;

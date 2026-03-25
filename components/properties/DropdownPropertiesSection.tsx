@@ -1,4 +1,3 @@
-import React from "react";
 import {
   DeleteOutlined,
   InfoCircleOutlined,
@@ -7,17 +6,21 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 import { Button, Flex, Form, Input, Select, Space, Typography } from "antd";
+import React from "react";
+
 import { SectionProps } from "./types";
 import { ValidationSection } from "./ValidationSection";
 
 const EMPTY_BIND_FIELD_OPTIONS: { label: string; value: string }[] = [];
 
-type DropdownPropertiesSectionProps = Pick<SectionProps, "selectedNode" | "onPropChange">;
+type DropdownPropertiesSectionProps = Pick<
+  SectionProps,
+  "selectedNode" | "onPropChange"
+>;
 
-export const DropdownPropertiesSection: React.FC<DropdownPropertiesSectionProps> = ({
-  selectedNode,
-  onPropChange,
-}) => {
+export const DropdownPropertiesSection: React.FC<
+  DropdownPropertiesSectionProps
+> = ({ selectedNode, onPropChange }) => {
   const options = selectedNode.props.options || [];
   const defaultOptionValue =
     typeof selectedNode.props.defaultValue === "string"
@@ -43,7 +46,9 @@ export const DropdownPropertiesSection: React.FC<DropdownPropertiesSectionProps>
 
   const handleDeleteOption = (index: number) => {
     const removedOption = options[index];
-    const nextOptions = options.filter((_, optionIndex) => optionIndex !== index);
+    const nextOptions = options.filter(
+      (_, optionIndex) => optionIndex !== index,
+    );
     onPropChange("options", nextOptions);
 
     if (removedOption?.value === defaultOptionValue) {
@@ -53,7 +58,10 @@ export const DropdownPropertiesSection: React.FC<DropdownPropertiesSectionProps>
 
   const handleAddOption = () => {
     const nextIndex = options.length + 1;
-    onPropChange("options", [...options, { label: `Option ${nextIndex}`, value: `${nextIndex}` }]);
+    onPropChange("options", [
+      ...options,
+      { label: `Option ${nextIndex}`, value: `${nextIndex}` },
+    ]);
   };
 
   return (
@@ -87,7 +95,9 @@ export const DropdownPropertiesSection: React.FC<DropdownPropertiesSectionProps>
             <Input
               placeholder="Enter Value"
               value={selectedNode.props.placeholder ?? ""}
-              onChange={(event) => onPropChange("placeholder", event.target.value)}
+              onChange={(event) =>
+                onPropChange("placeholder", event.target.value)
+              }
             />
           </Form.Item>
         </Form>
@@ -97,13 +107,21 @@ export const DropdownPropertiesSection: React.FC<DropdownPropertiesSectionProps>
         <Typography.Text strong className="text-blue-600">
           Choice configuration
         </Typography.Text>
-        <Space direction="vertical" size={12} style={{ width: "100%", marginTop: 12 }}>
+        <Space
+          direction="vertical"
+          size={12}
+          style={{ width: "100%", marginTop: 12 }}
+        >
           {options.map((option, index) => {
             const isDefault = defaultOptionValue === option.value;
 
             return (
               <div key={`${option.value}-${index}`}>
-                <Flex justify="space-between" align="center" style={{ marginBottom: 8 }}>
+                <Flex
+                  justify="space-between"
+                  align="center"
+                  style={{ marginBottom: 8 }}
+                >
                   <Typography.Text>{`Option ${index + 1}`}</Typography.Text>
                   <Space size={2}>
                     <Button
@@ -111,7 +129,9 @@ export const DropdownPropertiesSection: React.FC<DropdownPropertiesSectionProps>
                       size="small"
                       icon={
                         isDefault ? (
-                          <StarFilled style={{ color: "#1677ff", fontSize: 14 }} />
+                          <StarFilled
+                            style={{ color: "#1677ff", fontSize: 14 }}
+                          />
                         ) : (
                           <StarOutlined style={{ fontSize: 14 }} />
                         )
@@ -140,7 +160,9 @@ export const DropdownPropertiesSection: React.FC<DropdownPropertiesSectionProps>
                     <Input
                       placeholder="Enter Option"
                       value={option.label}
-                      onChange={(event) => handleOptionLabelChange(index, event.target.value)}
+                      onChange={(event) =>
+                        handleOptionLabelChange(index, event.target.value)
+                      }
                     />
                   </Form.Item>
                   <Form.Item
@@ -155,7 +177,9 @@ export const DropdownPropertiesSection: React.FC<DropdownPropertiesSectionProps>
                     <Input
                       placeholder="Enter Option"
                       value={option.value}
-                      onChange={(event) => handleOptionValueChange(index, event.target.value)}
+                      onChange={(event) =>
+                        handleOptionValueChange(index, event.target.value)
+                      }
                     />
                   </Form.Item>
                 </Form>
@@ -174,7 +198,10 @@ export const DropdownPropertiesSection: React.FC<DropdownPropertiesSectionProps>
         </Space>
       </div>
 
-      <ValidationSection selectedNode={selectedNode} onPropChange={onPropChange} />
+      <ValidationSection
+        selectedNode={selectedNode}
+        onPropChange={onPropChange}
+      />
     </div>
   );
 };

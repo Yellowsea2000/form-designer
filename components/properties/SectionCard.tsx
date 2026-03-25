@@ -1,5 +1,5 @@
-import React from "react";
 import { Card, Flex, Typography } from "antd";
+import React from "react";
 
 interface SectionCardProps {
   title: string;
@@ -7,7 +7,11 @@ interface SectionCardProps {
   children: React.ReactNode;
 }
 
-export const SectionCard: React.FC<SectionCardProps> = ({ title, icon, children }) => {
+export const SectionCard: React.FC<SectionCardProps> = ({
+  title,
+  icon,
+  children,
+}) => {
   return (
     <Card
       size="small"

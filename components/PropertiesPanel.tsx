@@ -1,13 +1,14 @@
-import React from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import { Button, Flex, Space, Tag } from "antd";
 import { observer } from "mobx-react-lite";
+import React from "react";
+
+import panelBg from "../images/panelBg.png";
 import { useDesignerStore } from "../store";
 import { ComponentType } from "../types";
-import panelBg from "../images/panelBg.png";
 import { BindFieldSection } from "./properties/BindFieldSection";
-import { ContentSection } from "./properties/ContentSection";
 import { ContainerPropertiesSection } from "./properties/ContainerPropertiesSection";
+import { ContentSection } from "./properties/ContentSection";
 import { DropdownPropertiesSection } from "./properties/DropdownPropertiesSection";
 import { EmptyProperties } from "./properties/EmptyProperties";
 import { ImageSettingsSection } from "./properties/ImageSettingsSection";
@@ -15,13 +16,16 @@ import { SelectOptionsSection } from "./properties/SelectOptionsSection";
 import { SwitchPropertiesSection } from "./properties/SwitchPropertiesSection";
 import { TabItemHint } from "./properties/TabItemHint";
 import { TabsManagementSection } from "./properties/TabsManagementSection";
-import { StyleChangeFn, PropChangeFn } from "./properties/types";
-import { ValidationSection } from "./properties/ValidationSection";
+import { PropChangeFn, StyleChangeFn } from "./properties/types";
 import { findNodeById } from "./properties/utils";
+import { ValidationSection } from "./properties/ValidationSection";
 
 export const PropertiesPanel: React.FC = observer(() => {
-  const { nodes, selectedNodeId, updateNode, selectNode, addNode, removeNode } = useDesignerStore();
-  const selectedNode = selectedNodeId ? findNodeById(nodes, selectedNodeId) : undefined;
+  const { nodes, selectedNodeId, updateNode, selectNode, addNode, removeNode } =
+    useDesignerStore();
+  const selectedNode = selectedNodeId
+    ? findNodeById(nodes, selectedNodeId)
+    : undefined;
 
   if (!selectedNode) {
     return <EmptyProperties />;
@@ -59,7 +63,9 @@ export const PropertiesPanel: React.FC = observer(() => {
         style={{ backgroundImage: `url(${panelBg})` }}
       >
         <Flex justify="space-between" align="center" style={{ width: "100%" }}>
-          <Tag style={{ margin: 0, textTransform: "uppercase" }}>{selectedNode.type}</Tag>
+          <Tag style={{ margin: 0, textTransform: "uppercase" }}>
+            {selectedNode.type}
+          </Tag>
           <Button
             type="text"
             icon={<CloseOutlined style={{ fontSize: 20 }} />}
@@ -73,7 +79,10 @@ export const PropertiesPanel: React.FC = observer(() => {
           {isTabItem ? (
             <TabItemHint />
           ) : isSwitch ? (
-            <SwitchPropertiesSection selectedNode={selectedNode} onPropChange={handlePropChange} />
+            <SwitchPropertiesSection
+              selectedNode={selectedNode}
+              onPropChange={handlePropChange}
+            />
           ) : isDropdown ? (
             <DropdownPropertiesSection
               selectedNode={selectedNode}
@@ -94,10 +103,15 @@ export const PropertiesPanel: React.FC = observer(() => {
           ) : (
             <>
               {!isContainer &&
-                ![ComponentType.TEXT, ComponentType.ICON, ComponentType.TITLE].includes(
-                  selectedNode.type,
-                ) && (
-                  <BindFieldSection selectedNode={selectedNode} onPropChange={handlePropChange} />
+                ![
+                  ComponentType.TEXT,
+                  ComponentType.ICON,
+                  ComponentType.TITLE,
+                ].includes(selectedNode.type) && (
+                  <BindFieldSection
+                    selectedNode={selectedNode}
+                    onPropChange={handlePropChange}
+                  />
                 )}
 
               <ContentSection
@@ -118,7 +132,10 @@ export const PropertiesPanel: React.FC = observer(() => {
                 onStyleChange={handleStyleChange}
               />
 
-              <ValidationSection selectedNode={selectedNode} onPropChange={handlePropChange} />
+              <ValidationSection
+                selectedNode={selectedNode}
+                onPropChange={handlePropChange}
+              />
             </>
           )}
         </Space>

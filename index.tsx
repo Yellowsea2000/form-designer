@@ -1,34 +1,41 @@
-import React, { useMemo, useState, createContext, useContext } from "react";
+import "antd/dist/reset.css";
+import "./index.css";
+
 import {
+  CodeOutlined,
+  CopyOutlined,
+  EyeOutlined,
+  SaveOutlined,
+} from "@ant-design/icons";
+import {
+  defaultDropAnimationSideEffects,
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   DragOverlay,
+  DragOverlayProps,
   DragStartEvent,
+  DropAnimation,
+  getFirstCollision,
+  Modifier,
   MouseSensor,
+  pointerWithin,
+  rectIntersection,
   TouchSensor,
   useSensor,
   useSensors,
-  defaultDropAnimationSideEffects,
-  DropAnimation,
-  DragOverEvent,
-  pointerWithin,
-  rectIntersection,
-  getFirstCollision,
-  DragOverlayProps,
-  Modifier,
 } from "@dnd-kit/core";
-import { CodeOutlined, CopyOutlined, EyeOutlined, SaveOutlined } from "@ant-design/icons";
-import { Button, Input, Modal, Space, message } from "antd";
+import { Button, Input, message, Modal, Space } from "antd";
 import { observer } from "mobx-react-lite";
-import { Sidebar } from "./components/Sidebar";
+import React, { createContext, useContext, useMemo, useState } from "react";
+
 import { Canvas } from "./components/Canvas";
 import { PropertiesPanel } from "./components/PropertiesPanel";
+import { Sidebar } from "./components/Sidebar";
+import { DragContext } from "./dragContext";
+import { createFormDocument } from "./dsl/form";
 import { useDesignerStore } from "./store";
 import { ComponentType, DragData, FormNode } from "./types";
-import { createFormDocument } from "./dsl/form";
-import "antd/dist/reset.css";
-import "./index.css";
-import { DragContext } from "./dragContext";
 
 // Context for sharing drag state with Canvas
 
@@ -184,7 +191,10 @@ export const FormCraftPage: React.FC = observer(() => {
 
     // Scenario 2: Reordering / Moving Canvas Items
     if (activeData?.type === "canvas-item") {
-      if (active.id !== over.id && !over.id.toString().startsWith(active.id.toString())) {
+      if (
+        active.id !== over.id &&
+        !over.id.toString().startsWith(active.id.toString())
+      ) {
         const dragData = activeData as DragData;
         moveNode(
           active.id as string,
@@ -299,7 +309,8 @@ export const FormCraftPage: React.FC = observer(() => {
             modifiers={[cursorModifier]}
             style={{ cursor: "grabbing" }}
           >
-            {activeDragData?.type === "sidebar-item" && activeDragData.componentType ? (
+            {activeDragData?.type === "sidebar-item" &&
+            activeDragData.componentType ? (
               <div className="w-[180px] bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-slate-700 text-sm">
@@ -328,7 +339,11 @@ export const FormCraftPage: React.FC = observer(() => {
               >
                 Copy JSON
               </Button>,
-              <Button key="close" type="primary" onClick={() => setShowJsonModal(false)}>
+              <Button
+                key="close"
+                type="primary"
+                onClick={() => setShowJsonModal(false)}
+              >
                 Close
               </Button>,
             ]}

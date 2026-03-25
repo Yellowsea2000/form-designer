@@ -1,10 +1,12 @@
-import React, { useMemo, useState } from "react";
+import {
+  CloseOutlined,
+  SearchOutlined,
+  VerticalAlignTopOutlined,
+} from "@ant-design/icons";
 import { useDraggable } from "@dnd-kit/core";
-import { CloseOutlined, SearchOutlined, VerticalAlignTopOutlined } from "@ant-design/icons";
-import { ComponentType } from "../types";
+import React, { useMemo, useState } from "react";
+
 import { componentDSLs } from "../dsl/components";
-import { FieldsImportModal, ImportedField } from "./FieldsImportModal";
-import { FieldsTabContent } from "./FieldsTabContent";
 import checkboxIcon from "../images/FormComponent/Checkbox.png";
 import containerIcon from "../images/FormComponent/Container.png";
 import datePickerIcon from "../images/FormComponent/DatePicker.png";
@@ -15,11 +17,14 @@ import inputNumberIcon from "../images/FormComponent/InputNumber.png";
 import radioIcon from "../images/FormComponent/Radio.png";
 import switchIcon from "../images/FormComponent/Switch.png";
 import tabIcon from "../images/FormComponent/Tab.png";
-import textAreaIcon from "../images/FormComponent/TextArea.png";
 import textIcon from "../images/FormComponent/Text.png";
+import textAreaIcon from "../images/FormComponent/TextArea.png";
 import timePickerIcon from "../images/FormComponent/TimePicker.png";
 import titleIcon from "../images/FormComponent/Title.png";
 import panelBg from "../images/panelBg.png";
+import { ComponentType } from "../types";
+import { FieldsImportModal, ImportedField } from "./FieldsImportModal";
+import { FieldsTabContent } from "./FieldsTabContent";
 
 interface SidebarItemProps {
   dragId: string;
@@ -28,7 +33,8 @@ interface SidebarItemProps {
   icon: React.ReactNode;
 }
 
-const sectionTitleClassName = "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
+const sectionTitleClassName =
+  "text-base leading-4 font-bold text-[#737373] tracking-normal mb-4";
 const itemImageClassName = "w-[36px] h-[36px]";
 const itemIconBoxClassName = "flex items-center justify-center text-slate-600";
 
@@ -62,34 +68,65 @@ const layoutItems: SidebarPaletteItem[] = [
     type: ComponentType.CONTAINER,
     label: componentDSLs[ComponentType.CONTAINER].displayName,
     icon: (
-      <img src={containerIcon} alt="Container" className={itemImageClassName} draggable={false} />
+      <img
+        src={containerIcon}
+        alt="Container"
+        className={itemImageClassName}
+        draggable={false}
+      />
     ),
   },
   {
     id: "layout-text",
     type: ComponentType.TEXT,
     label: componentDSLs[ComponentType.TEXT].displayName,
-    icon: <img src={textIcon} alt="Text" className={itemImageClassName} draggable={false} />,
+    icon: (
+      <img
+        src={textIcon}
+        alt="Text"
+        className={itemImageClassName}
+        draggable={false}
+      />
+    ),
   },
   {
     id: "layout-title",
     type: ComponentType.TITLE,
     label: componentDSLs[ComponentType.TITLE].displayName,
-    icon: <img src={titleIcon} alt="Title" className={itemImageClassName} draggable={false} />,
+    icon: (
+      <img
+        src={titleIcon}
+        alt="Title"
+        className={itemImageClassName}
+        draggable={false}
+      />
+    ),
   },
   {
     id: "layout-icon",
     type: ComponentType.ICON,
     label: componentDSLs[ComponentType.ICON].displayName,
     icon: (
-      <img src={iconComponentIcon} alt="Icon" className={itemImageClassName} draggable={false} />
+      <img
+        src={iconComponentIcon}
+        alt="Icon"
+        className={itemImageClassName}
+        draggable={false}
+      />
     ),
   },
   {
     id: "layout-tabs",
     type: ComponentType.TABS,
     label: componentDSLs[ComponentType.TABS].displayName,
-    icon: <img src={tabIcon} alt="Tab" className={itemImageClassName} draggable={false} />,
+    icon: (
+      <img
+        src={tabIcon}
+        alt="Tab"
+        className={itemImageClassName}
+        draggable={false}
+      />
+    ),
   },
 ];
 
@@ -99,7 +136,12 @@ const formControlItems: SidebarPaletteItem[] = [
     type: ComponentType.INPUT,
     label: "Input Box",
     icon: (
-      <img src={inputBoxIcon} alt="Input Box" className={itemImageClassName} draggable={false} />
+      <img
+        src={inputBoxIcon}
+        alt="Input Box"
+        className={itemImageClassName}
+        draggable={false}
+      />
     ),
   },
   {
@@ -120,27 +162,51 @@ const formControlItems: SidebarPaletteItem[] = [
     type: ComponentType.SELECT,
     label: "Dropdown",
     icon: (
-      <img src={dropdownIcon} alt="Dropdown" className={itemImageClassName} draggable={false} />
+      <img
+        src={dropdownIcon}
+        alt="Dropdown"
+        className={itemImageClassName}
+        draggable={false}
+      />
     ),
   },
   {
     id: "control-switch",
     type: ComponentType.SWITCH,
     label: "Switch",
-    icon: <img src={switchIcon} alt="Switch" className={itemImageClassName} draggable={false} />,
+    icon: (
+      <img
+        src={switchIcon}
+        alt="Switch"
+        className={itemImageClassName}
+        draggable={false}
+      />
+    ),
   },
   {
     id: "control-radio",
     type: ComponentType.RADIO,
     label: "Radio",
-    icon: <img src={radioIcon} alt="Radio" className={itemImageClassName} draggable={false} />,
+    icon: (
+      <img
+        src={radioIcon}
+        alt="Radio"
+        className={itemImageClassName}
+        draggable={false}
+      />
+    ),
   },
   {
     id: "control-checkbox",
     type: ComponentType.CHECKBOX,
     label: "Checkbox",
     icon: (
-      <img src={checkboxIcon} alt="Checkbox" className={itemImageClassName} draggable={false} />
+      <img
+        src={checkboxIcon}
+        alt="Checkbox"
+        className={itemImageClassName}
+        draggable={false}
+      />
     ),
   },
   {
@@ -148,7 +214,12 @@ const formControlItems: SidebarPaletteItem[] = [
     type: ComponentType.TEXTAREA,
     label: "Text Area",
     icon: (
-      <img src={textAreaIcon} alt="Text Area" className={itemImageClassName} draggable={false} />
+      <img
+        src={textAreaIcon}
+        alt="Text Area"
+        className={itemImageClassName}
+        draggable={false}
+      />
     ),
   },
   {
@@ -196,7 +267,12 @@ const sidebarSections: Array<{
   },
 ];
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({
+  dragId,
+  type,
+  label,
+  icon,
+}) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: dragId,
     data: {
@@ -225,7 +301,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ dragId, type, label, icon }) 
       >
         <div className={itemIconBoxClassName}>{icon}</div>
       </div>
-      <span className="mt-2 text-xs font-medium text-slate-700 text-center">{label}</span>
+      <span className="mt-2 text-xs font-medium text-slate-700 text-center">
+        {label}
+      </span>
     </div>
   );
 };
@@ -246,7 +324,9 @@ export const Sidebar: React.FC = () => {
     return sidebarSections
       .map((section) => ({
         ...section,
-        items: section.items.filter((item) => item.label.toLowerCase().includes(searchKey)),
+        items: section.items.filter((item) =>
+          item.label.toLowerCase().includes(searchKey),
+        ),
       }))
       .filter((section) => section.items.length > 0);
   }, [keyword]);
@@ -273,7 +353,9 @@ export const Sidebar: React.FC = () => {
             type="button"
             onClick={() => setActiveTab("fields")}
             className={`text-[14px] leading-5 transition-colors ${
-              activeTab === "fields" ? "font-semibold text-[#4d4d4d]" : "font-medium text-[#737373]"
+              activeTab === "fields"
+                ? "font-semibold text-[#4d4d4d]"
+                : "font-medium text-[#737373]"
             }`}
           >
             Fields
@@ -291,7 +373,11 @@ export const Sidebar: React.FC = () => {
             type="text"
             value={keyword}
             onChange={(event) => setKeyword(event.target.value)}
-            placeholder={activeTab === "fields" ? "Search the fields" : "Search the elements"}
+            placeholder={
+              activeTab === "fields"
+                ? "Search the fields"
+                : "Search the elements"
+            }
             className="h-full min-w-0 flex-1 bg-transparent text-xs text-[#4d4d4d] placeholder:text-[#b2b2b2] outline-none"
           />
           <SearchOutlined style={{ fontSize: 12, color: "#4d4d4d" }} />

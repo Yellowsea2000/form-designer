@@ -4,7 +4,12 @@ import { ComponentDSLDefinition } from "../types";
 const defaultProps: ComponentProps = {
   content: "Submit",
   buttonType: "submit",
-  style: { backgroundColor: "#3b82f6", color: "white", padding: "8px 16px", borderRadius: "4px" },
+  style: {
+    backgroundColor: "#3b82f6",
+    color: "white",
+    padding: "8px 16px",
+    borderRadius: "4px",
+  },
 };
 
 export const buttonDSL: ComponentDSLDefinition = {
@@ -12,7 +17,8 @@ export const buttonDSL: ComponentDSLDefinition = {
   displayName: "Button",
   version: "1.0.0",
   category: "form-control",
-  description: "Form button that can submit, reset, or act as a plain action trigger.",
+  description:
+    "Form button that can submit, reset, or act as a plain action trigger.",
   defaultProps,
   props: [
     {

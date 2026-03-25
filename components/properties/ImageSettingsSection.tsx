@@ -1,17 +1,24 @@
-import React from "react";
 import { PictureOutlined } from "@ant-design/icons";
 import { Form, Input } from "antd";
-import { ComponentType } from "../../types";
-import { SectionProps } from "./types";
-import { SectionCard } from "./SectionCard";
+import React from "react";
 
-export const ImageSettingsSection: React.FC<SectionProps> = ({ selectedNode, onPropChange }) => {
+import { ComponentType } from "../../types";
+import { SectionCard } from "./SectionCard";
+import { SectionProps } from "./types";
+
+export const ImageSettingsSection: React.FC<SectionProps> = ({
+  selectedNode,
+  onPropChange,
+}) => {
   if (selectedNode.type !== ComponentType.ICON) {
     return null;
   }
 
   return (
-    <SectionCard title="Image Source" icon={<PictureOutlined style={{ fontSize: 16 }} />}>
+    <SectionCard
+      title="Image Source"
+      icon={<PictureOutlined style={{ fontSize: 16 }} />}
+    >
       <Form layout="vertical" size="small">
         <Form.Item label="Image URL" style={{ marginBottom: 12 }}>
           <Input

@@ -1,6 +1,7 @@
 import React from "react";
-import { ElementRendererProps } from "./types";
+
 import { mergeCn } from "./common";
+import { ElementRendererProps } from "./types";
 
 export const TabsElement: React.FC<ElementRendererProps> = ({
   props,
@@ -35,7 +36,9 @@ export const TabsElement: React.FC<ElementRendererProps> = ({
       <div className="p-1 min-h-[100px]">
         {children}
         {(!children || (Array.isArray(children) && children.length === 0)) && (
-          <div className="text-slate-300 text-center py-8 text-sm italic">No tabs</div>
+          <div className="text-slate-300 text-center py-8 text-sm italic">
+            No tabs
+          </div>
         )}
       </div>
     </div>

@@ -1,7 +1,8 @@
-import React from "react";
 import { Checkbox } from "antd";
-import { ElementRendererProps } from "./types";
+import React from "react";
+
 import { baseLabelClass, mergeCn } from "./common";
+import { ElementRendererProps } from "./types";
 
 const createDefaultOptions = (count = 2) =>
   Array.from({ length: count }, (_, index) => ({
@@ -11,7 +12,8 @@ const createDefaultOptions = (count = 2) =>
 
 export const CheckboxElement: React.FC<ElementRendererProps> = ({ props }) => {
   const { label, required, options, style, className } = props;
-  const choiceOptions = options && options.length > 0 ? options : createDefaultOptions(2);
+  const choiceOptions =
+    options && options.length > 0 ? options : createDefaultOptions(2);
 
   return (
     <div style={style} className={mergeCn(className)}>

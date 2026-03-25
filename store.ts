@@ -1,6 +1,7 @@
 import { makeAutoObservable, observable } from "mobx";
-import { FormNode, ComponentType, ComponentProps } from "./types";
+
 import { DEFAULT_PROPS } from "./dsl/components";
+import { ComponentProps, ComponentType, FormNode } from "./types";
 
 // Simple ID generator
 const generateId = () => `node_${Math.random().toString(36).substr(2, 9)}`;
@@ -69,7 +70,10 @@ const updateNodeRecursively = (
       return { ...node, props: { ...node.props, ...updates } };
     }
     if (node.children.length > 0) {
-      return { ...node, children: updateNodeRecursively(node.children, id, updates) };
+      return {
+        ...node,
+        children: updateNodeRecursively(node.children, id, updates),
+      };
     }
     return node;
   });
@@ -175,7 +179,12 @@ export class DesignerStore {
     );
   }
 
-  addNode(type: ComponentType, parentId: string | null, index?: number, autoSelect = true) {
+  addNode(
+    type: ComponentType,
+    parentId: string | null,
+    index?: number,
+    autoSelect = true,
+  ) {
     const newNode: FormNode = {
       id: generateId(),
       type,
@@ -189,19 +198,28 @@ export class DesignerStore {
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
-          props: { label: "View 1", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
+          props: {
+            label: "View 1",
+            style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style,
+          },
           children: [],
         },
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
-          props: { label: "View 2", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
+          props: {
+            label: "View 2",
+            style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style,
+          },
           children: [],
         },
         {
           id: generateId(),
           type: ComponentType.TAB_ITEM,
-          props: { label: "View 3", style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style },
+          props: {
+            label: "View 3",
+            style: DEFAULT_PROPS[ComponentType.TAB_ITEM].style,
+          },
           children: [],
         },
       ];

@@ -1,16 +1,19 @@
-import React from "react";
 import { Form, Input, Select, Switch, Typography } from "antd";
+import React from "react";
+
 import { SectionProps } from "./types";
 import { ValidationSection } from "./ValidationSection";
 
 const EMPTY_BIND_FIELD_OPTIONS: { label: string; value: string }[] = [];
 
-type SwitchPropertiesSectionProps = Pick<SectionProps, "selectedNode" | "onPropChange">;
+type SwitchPropertiesSectionProps = Pick<
+  SectionProps,
+  "selectedNode" | "onPropChange"
+>;
 
-export const SwitchPropertiesSection: React.FC<SwitchPropertiesSectionProps> = ({
-  selectedNode,
-  onPropChange,
-}) => {
+export const SwitchPropertiesSection: React.FC<
+  SwitchPropertiesSectionProps
+> = ({ selectedNode, onPropChange }) => {
   return (
     <div className="space-y-4">
       <Form layout="vertical" size="small">
@@ -50,7 +53,10 @@ export const SwitchPropertiesSection: React.FC<SwitchPropertiesSectionProps> = (
         </Form>
       </div>
 
-      <ValidationSection selectedNode={selectedNode} onPropChange={onPropChange} />
+      <ValidationSection
+        selectedNode={selectedNode}
+        onPropChange={onPropChange}
+      />
     </div>
   );
 };

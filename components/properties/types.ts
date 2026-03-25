@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+
 import { ComponentProps, ComponentType, FormNode } from "../../types";
 
 export type UpdateNodeFn = (
@@ -6,7 +7,11 @@ export type UpdateNodeFn = (
   updates: Partial<FormNode> | Partial<ComponentProps>,
 ) => void;
 
-export type AddNodeFn = (type: ComponentType, parentId: string | null, index?: number) => void;
+export type AddNodeFn = (
+  type: ComponentType,
+  parentId: string | null,
+  index?: number,
+) => void;
 
 export type RemoveNodeFn = (id: string) => void;
 

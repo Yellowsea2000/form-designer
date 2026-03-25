@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+
 import FormCraftPage from "./index";
 
 const rootElement = document.getElementById("root");

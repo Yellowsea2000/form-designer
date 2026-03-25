@@ -1,8 +1,12 @@
-import React from "react";
 import { Form, Select } from "antd";
+import React from "react";
+
 import { SectionProps } from "./types";
 
-type ContainerPropertiesSectionProps = Pick<SectionProps, "selectedNode" | "onPropChange">;
+type ContainerPropertiesSectionProps = Pick<
+  SectionProps,
+  "selectedNode" | "onPropChange"
+>;
 
 const COLUMN_OPTIONS = [
   { label: "1", value: 1 },

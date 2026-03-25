@@ -36,6 +36,7 @@ tsconfig.json
 
 webpack.config.js
 eslint.config.js
+eslint.config.mjs
 
 package-lock.json
 package.json

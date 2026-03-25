@@ -13,7 +13,8 @@ export const containerDSL: ComponentDSLDefinition = {
   displayName: "Container",
   version: "1.0.0",
   category: "layout",
-  description: "A generic layout wrapper that can host any other component in a grid.",
+  description:
+    "A generic layout wrapper that can host any other component in a grid.",
   defaultProps,
   props: [
     {

@@ -1,6 +1,7 @@
-import React, { useMemo } from "react";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Flex, Form, Input, Radio, Select, Typography } from "antd";
+import React, { useMemo } from "react";
+
 import { ComponentType, FormNode } from "../../types";
 import { AddNodeFn, RemoveNodeFn, UpdateNodeFn } from "./types";
 
@@ -67,7 +68,9 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
             placeholder="Select View"
             options={defaultViewOptions}
             value={defaultTabId}
-            onChange={(value) => updateNode(selectedNode.id, { defaultTabId: value })}
+            onChange={(value) =>
+              updateNode(selectedNode.id, { defaultTabId: value })
+            }
           />
         </Form.Item>
       </Form>
@@ -78,7 +81,11 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
         </Typography.Text>
 
         <div className="mt-3">
-          <Flex justify="space-between" align="center" style={{ marginBottom: 8 }}>
+          <Flex
+            justify="space-between"
+            align="center"
+            style={{ marginBottom: 8 }}
+          >
             <Typography.Text>Views</Typography.Text>
             <Button
               type="text"
@@ -93,16 +100,24 @@ export const TabsManagementSection: React.FC<TabsManagementSectionProps> = ({
               <div
                 key={tab.id}
                 className="flex items-center gap-2 px-2 py-1.5"
-                style={index < tabs.length - 1 ? { borderBottom: "1px solid #e2e8f0" } : undefined}
+                style={
+                  index < tabs.length - 1
+                    ? { borderBottom: "1px solid #e2e8f0" }
+                    : undefined
+                }
               >
                 <Radio
                   checked={defaultTabId === tab.id}
-                  onChange={() => updateNode(selectedNode.id, { defaultTabId: tab.id })}
+                  onChange={() =>
+                    updateNode(selectedNode.id, { defaultTabId: tab.id })
+                  }
                 />
                 <Input
                   bordered={false}
                   value={tab.props.label || `View ${index + 1}`}
-                  onChange={(event) => handleLabelChange(tab.id, event.target.value)}
+                  onChange={(event) =>
+                    handleLabelChange(tab.id, event.target.value)
+                  }
                 />
                 <Button
                   type="text"

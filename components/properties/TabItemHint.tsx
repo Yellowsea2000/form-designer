@@ -1,6 +1,6 @@
-import React from "react";
 import { ClusterOutlined } from "@ant-design/icons";
 import { Alert, Typography } from "antd";
+import React from "react";
 
 export const TabItemHint: React.FC = () => {
   return (

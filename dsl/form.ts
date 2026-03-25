@@ -1,4 +1,4 @@
-import { FormNode, ComponentType } from "../types";
+import { ComponentType, FormNode } from "../types";
 import { componentDSLs } from "./components";
 import { FormDSLDocument, FormDSLSpec } from "./types";
 
@@ -30,7 +30,9 @@ export const validateFormDocument = (doc: FormDSLDocument): string[] => {
     }
 
     if (!dsl.children && node.children.length > 0) {
-      errors.push(`Component "${node.id}" of type ${node.type} should not have children`);
+      errors.push(
+        `Component "${node.id}" of type ${node.type} should not have children`,
+      );
     }
 
     if (dsl.children) {

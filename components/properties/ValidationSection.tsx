@@ -1,10 +1,14 @@
-import React from "react";
 import { Form, Select, Typography } from "antd";
+import React from "react";
+
 import { SectionProps } from "./types";
 
 const VALIDATION_RULE_OPTIONS = [{ label: "Required", value: "required" }];
 
-type ValidationSectionProps = Pick<SectionProps, "selectedNode" | "onPropChange">;
+type ValidationSectionProps = Pick<
+  SectionProps,
+  "selectedNode" | "onPropChange"
+>;
 
 export const ValidationSection: React.FC<ValidationSectionProps> = ({
   selectedNode,

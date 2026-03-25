@@ -1,9 +1,10 @@
-import React from "react";
 import { BgColorsOutlined } from "@ant-design/icons";
 import { Button, Flex, Form, Select, Slider, Space, Typography } from "antd";
+import React from "react";
+
 import { ComponentType } from "../../types";
-import { SectionProps } from "./types";
 import { SectionCard } from "./SectionCard";
+import { SectionProps } from "./types";
 import { COLOR_OPTIONS, FONT_SIZE_OPTIONS, getPxNumber } from "./utils";
 
 interface AppearanceSectionProps extends SectionProps {
@@ -16,17 +17,22 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
   onPaddingChange,
 }) => {
   const supportsFontSize =
-    selectedNode.type === ComponentType.TITLE || selectedNode.type === ComponentType.TEXT;
+    selectedNode.type === ComponentType.TITLE ||
+    selectedNode.type === ComponentType.TEXT;
   const supportsColor =
     selectedNode.type === ComponentType.BUTTON ||
     selectedNode.type === ComponentType.TITLE ||
     selectedNode.type === ComponentType.TEXT;
-  const colorKey = selectedNode.type === ComponentType.BUTTON ? "backgroundColor" : "color";
+  const colorKey =
+    selectedNode.type === ComponentType.BUTTON ? "backgroundColor" : "color";
   const colorValue = selectedNode.props.style?.[colorKey] as string | undefined;
   const padding = getPxNumber(selectedNode.props.style?.paddingTop, 0);
 
   return (
-    <SectionCard title="Appearance" icon={<BgColorsOutlined style={{ fontSize: 16 }} />}>
+    <SectionCard
+      title="Appearance"
+      icon={<BgColorsOutlined style={{ fontSize: 16 }} />}
+    >
       <Form layout="vertical" size="small">
         {supportsFontSize && (
           <Form.Item label="Font Size" style={{ marginBottom: 12 }}>
@@ -39,7 +45,11 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
         )}
         {supportsColor && (
           <Form.Item
-            label={selectedNode.type === ComponentType.BUTTON ? "Background Color" : "Text Color"}
+            label={
+              selectedNode.type === ComponentType.BUTTON
+                ? "Background Color"
+                : "Text Color"
+            }
             style={{ marginBottom: 12 }}
           >
             <Space wrap size={8}>
@@ -57,8 +67,12 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
                       padding: 0,
                       borderRadius: "9999px",
                       backgroundColor: color,
-                      border: isSelected ? "2px solid #1677ff" : "1px solid #d9d9d9",
-                      boxShadow: isSelected ? "0 0 0 2px rgba(22, 119, 255, 0.2)" : undefined,
+                      border: isSelected
+                        ? "2px solid #1677ff"
+                        : "1px solid #d9d9d9",
+                      boxShadow: isSelected
+                        ? "0 0 0 2px rgba(22, 119, 255, 0.2)"
+                        : undefined,
                     }}
                   />
                 );
@@ -71,7 +85,9 @@ export const AppearanceSection: React.FC<AppearanceSectionProps> = ({
             min={0}
             max={64}
             value={padding}
-            onChange={(value) => onPaddingChange(Array.isArray(value) ? value[0] : value)}
+            onChange={(value) =>
+              onPaddingChange(Array.isArray(value) ? value[0] : value)
+            }
           />
           <Flex justify="end">
             <Typography.Text type="secondary" style={{ fontSize: 12 }}>

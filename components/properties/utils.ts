@@ -19,7 +19,10 @@ export const FONT_SIZE_OPTIONS = [
   { label: "Huge", value: "32px" },
 ];
 
-export const findNodeById = (nodes: FormNode[], id: string): FormNode | undefined => {
+export const findNodeById = (
+  nodes: FormNode[],
+  id: string,
+): FormNode | undefined => {
   for (const node of nodes) {
     if (node.id === id) {
       return node;
