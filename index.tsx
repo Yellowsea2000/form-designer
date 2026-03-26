@@ -20,13 +20,14 @@ import {
 } from "@dnd-kit/core";
 import { Button, Input, message, Modal, Space } from "antd";
 import { observer } from "mobx-react-lite";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { Canvas } from "./components/Canvas";
 import { PropertiesPanel } from "./components/PropertiesPanel";
 import { Sidebar } from "./components/Sidebar";
 import { DragContext } from "./dragContext";
-import { createFormDocument } from "./dsl/form";
+import { createFormDocument, validateFormDocument } from "./dsl/form";
+import { FormDSLDocument } from "./dsl/types";
 import { useDesignerStore } from "./store";
 import { ComponentType, DragData, FormNode } from "./types";
 
@@ -54,8 +55,11 @@ const cursorModifier: Modifier = ({ transform }) => {
   };
 };
 
+const FORM_STORAGE_KEY = "formcraft-pro-document";
+
 export const FormCraftPage: React.FC = observer(() => {
-  const { addNode, moveNode, nodes, selectedNodeId } = useDesignerStore();
+  const { addNode, loadFormNodes, moveNode, nodes, selectedNodeId } =
+    useDesignerStore();
   const [activeDragData, setActiveDragData] = useState<DragData | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
   const [overData, setOverData] = useState<any>(null);
@@ -201,8 +205,24 @@ export const FormCraftPage: React.FC = observer(() => {
 
   const saveForm = () => {
     const document = createFormDocument(nodes, { name: "FormCraft Pro DSL" });
+    window.localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(document));
     console.log("Form DSL document:", JSON.stringify(document, null, 2));
     message.success("Form saved");
+  };
+
+  const getFormdetail = (): FormDSLDocument | null => {
+    const savedDocument = window.localStorage.getItem(FORM_STORAGE_KEY);
+
+    if (!savedDocument) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(savedDocument) as FormDSLDocument;
+    } catch {
+      message.error("Saved form data is invalid");
+      return null;
+    }
   };
 
   const publishForm = () => {
@@ -210,6 +230,23 @@ export const FormCraftPage: React.FC = observer(() => {
     console.log("Published form document:", JSON.stringify(document, null, 2));
     message.success("Form published");
   };
+
+  useEffect(() => {
+    const document = getFormdetail();
+
+    if (!document) {
+      return;
+    }
+
+    const errors = validateFormDocument(document);
+
+    if (errors.length > 0) {
+      message.error("Saved form data failed validation");
+      return;
+    }
+
+    loadFormNodes(document.nodes);
+  }, [loadFormNodes]);
 
   const pageJson = useMemo(() => {
     const payload = createFormDocument(nodes, { name: "FormCraft Pro DSL" });

@@ -268,6 +268,11 @@ export class DesignerStore {
     this.nodes = updateNodeRecursively(this.nodes, id, updates);
   }
 
+  loadFormNodes(nodes: FormNode[]) {
+    this.nodes = JSON.parse(JSON.stringify(nodes));
+    this.selectedNodeId = null;
+  }
+
   selectNode(id: string | null) {
     if (!id) {
       this.selectedNodeId = null;
