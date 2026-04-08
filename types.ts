@@ -48,6 +48,9 @@ export interface FormNode {
 export interface DragData {
   type: "sidebar-item" | "canvas-item" | "container-interior";
   componentType?: ComponentType;
+  componentLabel?: string;
+  componentPreviewSrc?: string;
+  componentPreviewAlt?: string;
   id?: string;
   isContainer?: boolean;
   nodeType?: ComponentType;

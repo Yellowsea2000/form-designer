@@ -25,7 +25,8 @@ const FieldRowItem: React.FC<FieldRowItemProps> = ({ field }) => {
     id: `sidebar-imported-${field.id}`,
     data: {
       type: "sidebar-item",
-      componentType: field.componentType
+      componentType: field.componentType,
+      componentLabel: field.name
     }
   });
 

@@ -69,7 +69,7 @@ export const FormCraftPage: React.FC = observer(() => {
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 10 // 10px movement before drag starts prevents accidental clicks
+        distance: 4 // Lower threshold makes drag from sidebar feel more responsive
       }
     }),
     useSensor(TouchSensor, {
@@ -115,10 +115,17 @@ export const FormCraftPage: React.FC = observer(() => {
       let parentId: string | null = null;
       let index: number | undefined = undefined;
 
+      const isInteriorCapableContainer =
+        overData?.nodeType === ComponentType.CONTAINER ||
+        overData?.nodeType === ComponentType.TAB_ITEM;
+
       // Check if dropping into container interior (explicit nesting)
       if (overData?.type === "container-interior") {
         parentId = overData.parentId as string;
         // Append to end of container
+      } else if (overData?.isContainer && isInteriorCapableContainer) {
+        // Fallback: dropping on container body should still append into it.
+        parentId = over.id as string;
       } else if (overData?.isContainer) {
         // Dropping on container border/edge - place as sibling
         const findParentAndIndex = (
@@ -264,6 +271,8 @@ export const FormCraftPage: React.FC = observer(() => {
 
   // Custom collision detection - prioritize interior zones when pointer is well inside
   const customCollisionDetection = (args: any) => {
+    const activeType = args.active?.data?.current?.type;
+
     // First check pointer-based collision for interior zones
     const pointerCollisions = pointerWithin(args);
     const interiorCollision = pointerCollisions.find((collision: any) =>
@@ -273,6 +282,11 @@ export const FormCraftPage: React.FC = observer(() => {
     // If pointer is over an interior zone, use it
     if (interiorCollision) {
       return [interiorCollision];
+    }
+
+    // For sidebar drags, prefer pointer collisions directly to avoid jitter from rect overlap changes.
+    if (activeType === "sidebar-item" && pointerCollisions.length > 0) {
+      return [pointerCollisions[0]];
     }
 
     // Otherwise use rectangle intersection for better edge detection
@@ -349,12 +363,30 @@ export const FormCraftPage: React.FC = observer(() => {
           >
             {activeDragData?.type === "sidebar-item" &&
             activeDragData.componentType ? (
-              <div className="w-[180px] bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-slate-700 text-sm">
-                    {activeDragData.componentType}
-                  </span>
+              <div className="flex flex-col items-center opacity-95">
+                <div className="w-[60px] h-[60px] p-3 bg-white border border-slate-200 rounded-lg flex items-center justify-center shadow-xl ring-2 ring-blue-500">
+                  {activeDragData.componentPreviewSrc ? (
+                    <img
+                      src={activeDragData.componentPreviewSrc}
+                      alt={
+                        activeDragData.componentPreviewAlt ??
+                        activeDragData.componentLabel ??
+                        activeDragData.componentType
+                      }
+                      className="w-[36px] h-[36px]"
+                      draggable={false}
+                    />
+                  ) : (
+                    <span className="font-medium text-slate-700 text-xs text-center px-1">
+                      {activeDragData.componentLabel ??
+                        activeDragData.componentType}
+                    </span>
+                  )}
                 </div>
+                <span className="mt-2 text-xs font-medium text-slate-700 text-center">
+                  {activeDragData.componentLabel ??
+                    activeDragData.componentType}
+                </span>
               </div>
             ) : null}
             {activeDragData?.type === "canvas-item" ? (

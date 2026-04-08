@@ -30,7 +30,8 @@ interface SidebarItemProps {
   dragId: string;
   type: ComponentType;
   label: string;
-  icon: React.ReactNode;
+  iconSrc: string;
+  iconAlt: string;
 }
 
 const sectionTitleClassName =
@@ -58,7 +59,8 @@ interface SidebarPaletteItem {
   id: string;
   type: SidebarPaletteType;
   label: string;
-  icon: React.ReactNode;
+  iconSrc: string;
+  iconAlt: string;
 }
 
 const layoutItems: SidebarPaletteItem[] = [
@@ -66,53 +68,29 @@ const layoutItems: SidebarPaletteItem[] = [
     id: "layout-container",
     type: ComponentType.CONTAINER,
     label: componentDSLs[ComponentType.CONTAINER].displayName,
-    icon: (
-      <img
-        src={containerIcon}
-        alt="Container"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: containerIcon,
+    iconAlt: "Container"
   },
   {
     id: "layout-text",
     type: ComponentType.TEXT,
     label: componentDSLs[ComponentType.TEXT].displayName,
-    icon: (
-      <img
-        src={textIcon}
-        alt="Text"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: textIcon,
+    iconAlt: "Text"
   },
   {
     id: "layout-title",
     type: ComponentType.TITLE,
     label: componentDSLs[ComponentType.TITLE].displayName,
-    icon: (
-      <img
-        src={titleIcon}
-        alt="Title"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: titleIcon,
+    iconAlt: "Title"
   },
   {
     id: "layout-tabs",
     type: ComponentType.TABS,
     label: componentDSLs[ComponentType.TABS].displayName,
-    icon: (
-      <img
-        src={tabIcon}
-        alt="Tab"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: tabIcon,
+    iconAlt: "Tab"
   }
 ];
 
@@ -121,118 +99,64 @@ const formControlItems: SidebarPaletteItem[] = [
     id: "control-input-box",
     type: ComponentType.INPUT,
     label: "Input Box",
-    icon: (
-      <img
-        src={inputBoxIcon}
-        alt="Input Box"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: inputBoxIcon,
+    iconAlt: "Input Box"
   },
   {
     id: "control-number-input",
     type: ComponentType.INPUT,
     label: "Number Input",
-    icon: (
-      <img
-        src={inputNumberIcon}
-        alt="Number Input"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: inputNumberIcon,
+    iconAlt: "Number Input"
   },
   {
     id: "control-dropdown",
     type: ComponentType.SELECT,
     label: "Dropdown",
-    icon: (
-      <img
-        src={dropdownIcon}
-        alt="Dropdown"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: dropdownIcon,
+    iconAlt: "Dropdown"
   },
   {
     id: "control-switch",
     type: ComponentType.SWITCH,
     label: "Switch",
-    icon: (
-      <img
-        src={switchIcon}
-        alt="Switch"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: switchIcon,
+    iconAlt: "Switch"
   },
   {
     id: "control-radio",
     type: ComponentType.RADIO,
     label: "Radio",
-    icon: (
-      <img
-        src={radioIcon}
-        alt="Radio"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: radioIcon,
+    iconAlt: "Radio"
   },
   {
     id: "control-checkbox",
     type: ComponentType.CHECKBOX,
     label: "Checkbox",
-    icon: (
-      <img
-        src={checkboxIcon}
-        alt="Checkbox"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: checkboxIcon,
+    iconAlt: "Checkbox"
   },
   {
     id: "control-text-area",
     type: ComponentType.TEXTAREA,
     label: "Text Area",
-    icon: (
-      <img
-        src={textAreaIcon}
-        alt="Text Area"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: textAreaIcon,
+    iconAlt: "Text Area"
   },
   {
     id: "control-date-picker",
     type: ComponentType.DATE_PICKER,
     label: "Date Picker",
-    icon: (
-      <img
-        src={datePickerIcon}
-        alt="Date Picker"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: datePickerIcon,
+    iconAlt: "Date Picker"
   },
   {
     id: "control-time-picker",
     type: ComponentType.TIME_PICKER,
     label: "Time Picker",
-    icon: (
-      <img
-        src={timePickerIcon}
-        alt="Time Picker"
-        className={itemImageClassName}
-        draggable={false}
-      />
-    )
+    iconSrc: timePickerIcon,
+    iconAlt: "Time Picker"
   }
 ];
 
@@ -257,13 +181,17 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   dragId,
   type,
   label,
-  icon
+  iconSrc,
+  iconAlt
 }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: dragId,
     data: {
       type: "sidebar-item",
-      componentType: type
+      componentType: type,
+      componentLabel: label,
+      componentPreviewSrc: iconSrc,
+      componentPreviewAlt: iconAlt
     }
   });
 
@@ -285,7 +213,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         style={cardStyle}
         className="w-[60px] h-[60px] p-3 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:border-blue-400 hover:shadow-sm transition-all"
       >
-        <div className={itemIconBoxClassName}>{icon}</div>
+        <div className={itemIconBoxClassName}>
+          <img
+            src={iconSrc}
+            alt={iconAlt}
+            className={itemImageClassName}
+            draggable={false}
+          />
+        </div>
       </div>
       <span className="mt-2 text-xs font-medium text-slate-700 text-center">
         {label}
@@ -431,7 +366,8 @@ export const Sidebar: React.FC = () => {
                       dragId={`sidebar-${item.id}`}
                       type={item.type}
                       label={item.label}
-                      icon={item.icon}
+                      iconSrc={item.iconSrc}
+                      iconAlt={item.iconAlt}
                     />
                   ))}
                 </div>

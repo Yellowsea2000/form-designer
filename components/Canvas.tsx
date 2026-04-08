@@ -215,14 +215,14 @@ const SortableNode: React.FC<SortableNodeProps> = ({
         listeners?.onTouchStart?.(e);
       }}
       onMouseMove={(e) => {
-        if (isPreview) {
+        if (isPreview || activeDragData?.type === "sidebar-item") {
           return;
         }
         e.stopPropagation();
         setHoveredNodeId(node.id);
       }}
       onMouseLeave={(e) => {
-        if (isPreview) {
+        if (isPreview || activeDragData?.type === "sidebar-item") {
           return;
         }
         e.stopPropagation();
@@ -256,7 +256,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
                     <div
                       ref={setDroppableRef}
                       className={cn(
-                        "absolute inset-2 rounded-lg transition-all min-h-[80px]",
+                        "absolute inset-0 rounded-lg transition-all min-h-[80px]",
                         isOverInterior
                           ? "ring-2 ring-inset ring-green-400 bg-green-50/50 border-2 border-dashed border-green-400"
                           : activeDragData
@@ -290,15 +290,6 @@ const SortableNode: React.FC<SortableNodeProps> = ({
                     />
                   </div>
                 ))}
-                {/* Show placeholder at the end when hovering interior - AFTER all children */}
-                {!isPreview &&
-                  visibleChildren.length > 0 &&
-                  activeDragData?.type === "sidebar-item" &&
-                  isOverInterior && (
-                    <div className="relative z-10 col-span-full">
-                      <DragPlaceholder isInterior />
-                    </div>
-                  )}
               </div>
             </SortableContext>
           )}
@@ -346,7 +337,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({
       {!isPreview &&
         activeDragData?.type === "sidebar-item" &&
         overId === node.id &&
-        !overData?.type?.includes("interior") && <DragPlaceholder />}
+        !overData?.type?.includes("interior") &&
+        !overData?.isContainer && <DragPlaceholder />}
     </div>
   );
 };
