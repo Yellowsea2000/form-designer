@@ -23,6 +23,7 @@ import { observer } from "mobx-react-lite";
 import React, { useEffect, useMemo, useState } from "react";
 
 import { Canvas } from "./components/Canvas";
+import { FormElementRenderer } from "./components/FormElements";
 import { PropertiesPanel } from "./components/PropertiesPanel";
 import { Sidebar } from "./components/Sidebar";
 import { DragContext } from "./dragContext";
@@ -46,8 +47,14 @@ const dropAnimation: DropAnimation = {
   duration: 0
 };
 
-// Modifier to position the drag overlay near the cursor
-const cursorModifier: Modifier = ({ transform }) => {
+// Keep canvas-item overlay aligned with cursor; sidebar item keeps small offset.
+const cursorModifier: Modifier = ({ transform, active }) => {
+  const dragType = active?.data?.current?.type;
+
+  if (dragType === "canvas-item") {
+    return transform;
+  }
+
   return {
     ...transform,
     x: transform.x - 10, // Small offset from cursor
@@ -56,6 +63,78 @@ const cursorModifier: Modifier = ({ transform }) => {
 };
 
 const FORM_STORAGE_KEY = "formcraft-pro-document";
+
+const findNodeById = (nodes: FormNode[], nodeId: string): FormNode | null => {
+  for (const node of nodes) {
+    if (node.id === nodeId) {
+      return node;
+    }
+
+    const childMatch = findNodeById(node.children, nodeId);
+    if (childMatch) {
+      return childMatch;
+    }
+  }
+
+  return null;
+};
+
+const DragNodePreview: React.FC<{ node: FormNode }> = ({ node }) => {
+  const isContainerLike =
+    node.type === ComponentType.CONTAINER ||
+    node.type === ComponentType.TAB_ITEM;
+  const isTabs = node.type === ComponentType.TABS;
+
+  const childIds = node.children.map((child) => child.id);
+  const preferredDefaultTabId = node.props.defaultTabId;
+  const activeTabId =
+    preferredDefaultTabId && childIds.includes(preferredDefaultTabId)
+      ? preferredDefaultTabId
+      : (childIds[0] ?? null);
+
+  const visibleChildren = isTabs
+    ? node.children.filter((child) => child.id === activeTabId)
+    : node.children;
+
+  const columns = node.props.columns || 1;
+  const gap = node.type === ComponentType.CONTAINER ? 0 : node.props.gap || 16;
+  const showGrid = isContainerLike && columns > 1;
+
+  const contentStyle = showGrid
+    ? ({
+        display: "grid",
+        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+        gap: `${gap}px`
+      } as React.CSSProperties)
+    : undefined;
+
+  return (
+    <FormElementRenderer
+      type={node.type}
+      props={node.props}
+      node={node}
+      activeTabId={activeTabId}
+      onTabChange={() => undefined}
+    >
+      {(isContainerLike || isTabs) && (
+        <div
+          className={
+            isTabs
+              ? "w-full"
+              : showGrid
+                ? "w-full min-h-[50px]"
+                : "w-full min-h-[50px] space-y-3"
+          }
+          style={contentStyle}
+        >
+          {visibleChildren.map((child) => (
+            <DragNodePreview key={child.id} node={child} />
+          ))}
+        </div>
+      )}
+    </FormElementRenderer>
+  );
+};
 
 export const FormCraftPage: React.FC = observer(() => {
   const { addNode, loadFormNodes, moveNode, nodes, selectedNodeId } =
@@ -69,7 +148,7 @@ export const FormCraftPage: React.FC = observer(() => {
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 4 // Lower threshold makes drag from sidebar feel more responsive
+        distance: 2 // Smaller threshold makes drag start feel snappier
       }
     }),
     useSensor(TouchSensor, {
@@ -260,6 +339,14 @@ export const FormCraftPage: React.FC = observer(() => {
     return JSON.stringify(payload, null, 2);
   }, [nodes]);
 
+  const activeCanvasNode = useMemo(() => {
+    if (activeDragData?.type !== "canvas-item" || !activeDragData.id) {
+      return null;
+    }
+
+    return findNodeById(nodes, activeDragData.id);
+  }, [activeDragData, nodes]);
+
   const copyJsonToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(pageJson);
@@ -389,9 +476,9 @@ export const FormCraftPage: React.FC = observer(() => {
                 </span>
               </div>
             ) : null}
-            {activeDragData?.type === "canvas-item" ? (
-              <div className="bg-white p-3 rounded-lg shadow-xl border-2 border-blue-500 opacity-90 w-[200px]">
-                <span className="text-sm text-slate-700">移动中...</span>
+            {activeDragData?.type === "canvas-item" && activeCanvasNode ? (
+              <div className="pointer-events-none w-[min(560px,80vw)] rounded-xl border-2 border-blue-500 bg-white p-4 shadow-2xl opacity-95">
+                <DragNodePreview node={activeCanvasNode} />
               </div>
             ) : null}
           </DragOverlay>

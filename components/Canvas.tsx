@@ -60,6 +60,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
   const {
     attributes,
     listeners,
+    setActivatorNodeRef,
     setNodeRef,
     transform,
     transition,
@@ -159,6 +160,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({
   const sortingStrategy = showGrid
     ? rectSortingStrategy
     : verticalListSortingStrategy;
+  const showNodeTools = hoveredNodeId === node.id || isSelected;
+  const componentTypeLabel = node.type.replace(/_/g, " ");
 
   if (isDragging) {
     return (
@@ -179,7 +182,7 @@ const SortableNode: React.FC<SortableNodeProps> = ({
         isPlainContainer ? "bg-transparent" : "bg-white",
         isPreview
           ? "border-0 shadow-none cursor-default"
-          : "border-2 hover:shadow-md cursor-grab active:cursor-grabbing",
+          : "border-2 hover:shadow-md cursor-default",
         !isPreview && isSelected
           ? "border-blue-500 ring-1 ring-blue-500 z-10"
           : "",
@@ -197,38 +200,44 @@ const SortableNode: React.FC<SortableNodeProps> = ({
         e.stopPropagation();
         onClick(e);
       }}
-      {...(!isPreview ? attributes : {})}
-      {...(!isPreview ? listeners : {})}
-      // Critical: Stop propagation to prevent dragging parent when interacting with child
-      onMouseDown={(e) => {
-        if (isPreview) {
+      onMouseEnter={() => {
+        if (isPreview || activeDragData) {
           return;
         }
-        e.stopPropagation();
-        listeners?.onMouseDown?.(e);
-      }}
-      onTouchStart={(e) => {
-        if (isPreview) {
-          return;
-        }
-        e.stopPropagation();
-        listeners?.onTouchStart?.(e);
-      }}
-      onMouseMove={(e) => {
-        if (isPreview || activeDragData?.type === "sidebar-item") {
-          return;
-        }
-        e.stopPropagation();
-        setHoveredNodeId(node.id);
+        setHoveredNodeId((current) =>
+          current === node.id ? current : node.id
+        );
       }}
       onMouseLeave={(e) => {
-        if (isPreview || activeDragData?.type === "sidebar-item") {
+        if (isPreview || activeDragData) {
           return;
         }
         e.stopPropagation();
         setHoveredNodeId((current) => (current === node.id ? null : current));
       }}
     >
+      {/* Drag anchor - only this handle can start dragging */}
+      {!isPreview && (
+        <div
+          className={cn(
+            "absolute -top-3 -left-1 z-20 transition-opacity",
+            showNodeTools
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
+          )}
+        >
+          <button
+            ref={setActivatorNodeRef}
+            {...attributes}
+            {...listeners}
+            className="flex items-center gap-1 rounded-md border border-blue-500 bg-blue-600 px-2 py-1 text-xs font-medium text-white shadow-lg transition-colors hover:bg-blue-700 cursor-grab active:cursor-grabbing"
+            title="Drag component"
+          >
+            <span>{componentTypeLabel}</span>
+          </button>
+        </div>
+      )}
+
       {/* Content */}
       <div className="p-4 relative">
         <FormElementRenderer
@@ -300,8 +309,8 @@ const SortableNode: React.FC<SortableNodeProps> = ({
       {!isPreview && (
         <div
           className={cn(
-            "absolute -bottom-3 left-2 z-20 flex items-center gap-[6px] transition-opacity",
-            hoveredNodeId === node.id
+            "absolute bottom-4 left-2 z-20 flex items-center gap-[6px] transition-opacity",
+            showNodeTools
               ? "opacity-100 pointer-events-auto"
               : "opacity-0 pointer-events-none"
           )}
