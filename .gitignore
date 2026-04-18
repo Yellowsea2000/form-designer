@@ -26,17 +26,4 @@ dist-ssr
 .husky
 .vscode
 
-tailwind.config.js
-tailwind.config.cjs
-postcss.config.js
-postcss.config.cjs
-tsconfig.json
-.prettierignore
-.prettierrc.json
 
-webpack.config.js
-eslint.config.js
-eslint.config.mjs
-
-package-lock.json
-package.json
