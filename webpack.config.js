@@ -59,6 +59,7 @@ module.exports = (env, argv) => {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${htmlWebpackPlugin.options.title || "FormCraft Pro"}</title>
+    <script src = "http://localhost:30001"> </script>
   </head>
   <body>
     <div id="root"></div>
